@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang = "en">
+   <head></head>
+   <body>
+      <h3>
+         <a href = "{{ url_for('product_backlog') }}">Comments - Flask SQLAlchemy example</a>
+      </h3>
+      
+      <hr/>
+      {%- for message in get_flashed_messages() %}
+         {{ message }}
+      {%- endfor %}
+		
+      <h3>Tasks (<a href = "{{ url_for('new_task') }}">Add Tasks
+         </a>)</h3>
+      
+      <table>
+         <thead>
+            <tr>
+               <th>Name</th>
+               <th>Tag</th>
+               <th>Priority</th>
+               <th>Story Point</th>
+            </tr>
+         </thead>
+
+         <tbody>
+            {% for task in tasks %}
+               <tr>
+                  <td>{{ task.name }}</td>
+                  <td>{{ task.labels }}</td>
+                  <td>{{ task.priority }}</td>
+                  <td>{{ task.story_points }}</td>
+               </tr>
+            {% endfor %}
+         </tbody>
+      </table>
+   </body>
+</html>
