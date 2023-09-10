@@ -2,11 +2,14 @@ from flask import Flask, render_template, request, session, flash, redirect, url
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, Integer, String, DateTime, func, CheckConstraint, Enum
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static')
+app.config['FAVICON'] = 'static/favicon.ico'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tasks.sqlite3'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 app.config['SECRET_KEY'] = "random string"
+
+
 
 class Tasks(db.Model):
 
