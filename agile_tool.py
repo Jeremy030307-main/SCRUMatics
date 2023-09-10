@@ -13,7 +13,7 @@ app.config['SECRET_KEY'] = "random string"
 # Intermediate table for many-to-many relationship
 task_labels = db.Table(
     'task_labels',
-    db.Column('task_id', db.Integer, db.ForeignKey('tasks.id')),
+    db.Column('task_id', db.Integer, db.ForeignKey('tasks.id')) ,
     db.Column('label_id', db.String(20), db.ForeignKey('label.name')))
 
 class Label(db.Model):
