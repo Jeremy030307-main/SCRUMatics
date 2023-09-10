@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang = "en">
-   <head></head>
+   <head>
+      <!--CSS-->
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+      <!--ICON-->
+      <link href='https://unpkg.com/css.gg@2.0.0/icons/css/add.css' rel='stylesheet'>
+   </head>
    <body>
       <h3>
          <a href = "{{ url_for('product_backlog') }}">Comments - Flask SQLAlchemy example</a>
@@ -11,10 +16,16 @@
          {{ message }}
       {%- endfor %}
 		
-      <h3>Tasks (<a href = "{{ url_for('new_task') }}">Add Tasks
-         </a>)</h3>
+      <h3 class="pageTitle">Tasks
+         <i class="gg-add">
+            <a href = "{{ url_for('new_task') }}"></a>
+         </i>
+         <button class="buttons">
+            <a href = "{{ url_for('new_task') }}">Add Tasks</a>
+         </button>
+      </h3>
       
-      <table>
+      <table class="taskTable">
          <thead>
             <tr>
                <th>Name</th>
