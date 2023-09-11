@@ -4,7 +4,8 @@ from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, collate
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static')
+app.config['FAVICON'] = 'static/favicon.ico'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tasks.sqlite3'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)

@@ -4,6 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+   <!-- Include the CSS file -->
+   <link rel="stylesheet" href="{{ url_for('static', filename='task_style.css') }}">
+   <script src="{{ url_for('static', filename='status.js') }}"></script>
     <style>
         /* Apply some basic styling */
         body {
@@ -64,10 +67,10 @@
     
             <!--Drop-down list of task status-->
             <label for="status" style="font-size: large;"> Status</label><br>
-            <select id="status_type" name="status_type">
+            <select id="status_type" name="status_type" onchange="changeColor(this)" >
                 <option value="" disabled selected>Select an option</option>
                 <option value="Not Started">Not Started</option>
-                <option value="Incomplete">Incomplete</option>
+                <option value="Incomplete">In Progress</option>
                 <option value="Completed">Completed</option>
             </select><br><br>
     
