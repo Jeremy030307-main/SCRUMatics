@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang = "en">
    <head>
+      <!--CSS-->
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+      <!--ICON-->
+      <link href='https://unpkg.com/css.gg@2.0.0/icons/css/add.css' rel='stylesheet'>
 
       <style>
          /* CSS to hide the dropdown menu */
@@ -19,7 +23,13 @@
       {%- endfor %}
 		
       <!--This the link to add new task to product backlog, can chage to a button in future-->
-      <h3>Tasks (<a href = "{{ url_for('new_task') }}">Add Tasks</a>)</h3>
+      <h3 class="pageTitle">Tasks
+         
+         <button class="buttons">
+            <i class="gg-add"></i>
+            <a href = "{{ url_for('new_task') }}"></a>
+         </button>
+      </h3>
 
       <!--This is the drop down menu to let user choose whihc to sort-->
       <form action="/" method="POST">
@@ -60,7 +70,7 @@
 
       </form>
 
-      <table style="width:80%">
+      <table class="taskTable" style="width:80%">
          <thead>
             <tr>
                <th>Name</th>
