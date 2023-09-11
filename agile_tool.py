@@ -35,10 +35,75 @@ class Tasks(db.Model):
                             primaryjoin="Tasks.id == task_labels.c.task_id",
                             secondaryjoin="Label.name == task_labels.c.label_id")
 
-@app.route('/')
+def filter_and_sort_tasks(filter_condition=None, sort_column=None, ordering = "ascending"):
+    query = Tasks.query
+
+    if filter_condition is not None:
+        query = query.filter(filter_condition)
+
+    if sort_column is not None:
+        if ordering == "ascending":
+            query = query.order_by(collate(sort_column, 'NOCASE').asc())
+        else:
+            query = query.order_by(collate(sort_column, 'NOCASE').desc())
+
+    tasks = query.all()
+
+    return tasks
+
+@app.route('/', methods = ['GET', 'POST'])
 def product_backlog():
-    tasks = Tasks.query.order_by(Tasks.priority.asc()).all()
-    return render_template('product_backlog.html', tasks = tasks )
+
+    sort_map = {
+        "name" : Tasks.name,
+        "priority" : Tasks.priority,
+        "story_points" : Tasks.story_points,
+        "created_at" : Tasks.created_at}
+
+    proirity_map = {
+        1 : "Low",
+        2: "Medium",
+        3: "Important", 
+        4: "Urgent"}
+
+    filter_map = {
+        "Front End": Tasks.labels.any(Label.name == "Front End"),
+        "Back End" : Tasks.labels.any(Label.name == "Back End"),
+        "API":Tasks.labels.any(Label.name == "API"),
+        "Database": Tasks.labels.any(Label.name == "Database"),
+        "Framework": Tasks.labels.any(Label.name == "Framework"),
+        "Testing": Tasks.labels.any(Label.name == "Testing"),
+        "UI": Tasks.labels.any(Label.name == "UI"),
+        "UX": Tasks.labels.any(Label.name == "UX")}
+
+    # the default sorting element
+    sorting_style, sorting_element, ordering = "default", "", ""
+    tasks = None
+    filter_style = 'default'
+    filter_element = None
+
+    if request.method == "POST":
+
+        sorting_style = request.form["sorting style"] 
+
+        try:
+            filter_style = request.form["filter_element"]
+            filter_element = filter_map[filter_style]
+        except:   
+            pass
+
+        if sorting_style in sort_map:
+            sorting_element = sort_map[sorting_style]
+
+            try:
+                ordering = request.form["ordering"]
+            except:
+                pass
+    
+    tasks = filter_and_sort_tasks(filter_element, sorting_element, ordering)
+
+    return render_template('product_backlog.html', tasks = tasks, proirity_map = proirity_map, 
+                                selected_sort = sorting_style, selected_order = ordering, selected_filter = filter_style)
 
 @app.route('/addtask', methods = ['GET', 'POST'])
 def new_task():
