@@ -56,19 +56,19 @@
             <label for="priority" style="font-size: large;"> Priority</label><br>
             <select id="priority_level" name="priority_level">
                 <option value="" disabled selected>Select an option</option>
-                <option value="low">Low</option>
-                <option value="medium">Medium</option>
-                <option value="important">Important</option>
-                <option value="urgent">Urgent</option>
+                <option value=1>Low</option>
+                <option value=2>Medium</option>
+                <option value=3>Important</option>
+                <option value=4>Urgent</option>
             </select> <br><br>
     
             <!--Drop-down list of task status-->
             <label for="status" style="font-size: large;"> Status</label><br>
             <select id="status_type" name="status_type">
                 <option value="" disabled selected>Select an option</option>
-                <option value="not_started">Not Started</option>
-                <option value="incomplete">Incomplete</option>
-                <option value="completed">Completed</option>
+                <option value="Not Started">Not Started</option>
+                <option value="Incomplete">Incomplete</option>
+                <option value="Completed">Completed</option>
             </select><br><br>
     
             <!--Text box to let user enter the text description. -->
@@ -81,50 +81,50 @@
             <label for="catogory" style="font-size: large;"> Category</label><br>
             <select id="category_type" name="category_type">
                 <option value="" disabled selected>Select an option</option>
-                <option value="story">Story</option>
-                <option value="bug">Bug</option>
+                <option value="Story">Story</option>
+                <option value="Bug">Bug</option>
             </select> <br><br>
 
             <!--Drop-down list of Labels-->
             <label for="labels" style="font-size: large;"> Labels</label><br>
-            <select id="label_type" name="label_type">
+            <select id="label_type" name="label_type[]" multiple>
                 <option value="" disabled selected>Select an option</option>
-                <option value="frond_end">Front End</option>
-                <option value="back_end">Back End</option>
-                <option value="api">API</option>
-                <option value="database">Database</option>
-                <option value="framework">Framework</option>
-                <option value="testing">Testing</option>
-                <option value="ui">UI</option>
-                <option value="ux">UX</option>
+                <option value="Front End">Front End</option>
+                <option value="Back End">Back End</option>
+                <option value="API">API</option>
+                <option value="Database">Database</option>
+                <option value="Framework">Framework</option>
+                <option value="Testing">Testing</option>
+                <option value="UI">User Interface (UI)</option>
+                <option value="UX">User Experience (UX)</option>
             </select> <br><br>
 
             <!--Drop-down list of Assignee-->
             <label for="assignee" style="font-size: large;"> Assignee</label><br>
             <select id="assignee_name" name="assignee_name">
                 <option value="" disabled selected>Select an option</option>
-                <option value="sheen">Sheena</option>
-                <option value="jean">Jean</option>
-                <option value="jieru">Jie Ru</option>
-                <option value="bryan">Bryan</option>
-                <option value="benjamin">Benjamin</option>
-                <option value="jeremy">Jeremy</option>
+                <option value="Sheena">Sheena</option>
+                <option value="Jean">Jean</option>
+                <option value="Jie Ru">Jie Ru</option>
+                <option value="Bryan">Bryan</option>
+                <option value="Benjamin">Benjamin</option>
+                <option value="Jeremy">Jeremy</option>
             </select> <br><br>
 
             <!--Drop-down list of Story Point-->
             <label for="story_point" style="font-size: large;"> Story Point</label><br>
             <select id="point" name="point">
                 <option value="" disabled selected>Select an option</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
+                <option value=1>1</option>
+                <option value=2>2</option>
+                <option value=3>3</option>
+                <option value=4>4</option>
+                <option value=5>5</option>
+                <option value=6>6</option>
+                <option value=7>7</option>
+                <option value=8>8</option>
+                <option value=9>9</option>
+                <option value=10>10</option>
             </select> <br><br>
 
             <!--Add in the save button to let the user to save the task into product backlog-->
