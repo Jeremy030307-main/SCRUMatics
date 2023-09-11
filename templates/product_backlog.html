@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang = "en">
-   <head></head>
+   <head>
+      <!--CSS-->
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+      <!--ICON-->
+      <link href='https://unpkg.com/css.gg@2.0.0/icons/css/add.css' rel='stylesheet'>
+   </head>
    <body>
    
       <hr/>
@@ -8,10 +13,15 @@
          {{ message }}
       {%- endfor %}
 		
-      <!--This the link to add new task to product backlog, can chage to a button in future-->
-      <h3>Tasks (<a href = "{{ url_for('new_task') }}">Add Tasks</a>)</h3>
+      <h3 class="pageTitle">Tasks
+         
+         <button class="buttons">
+            <i class="gg-add"></i>
+            <a href = "{{ url_for('new_task') }}"></a>
+         </button>
+      </h3>
       
-      <table style="width:80%">
+      <table class="taskTable">
          <thead>
             <tr>
                <th>Name</th>

@@ -1,8 +1,6 @@
 from flask import Flask, render_template, request, session, flash, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, collate
-from sqlalchemy.orm import relationship
-from sqlalchemy.sql import func
+from sqlalchemy import Column, Integer, String, DateTime, func, CheckConstraint, Enum
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tasks.sqlite3'
@@ -10,61 +8,46 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 app.config['SECRET_KEY'] = "random string"
 
-# Intermediate table for many-to-many relationship
-task_labels = db.Table(
-    'task_labels',
-    db.Column('task_id', db.Integer, db.ForeignKey('tasks.id')) ,
-    db.Column('label_id', db.String(20), db.ForeignKey('label.name')))
-
-class Label(db.Model):
-    name = db.Column(db.String(20), primary_key=True)
-
 class Tasks(db.Model):
+
+    priority_enum = Enum("low", "medium", "important", "urgent")
+    status_enum = Enum("not started", "incomplete", "completed")
+    category_enum = Enum("story", "bug")
+    labels_enum = Enum("front end", "back end", "api", "database", "framework", "testing", "ui", "ux")
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Text, nullable=False)
-    priority = db.Column(db.Integer, nullable=False)
+    priority = db.Column(db.String(100),nullable=False)
     status = db.Column(db.String(100), nullable=False)
     category = db.Column(db.String(100), nullable=False)
+    labels = db.Column(db.String(100), nullable=False)
     assignee = db.Column(db.String(100), nullable=False)
     story_points = db.Column(db.Integer, nullable=False)
     description = db.Column(db.Text)
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
+    sprint_belong = db.Column(db.Integer)
 
-    # Define the relationship with labels using primaryjoin and secondaryjoin
-    labels = relationship('Label', secondary=task_labels, backref=db.backref('tasks', lazy='dynamic'),
-                            primaryjoin="Tasks.id == task_labels.c.task_id",
-                            secondaryjoin="Label.name == task_labels.c.label_id")
+    def __init__(self, name, priority, status, category, labels,assignee, story_points, description):
+        self.name = name
+        self.priority = priority
+        self.status = status
+        self.category = category
+        self.labels = labels
+        self.assignee = assignee
+        self.story_points = story_points
+        self.description = description
 
 @app.route('/')
 def product_backlog():
-    tasks = Tasks.query.order_by(Tasks.priority.asc()).all()
-    return render_template('product_backlog.html', tasks = tasks )
+    return render_template('product_backlog.html', tasks = Tasks.query.all() )
 
 @app.route('/addtask', methods = ['GET', 'POST'])
 def new_task():
    if request.method == 'POST':
-
-        this_task_labels = []
-        for label in request.form.getlist("label_type[]"):
-
-            # check is there existing label 
-            existing_label = Label.query.filter_by(name=label).first()
-
-            if existing_label:
-                this_task_labels.append(existing_label)
-            else:
-                this_task_labels.append(Label(name = label))
-
-        task = Tasks(
-            name = request.form["task_name"],
-            priority = request.form["priority_level"],
-            status = request.form["status_type"],
-            category = request.form["category_type"],
-            assignee = request.form["assignee_name"],
-            story_points = request.form['point'],
-            description = request.form["task_description"],
-            labels = this_task_labels
-        )
+    
+        task = Tasks(request.form['task_name'], request.form['priority_level'],
+        request.form['status_type'], request.form['category_type'], request.form['label_type'], 
+        request.form['assignee_name'], request.form['point'], request.form['task_description'])
 
         db.session.add(task)
         db.session.commit()
