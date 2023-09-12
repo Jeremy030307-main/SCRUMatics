@@ -50,11 +50,18 @@ body {
 }
 .taskTable td{
     color: #333333;
-    background-color: #d9d9d9;
+    
     font-size: 1.5em;
     height: 2em;
     text-align: center;
 }
+
+.taskTable td:nth-child(1),
+.taskTable td:nth-child(2),
+.taskTable td:nth-child(4){
+    background-color: #d9d9d9;
+}
+
 .taskTable tr:last-of-type td:first-of-type{
     border-bottom-left-radius: .5em;
 }
@@ -99,7 +106,7 @@ body {
 
 /* Priority Styles */
 .urgent-priority {
-    background-color: red;
+    background-color: rgb(247, 81, 81);
 }
 
 .important-priority {
@@ -111,5 +118,7 @@ body {
 }
 
 .low-priority {
-    background-color: green;
+    background-color: rgb(100, 255, 100);
 }
+
+
