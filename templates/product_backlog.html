@@ -91,7 +91,9 @@
                      {% endfor %}
                   </td>
                   
-                  <td>
+                  <td 
+                     class = "{% if task.priority == 4 %}urgent-priority{% elif task.priority == 3 %}important-priority{% elif task.priority == 2 %}medium-priority{% elif task.priority == 1 %}low-priority{% endif %}"
+                  >
                      {{ proirity_map[task.priority] }}
                   </td>
 
