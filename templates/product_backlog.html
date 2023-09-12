@@ -13,9 +13,19 @@
          }
      </style>
 
+
+      <style>
+         /* CSS to hide the dropdown menu */
+         .dropdown {
+             display: none;
+         }
+     </style>
+
    </head>
 
+
    <body>
+   
    
       <hr/>
       {%- for message in get_flashed_messages() %}
@@ -23,82 +33,91 @@
       {%- endfor %}
 		
       <!--This the link to add new task to product backlog, can chage to a button in future-->
+      <!--This the link to add new task to product backlog, can chage to a button in future-->
       <h3 class="pageTitle">Tasks
          
          <button class="buttons">
             
             <a href = "{{ url_for('new_task') }}"><i class="gg-add"></i></a>
+            
+            <a href = "{{ url_for('new_task') }}"><i class="gg-add"></i></a>
          </button>
       </h3>
 
-      <!--This is the drop down menu to let user choose whihc to sort-->
-      <form action="/" method="POST">
+      <div class="sortOptions">
+         <!--This is the drop down menu to let user choose whihc to sort-->
+         <form action="/" method="POST" class="theForm">
+            <div>
+               <!--Drop-down list of Sorting Element-->
+               <label for="sort_style" style="font-size: large;">Sorting</label><br>
+               <select id="sorting_style" name="sorting style" onchange="this.form.submit()">
+                  <option value="default" {% if selected_sort == 'default' %}selected{% endif %}>Default</option>
+                  <option value="name" {% if selected_sort == 'name' %}selected{% endif %}>Name</option>
+                  <option value="created_at" {% if selected_sort == 'created_at' %}selected{% endif %}>Date Created</option>
+                  <option value="priority" {% if selected_sort == 'priority' %}selected{% endif %}>Priority</option>
+                  <option value="story_points" {% if selected_sort == 'story_points' %}selected{% endif %}>Story Points</option>
+               </select> <br><br>
+            </div>
+            <div>
+               <!--Drop down list of chossing ascending or descending.-->
+               {% if selected_sort != 'default' %}
+                  <label for="ordering" style="font-size: large;">Ordering</label><br>
+                  <select id="ordering" name="ordering" onchange="this.form.submit()">
+                     <option value="ascending" {% if selected_order == 'ascending' %}selected{% endif %}>Ascending</option>
+                     <option value="descending" {% if selected_order == 'descending' %}selected{% endif %}>Descending</option>
+                  </select> <br><br>
+               {% endif %}
+            </div>
+            <div>
+               <!--Drop down list for choosing the filter-->
+               <label for="filter" style="font-size: large;">Filter</label><br>
+               <select id="filter_element" name="filter_element" onchange="this.form.submit()">
+                  <option value="default" {% if selected_filter == 'default' %}selected{% endif %}>No filter</option>
+                  <option value="Front End" {% if selected_filter == 'Front End' %}selected{% endif %}>Front End</option>
+                  <option value="Back End" {% if selected_filter == 'Back End' %}selected{% endif %}>Back End</option>
+                  <option value="API" {% if selected_filter == 'API' %}selected{% endif %}>API</option>
+                  <option value="Database" {% if selected_filter == 'Database' %}selected{% endif %}>Database</option>
+                  <option value="Framework" {% if selected_filter == 'Framework' %}selected{% endif %}>Framework</option>
+                  <option value="Testing" {% if selected_filter == 'Testing' %}selected{% endif %}>Testing</option>
+                  <option value="UI" {% if selected_filter == 'UI' %}selected{% endif %}>UI</option>
+                  <option value="UX" {% if selected_filter == 'UX' %}selected{% endif %}>UX</option>
 
-         <!--Drop-down list of Sorting Element-->
-         <label for="sort_style" style="font-size: large;">Sorting</label><br>
-         <select id="sorting_style" name="sorting style" onchange="this.form.submit()">
-             <option value="default" {% if selected_sort == 'default' %}selected{% endif %}>Default</option>
-             <option value="name" {% if selected_sort == 'name' %}selected{% endif %}>Name</option>
-             <option value="created_at" {% if selected_sort == 'created_at' %}selected{% endif %}>Date Created</option>
-             <option value="priority" {% if selected_sort == 'priority' %}selected{% endif %}>Priority</option>
-             <option value="story_points" {% if selected_sort == 'story_points' %}selected{% endif %}>Story Points</option>
-         </select> <br><br>
+               </select> <br><br>
+            </div>
+         </form>
+      </div>  
 
-         <!--Drop down list of chossing ascending or descending.-->
-         {% if selected_sort != 'default' %}
-            <label for="ordering" style="font-size: large;">Ordering</label><br>
-            <select id="ordering" name="ordering" onchange="this.form.submit()">
-               <option value="ascending" {% if selected_order == 'ascending' %}selected{% endif %}>Ascending</option>
-               <option value="descending" {% if selected_order == 'descending' %}selected{% endif %}>Descending</option>
-            </select> <br><br>
-         {% endif %}
-
-          <!--Dro down list for choosing the filter-->
-         <label for="filter" style="font-size: large;">Filter</label><br>
-         <select id="filter_element" name="filter_element" onchange="this.form.submit()">
-            <option value="default" {% if selected_filter == 'default' %}selected{% endif %}>No filter</option>
-             <option value="Front End" {% if selected_filter == 'Front End' %}selected{% endif %}>Front End</option>
-             <option value="Back End" {% if selected_filter == 'Back End' %}selected{% endif %}>Back End</option>
-             <option value="API" {% if selected_filter == 'API' %}selected{% endif %}>API</option>
-             <option value="Database" {% if selected_filter == 'Database' %}selected{% endif %}>Database</option>
-             <option value="Framework" {% if selected_filter == 'Framework' %}selected{% endif %}>Framework</option>
-             <option value="Testing" {% if selected_filter == 'Testing' %}selected{% endif %}>Testing</option>
-             <option value="UI" {% if selected_filter == 'UI' %}selected{% endif %}>UI</option>
-             <option value="UX" {% if selected_filter == 'UX' %}selected{% endif %}>UX</option>
-
-         </select> <br><br>
-
-      </form>
-
-      <table class="taskTable" style="width:80%">
-         <thead>
-            <tr>
-               <th>Name</th>
-               <th>Tag</th>
-               <th>Priority</th>
-               <th>Story Point</th>
-            </tr>
-         </thead>
-
-         <tbody>
-            {% for task in tasks %}
+      <div class="tableContainer">
+         <table class="taskTable" style="width:80%">
+            <thead>
                <tr>
-                  <td>{{ task.name }}</td>
-                  
-                  <td>
-                     {% for label in task.labels %}
-                        {{ label.name }},  
-                     {% endfor %}
-                  </td>
-                  
-                  <td>
-                     {{ proirity_map[task.priority] }}
-                  </td>
-
-                  <td>{{ task.story_points }}</td>
+                  <th>Name</th>
+                  <th>Tag</th>
+                  <th>Priority</th>
+                  <th>Story Point</th>
                </tr>
-            {% endfor %}
-         </tbody>
-      </table>
+            </thead>
+
+            <tbody>
+               {% for task in tasks %}
+                  <tr>
+                     <td>{{ task.name }}</td>
+                     
+                     <td>
+                        {% for label in task.labels %}
+                           {{ label.name }},  
+                        {% endfor %}
+                     </td>
+                     
+                     <td>
+                        {{ proirity_map[task.priority] }}
+                     </td>
+
+                     <td>{{ task.story_points }}</td>
+                  </tr>
+               {% endfor %}
+            </tbody>
+         </table>
+      </div>
    </body>
 </html>
