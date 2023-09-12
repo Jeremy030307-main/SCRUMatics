@@ -44,24 +44,3 @@ body {
     text-decoration: none;
     color: #333333;
 }
-
-/* Priority Styles */
-.low-priority {
-    background-color: green;
-    /* color: white; */
-}
-
-.medium-priority {
-    background-color: yellow;
-    /* color: black; */
-}
-
-.important-priority {
-    background-color: orange;
-    /* color: black; */
-}
-
-.urgent-priority {
-    background-color: red;
-    /* color: white; */
-}
