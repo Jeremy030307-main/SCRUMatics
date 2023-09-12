@@ -98,20 +98,22 @@
                </tr>
             </thead>
 
-            <tbody>
-               {% for task in tasks %}
-                  <tr>
-                     <td>{{ task.name }}</td>
-                     
-                     <td>
-                        {% for label in task.labels %}
-                           {{ label.name }},  
-                        {% endfor %}
-                     </td>
-                     
-                     <td>
-                        {{ proirity_map[task.priority] }}
-                     </td>
+         <tbody>
+            {% for task in tasks %}
+               <tr>
+                  <td>{{ task.name }}</td>
+                  
+                  <td>
+                     {% for label in task.labels %}
+                        {{ label.name }},  
+                     {% endfor %}
+                  </td>
+                  
+                  <td 
+                     class = "{% if task.priority == 4 %}urgent-priority{% elif task.priority == 3 %}important-priority{% elif task.priority == 2 %}medium-priority{% elif task.priority == 1 %}low-priority{% endif %}"
+                  >
+                     {{ proirity_map[task.priority] }}
+                  </td>
 
                      <td>{{ task.story_points }}</td>
                   </tr>
