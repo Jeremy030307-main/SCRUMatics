@@ -9,10 +9,11 @@ body {
     margin-left: 5%;
     margin-right: 5%;
     margin-top: 3%;
-    margin-bottom: 3%;
+    margin-bottom: auto;
     padding: 0;
 } 
 
+/* ---------------------Product Backlog--------------------- */
 .theForm {
     display: flex;
     padding-left: 10%;
@@ -121,4 +122,139 @@ body {
     background-color: rgb(100, 255, 100);
 }
 
+/* ---------------------Add Task--------------------- */
+.addTaskContainer{
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: auto;
+    margin-bottom: auto;
+    display: flex;
+    border-radius: .5em;
+    height: 90vh;
+}
 
+/* Define the left section with a 4:1 ratio */
+.left-section {
+    flex: 7;
+    padding: 20px; /* Add padding or content as needed */
+    border-top-left-radius: .5em;
+    border-bottom-left-radius: .5em;
+    background-color: #646464;
+    color: #eeeeee;
+    padding-left: 5%;
+}
+
+/* Define the right section */
+.right-section {
+    flex: 3;
+    background-color: #d9d9d9; /* Add your desired background color */
+    padding: 20px; /* Add padding or content as needed */
+    border-top-right-radius: .5em;
+    border-bottom-right-radius: .5em;
+}
+.addTaskContainer .left-section .addTaskInput{
+    font-size: 3em;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    color: #eeeeee;
+}
+.addTaskContainer .left-section input[type=text]{
+    background-color: #e0e0e0;
+    height: 2.5em;
+    width: 50%;
+    border-radius: .25em;
+    border:none;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    font-size: 1.5em;
+    padding-left: 2%;
+    padding-right: 2%;
+}
+.addTaskContainer .addTaskLabel{
+    font-size: 2em;
+    letter-spacing: .05em;
+}
+.addTaskContainer .addTaskSelectLeft{
+    background-color: #e0e0e0;
+    height: 2.5em;
+    width: 25%;
+    border-radius: .25em;
+    border:none;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    font-size: 1.25em;
+    padding-left: 2%;
+    padding-right: 2%;
+    color: #333333;
+}
+.addTaskContainer .addTaskSelectLeft select[open],
+.addTaskContainer .addTaskSelectRight select[open]{
+    z-index: 1;
+}
+.addTaskContainer .addTaskSelectLeft select:hover::after{
+    background-color: #646464;
+    color: #eeeeee;
+    border: #eeeeee;
+}
+.addTaskContainer .left-section textarea{
+    font-size: 1em;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 300;
+    color: #333333;
+    padding: 2%;
+    border-radius: .25em;
+    background-color: #e0e0e0;
+    width: 90%;
+}
+.addTaskContainer .right-section .addTaskSelectRight{
+    background-color: #ffffff;
+    height: 2.5em;
+    width: 60%;
+    border-radius: .25em;
+    border:none;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    font-size: 1.25em;
+    padding-left: 2%;
+    padding-right: 2%;
+    color: #333333;
+}
+.addTaskContainer .right-section .addTaskSelectRight select[open]{
+    z-index: 1;
+}
+.addTaskContainer .right-section .addTaskSelectRightMultiple{
+    background-color: #ffffff;
+    height:fit-content;
+    width: 60%;
+    border-radius: .25em;
+    border:none;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    font-size: 1.25em;
+    padding-left: 2%;
+    padding-right: 2%;
+    color: #333333;
+}
+.addTaskContainer .right-section .saveBtnDiv{
+    margin-top: 3vh;
+    margin-left: 3vh;
+    text-align: left;
+    height: 10%;
+}
+.addTaskContainer .right-section .saveBtn{
+    border-radius: .25em;
+    background-color: #ffffff;
+    height: 70%;
+    width: 40%;
+    font-size: 100%;
+    font-weight:500;
+    background-image: linear-gradient(0, #646464, #646464);
+    background-size: 0;
+    transition: .5s;
+    background-repeat: no-repeat;
+}
+.right-section .saveBtn:hover{
+    background-size: 100%;
+    color: #fff;
+    cursor: pointer;
+}
