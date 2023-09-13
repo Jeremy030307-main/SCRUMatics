@@ -26,7 +26,6 @@
 
    <body>
    
-   
       <hr/>
       {%- for message in get_flashed_messages() %}
          {{ message }}
@@ -99,7 +98,7 @@
          <tbody>
             {% for task in tasks %}
                <tr>
-                  <td>{{ task.name }}</td>
+                  <td>{{ task.name }} <a href = "{{ url_for('view_task', task_id = task.id) }}">&#128065</a></td>
                   
                   <td>
                      {% for label in task.labels %}
