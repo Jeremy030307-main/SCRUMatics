@@ -86,6 +86,7 @@ def product_backlog():
         "Testing": Tasks.labels.any(Label.name == "Testing"),
         "UI": Tasks.labels.any(Label.name == "UI"),
         "UX": Tasks.labels.any(Label.name == "UX")}
+    
 
     # the default sorting element
     sorting_style, sorting_element, ordering = "default", "", ""

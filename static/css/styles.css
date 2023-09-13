@@ -122,6 +122,86 @@ body {
     background-color: rgb(100, 255, 100);
 }
 
+.label-front-end {
+    display: inline-block; /* Use inline-block to display blocks horizontally */
+    background-color: #d62e2e;
+    color: white;
+    width: 100px; 
+    margin: 2px;
+    padding: 5px;
+    border-radius: .3em;
+  }
+
+  .label-back-end {
+    display: inline-block; /* Use inline-block to display blocks horizontally */
+    background-color: #cd532a;
+    width: 100px;
+    color: white;
+    margin: 2px;
+    padding: 5px;
+    border-radius: .3em;
+  }
+
+  .label-testing {
+    display: inline-block; /* Use inline-block to display blocks horizontally */
+    background-color: #d4be55;
+    color: white;
+    width: 80px;
+    margin: 2px;
+    padding: 5px;
+    border-radius: .3em;
+  }
+
+  .label-framework {
+    display: inline-block; /* Use inline-block to display blocks horizontally */
+    background-color: #59d533;
+    color: white;
+    width: 110px;
+    margin: 2px;
+    padding: 5px;
+    border-radius: .3em;
+  }
+
+  .label-api {
+    display: inline-block; /* Use inline-block to display blocks horizontally */
+    background-color: #32c9cc;
+    color: white;
+    width: 50px;
+    margin: 2px;
+    padding: 5px;
+    border-radius: .3em;
+  }
+
+  .label-database {
+    display: inline-block; /* Use inline-block to display blocks horizontally */
+    background-color: #2162cc;
+    color: white;
+    width: 100px;
+    margin: 2px;
+    padding: 5px;
+    border-radius: .3em;
+  }
+
+  .label-ui {
+    display: inline-block; /* Use inline-block to display blocks horizontally */
+    background-color: #8b50dd;
+    color: white;
+    width: 40px;
+    margin: 2px;
+    padding: 5px;
+    border-radius: .3em;
+  }
+
+  .label-ux {
+    display: inline-block; /* Use inline-block to display blocks horizontally */
+    background-color:  #d619a4;
+    color: white;
+    width: 40px;
+    margin: 2px;
+    padding: 5px;
+    border-radius: .3em;
+  }
+
 /* ---------------------Add Task--------------------- */
 .addTaskContainer{
     margin-left: 5%;
