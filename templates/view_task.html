@@ -5,41 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
    <!-- Include the CSS file -->
-   <link rel="stylesheet" href="{{ url_for('static', filename='task_style.css') }}">
+   <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
    <script src="{{ url_for('static', filename='status.js') }}"></script>
-    <style>
-        /* Apply some basic styling */
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
-
-        /* Create a container for the layout */
-        .container {
-            display: flex;
-        }
-
-        /* Define the left section with a 4:1 ratio */
-        .left-section {
-            flex: 7;
-            background-color: #f0f0f0; /* Add your desired background color */
-            padding: 20px; /* Add padding or content as needed */
-        }
-
-        /* Define the right section */
-        .right-section {
-            flex: 3;
-            background-color: #e0e0e0; /* Add your desired background color */
-            padding: 20px; /* Add padding or content as needed */
-        }
-    </style>
+   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
 <body>
-
-    <h3>Students - Flask SQLAlchemy example</h3>
-      <hr/>
       
       {%- for category, message in get_flashed_messages(with_categories = true) %}
          <div class = "alert alert-danger">
@@ -48,20 +19,23 @@
       {%- endfor %}
 
     <form action="/addtask/{{ task.id }}" method="POST">
-    <div class="container">
+    <div class="taskContainer">
         <div class="left-section">
             <!-- Content for the left section goes here -->
             <!--Block to let user enter task name-->
-            <label for = "task_name" style="font-size:xx-large">Task Name</label><br>
+            <div class="taskViewHeader">
+                <label for = "task_name">Task Name</label><br>
+                
+                <button class="add"><a href='/addtask/{{ task.id }}/edit'>Edit</a></button>
+                <button type="submit" formaction="/addtask/{{ task.id }}" class="del"><i class="material-icons">delete_forever</i></button>
+            </div>
+
             <input type="text" id="task_name" name="task_name" value= {{task.name}} disabled> <br><br>
     
-            <a href='/addtask/{{ task.id }}/edit'>Edit Task</a>
-
-            <button type="submit" formaction="/addtask/{{ task.id }}">Delete</button>
 
             <!--Drop-down list of Priority-->
-            <label for="priority" style="font-size: large;"> Priority</label><br>
-            <select id="priority_level" name="priority_level" disabled>
+            <label for="priority" class="addTaskLabel"> Priority</label><br>
+            <select id="priority_level" name="priority_level" class="addTaskSelectLeft" disabled>
                 <option value="" disabled>Select an option</option>
                 <option value=1 {% if task.priority == '1' %}selected{% endif %}>Low</option>
                 <option value=2 {% if task.priority == '2' %}selected{% endif %}>Medium</option>
@@ -70,8 +44,8 @@
             </select> <br><br>
     
             <!--Drop-down list of task status-->
-            <label for="status" style="font-size: large;"> Status</label><br>
-            <select id="status_type" name="status_type" onchange="changeColor(this)" disabled>
+            <label for="status" class="addTaskLabel"> Status</label><br>
+            <select id="status_type" name="status_type" onchange="changeColor(this)" class="addTaskSelectLeft" disabled>
                 <option value="" disabled>Select an option</option>
                 <option value="Not Started" {% if task.status == 'Not Started' %}selected{% endif %}>Not Started</option>
                 <option value="Incomplete" {% if task.status == 'Incomplete' %}selected{% endif %}>In Progress</option>
@@ -85,16 +59,16 @@
         <div class="right-section">
             <!-- Content for the right section goes here -->
             <!--Drop-down list of Category-->
-            <label for="catogory" style="font-size: large;"> Category</label><br>
-            <select id="category_type" name="category_type" disabled>
+            <label for="catogory" style="font-size: large;" class="addTaskLabel">Category</label><br>
+            <select id="category_type" name="category_type" class="addTaskSelectRight" disabled>
                 <option value="" disabled>Select an option</option>
                 <option value="Story" {% if task.category == 'Story' %}selected{% endif %}>Story</option>
                 <option value="Bug" {% if task.category == 'Bug' %}selected{% endif %}>Bug</option>
             </select> <br><br>
 
             <!--Drop-down list of Labels-->
-            <label for="labels" style="font-size: large;"> Labels</label><br>
-            <select id="label_type" name="label_type[]" multiple disabled>
+            <label for="labels" style="font-size: large;" class="addTaskLabel">Tags</label><br>
+            <select id="label_type" name="label_type[]" style="font-size: large;" class="addTaskSelectRightMultiple" multiple disabled>
                 <option value="" disabled selected>Select an option</option>
                 <option value="Front End" {% if "Front End" in labels %}selected{% endif %}>Front End</option>
                 <option value="Back End" {% if "Back End" in labels %}selected{% endif %}>Back End</option>
@@ -107,8 +81,8 @@
             </select> <br><br>
 
             <!--Drop-down list of Assignee-->
-            <label for="assignee" style="font-size: large;"> Assignee</label><br>
-            <select id="assignee_name" name="assignee_name" disabled>
+            <label for="assignee" style="font-size: large;" class="addTaskLabel">Assignee</label><br>
+            <select id="assignee_name" name="assignee_name" class="addTaskSelectRight" disabled>
                 <option value="" disabled selected>Select an option</option>
                 <option value="Sheena" {% if task.assignee == 'Sheena' %}selected{% endif %}>Sheena</option>
                 <option value="Jean" {% if task.assignee == 'Jean' %}selected{% endif %}>Jean</option>
@@ -119,8 +93,8 @@
             </select> <br><br>
 
             <!--Drop-down list of Story Point-->
-            <label for="story_point" style="font-size: large;"> Story Point</label><br>
-            <select id="point" name="point" disabled>
+            <label for="story_point" style="font-size: large;" class="addTaskLabel">Story Point</label><br>
+            <select id="point" name="point" class="addTaskSelectRight" disabled>
                 <option value="" disabled selected>Select an option</option>
                 <option value=1 {% if task.story_points == 1 %}selected{% endif %}>1</option>
                 <option value=2 {% if task.story_points == 2 %}selected{% endif %}>2</option>

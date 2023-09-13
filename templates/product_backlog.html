@@ -5,22 +5,6 @@
       <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
       <!--ICON-->
       <link href='https://unpkg.com/css.gg@2.0.0/icons/css/add.css' rel='stylesheet'>
-
-      <style>
-         /* CSS to hide the dropdown menu */
-         .dropdown {
-             display: none;
-         }
-     </style>
-
-
-      <style>
-         /* CSS to hide the dropdown menu */
-         .dropdown {
-             display: none;
-         }
-     </style>
-
    </head>
 
 
@@ -32,7 +16,7 @@
 		
       <!--This the link to add new task to product backlog, can chage to a button in future-->
       <!--This the link to add new task to product backlog, can chage to a button in future-->
-      <h3 class="pageTitle">Tasks
+      <h3 class="pageTitle">Product Backlog
          
          <button class="buttons">
             
@@ -97,7 +81,9 @@
          <tbody>
             {% for task in tasks %}
                <tr>
-                  <td>{{ task.name }} <a href = "{{ url_for('view_task', task_id = task.id) }}">&#128065</a></td>
+                  <td>{{ task.name }} 
+                     <a href = "{{ url_for('view_task', task_id = task.id) }}" style="text-decoration: none; margin-left: 1%; color: #333333;">&#128065</a>
+                  </td>
                   
                   <td>
                      {% for label in task.labels %}
