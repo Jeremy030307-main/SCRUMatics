@@ -18,7 +18,7 @@
       {%- endfor %}
 
     <form action="/addtask" method="POST" class="addTaskForm">
-        <div class="addTaskContainer">
+        <div class="taskContainer">
             <div class="left-section">
                 <!-- Content for the left section goes here -->
                 <!--Block to let user enter task name-->
@@ -59,7 +59,7 @@
                 </select> <br><br>
 
                 <!--Drop-down list of Labels-->
-                <label for="labels" style="font-size: large;" class="addTaskLabel"> Labels</label><br>
+                <label for="labels" style="font-size: large;" class="addTaskLabel">Tags</label><br>
                 <select id="label_type" name="label_type[]" multiple class="addTaskSelectRightMultiple">
                     <option value="" disabled selected>Select an option</option>
                     <option value="Front End">Front End</option>
@@ -73,7 +73,7 @@
                 </select> <br><br>
 
                 <!--Drop-down list of Assignee-->
-                <label for="assignee" style="font-size: large;" class="addTaskLabel"> Assignee</label><br>
+                <label for="assignee" style="font-size: large;" class="addTaskLabel">Assignee</label><br>
                 <select id="assignee_name" name="assignee_name" class="addTaskSelectRight">
                     <option value="" disabled selected>Select an option</option>
                     <option value="Sheena">Sheena</option>
@@ -85,7 +85,7 @@
                 </select> <br><br>
 
                 <!--Drop-down list of Story Point-->
-                <label for="story_point" style="font-size: large;" class="addTaskLabel"> Story Point</label><br>
+                <label for="story_point" style="font-size: large;" class="addTaskLabel">Story Point</label><br>
                 <select id="point" name="point" class="addTaskSelectRight">
                     <option value="" disabled selected>Select an option</option>
                     <option value=1>1</option>
