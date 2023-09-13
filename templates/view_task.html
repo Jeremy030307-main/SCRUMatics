@@ -37,15 +37,20 @@
             <label for="priority" class="addTaskLabel"> Priority</label><br>
             <select id="priority_level" name="priority_level" class="addTaskSelectLeft" disabled>
                 <option value="" disabled>Select an option</option>
-                <option value=1 {% if task.priority == '1' %}selected{% endif %}>Low</option>
-                <option value=2 {% if task.priority == '2' %}selected{% endif %}>Medium</option>
-                <option value=3 {% if task.priority == '3' %}selected{% endif %}>Important</option>
-                <option value=4 {% if task.priority == '4' %}selected{% endif %}>Urgent</option>
+                <option value=1 {% if task.priority == 1 %}selected{% endif %}>Low</option>
+                <option value=2 {% if task.priority == 2 %}selected{% endif %}>Medium</option>
+                <option value=3 {% if task.priority == 3 %}selected{% endif %}>Important</option>
+                <option value=4 {% if task.priority == 4 %}selected{% endif %}>Urgent</option>
             </select> <br><br>
     
             <!--Drop-down list of task status-->
             <label for="status" class="addTaskLabel"> Status</label><br>
-            <select id="status_type" name="status_type" onchange="changeColor(this)" class="addTaskSelectLeft" disabled>
+            <select id="status_type" name="status_type" class="
+                {%if task.status == "Not Started"%} addTaskSelectLeft-not-started 
+                {%elif task.status == "Incomplete"%} addTaskSelectLeft-incomplete
+                {%elif task.status == "Completed"%} addTaskSelectLeft-complete
+                {%endif%}"
+                disabled>
                 <option value="" disabled>Select an option</option>
                 <option value="Not Started" {% if task.status == 'Not Started' %}selected{% endif %}>Not Started</option>
                 <option value="Incomplete" {% if task.status == 'Incomplete' %}selected{% endif %}>In Progress</option>

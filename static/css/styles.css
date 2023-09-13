@@ -203,10 +203,7 @@ body {
   }
 
 /* ---------------------Add Task--------------------- */
-/* CSS to hide the dropdown menu */
-.dropdown {
-    display: none;
-}
+.dropdown
 
 .taskContainer{
     margin-left: 5%;
@@ -375,4 +372,46 @@ body {
 .taskViewHeader button.del i{
     margin-top: 20%;
     color: #e0e0e0;
+}
+
+.taskContainer .addTaskSelectLeft-not-started{
+    background-color: #9b9b9b;
+    height: 2.5em;
+    width: 25%;
+    border-radius: .25em;
+    border:none;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    font-size: 1.25em;
+    padding-left: 2%;
+    padding-right: 2%;
+    color: #333333;
+}
+
+.taskContainer .addTaskSelectLeft-incomplete{
+    background-color: #2572ca;
+    height: 2.5em;
+    width: 25%;
+    border-radius: .25em;
+    border:none;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    font-size: 1.25em;
+    padding-left: 2%;
+    padding-right: 2%;
+    color: #333333;
+}
+
+.taskContainer .addTaskSelectLeft-complete{
+    background-color: #77cb3f;
+    height: 2.5em;
+    width: 25%;
+    border-radius: .25em;
+    border:none;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    font-size: 1.25em;
+    padding-left: 2%;
+    padding-right: 2%;
+    color: #333333;
 }
