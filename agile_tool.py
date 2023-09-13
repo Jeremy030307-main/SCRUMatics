@@ -193,7 +193,6 @@ def view_task(task_id):
         db.session.delete(this_task)
         db.session.commit()
 
-        flash('Task was successfully deleted')
         return redirect(url_for('product_backlog'))
     return render_template("view_task.html", task = this_task, labels = this_task_labels)
 
