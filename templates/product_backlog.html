@@ -81,7 +81,8 @@
             <tbody>
                {% for task in tasks %}
                   <tr>
-                     <td>{{ task.name }} <a href = "{{ url_for('view_task', task_id = task.id) }}">&#128065</a></td>
+                     <td>{{ task.name }} <a href = "{{ url_for('view_task', task_id = task.id) }}" style="text-decoration: none; margin-left: 1%; color: #333333;">&#128065</a>
+                     </td>
                      
                      <td style="text-align: justify; padding-left: 1%;">
                         {% for label in task.labels %}
