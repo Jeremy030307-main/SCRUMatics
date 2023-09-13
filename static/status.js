@@ -10,5 +10,3 @@ function changeColor(e) {
   }
 }
 
-
-

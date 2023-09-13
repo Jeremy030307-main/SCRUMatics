@@ -11,9 +11,62 @@ body {
     margin-top: 3%;
     margin-bottom: 3%;
     padding: 0;
+} 
+
+.theForm {
+    display: flex;
+    padding-left: 10%;
+    padding-right: 10%;
 }
-.taskTable th, td{
-    border: 1px solid black;
+.theForm div {
+    padding-top: 2%;
+    display: flex;
+    margin-right: 5%;
+}
+.theForm div label {
+    margin-right: 5%;
+}
+.theForm div select {
+    margin-bottom: 5%;
+}
+
+.taskTable {
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 2em;
+    width: 100%;
+}
+.taskTable th{
+    color: #eeeeee;
+    background-color: #646464;
+    font-size: 2em;
+    height: 2em;
+}
+.taskTable th:first-of-type{
+    border-top-left-radius: .5em;
+}  
+.taskTable th:last-of-type{
+    border-top-right-radius: .5em;
+}
+.taskTable td{
+    color: #333333;
+    
+    font-size: 1.5em;
+    height: 2em;
+    text-align: center;
+}
+
+.taskTable td:nth-child(1),
+.taskTable td:nth-child(2),
+.taskTable td:nth-child(4){
+    background-color: #d9d9d9;
+}
+
+.taskTable tr:last-of-type td:first-of-type{
+    border-bottom-left-radius: .5em;
+}
+.taskTable tr:last-of-type td:last-of-type{
+    border-bottom-right-radius: .5em;
 }
 
 .pageTitle{
@@ -21,12 +74,19 @@ body {
     font-family: 'Poppins', sans-serif;
     font-size: 5em;
     font-weight: 700;
-    margin-bottom: 1%;
     margin-top: 0;
+    margin-bottom: 0;
     display: flex;
     color: #333333;
+    margin-left: 10%;
+    margin-right: 10%;
 }
-
+.pageTitle .buttons{
+    margin-left: 10em;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-right: 0;
+}
 .buttons{
     background-color: #ddd;
     color: #333333;
@@ -34,7 +94,6 @@ body {
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    margin: 4% 4%;
     cursor: pointer;
     border-radius: 16px;
     box-shadow: .3em .3em .3em #999;
@@ -44,3 +103,22 @@ body {
     text-decoration: none;
     color: #333333;
 }
+
+/* Priority Styles */
+.urgent-priority {
+    background-color: rgb(247, 81, 81);
+}
+
+.important-priority {
+    background-color: orange;
+}
+
+.medium-priority {
+    background-color: yellow;
+}
+
+.low-priority {
+    background-color: rgb(100, 255, 100);
+}
+
+
