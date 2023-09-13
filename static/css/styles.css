@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;700&display=swap');
 
 body {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 14px;
     background-color: #fff;
     color: #000;
@@ -203,7 +203,12 @@ body {
   }
 
 /* ---------------------Add Task--------------------- */
-.addTaskContainer{
+/* CSS to hide the dropdown menu */
+.dropdown {
+    display: none;
+}
+
+.taskContainer{
     margin-left: 5%;
     margin-right: 5%;
     margin-top: auto;
@@ -232,13 +237,13 @@ body {
     border-top-right-radius: .5em;
     border-bottom-right-radius: .5em;
 }
-.addTaskContainer .left-section .addTaskInput{
+.taskContainer .left-section .addTaskInput{
     font-size: 3em;
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
     color: #eeeeee;
 }
-.addTaskContainer .left-section input[type=text]{
+.taskContainer .left-section input[type=text]{
     background-color: #e0e0e0;
     height: 2.5em;
     width: 50%;
@@ -250,11 +255,11 @@ body {
     padding-left: 2%;
     padding-right: 2%;
 }
-.addTaskContainer .addTaskLabel{
+.taskContainer .addTaskLabel{
     font-size: 2em;
     letter-spacing: .05em;
 }
-.addTaskContainer .addTaskSelectLeft{
+.taskContainer .addTaskSelectLeft{
     background-color: #e0e0e0;
     height: 2.5em;
     width: 25%;
@@ -267,16 +272,16 @@ body {
     padding-right: 2%;
     color: #333333;
 }
-.addTaskContainer .addTaskSelectLeft select[open],
-.addTaskContainer .addTaskSelectRight select[open]{
+.taskContainer .addTaskSelectLeft select[open],
+.taskContainer .addTaskSelectRight select[open]{
     z-index: 1;
 }
-.addTaskContainer .addTaskSelectLeft select:hover::after{
+.taskContainer .addTaskSelectLeft select:hover::after{
     background-color: #646464;
     color: #eeeeee;
     border: #eeeeee;
 }
-.addTaskContainer .left-section textarea{
+.taskContainer .left-section textarea{
     font-size: 1em;
     font-family: 'Poppins', sans-serif;
     font-weight: 300;
@@ -286,7 +291,7 @@ body {
     background-color: #e0e0e0;
     width: 90%;
 }
-.addTaskContainer .right-section .addTaskSelectRight{
+.taskContainer .right-section .addTaskSelectRight{
     background-color: #ffffff;
     height: 2.5em;
     width: 60%;
@@ -299,10 +304,10 @@ body {
     padding-right: 2%;
     color: #333333;
 }
-.addTaskContainer .right-section .addTaskSelectRight select[open]{
+.taskContainer .right-section .addTaskSelectRight select[open]{
     z-index: 1;
 }
-.addTaskContainer .right-section .addTaskSelectRightMultiple{
+.taskContainer .right-section .addTaskSelectRightMultiple{
     background-color: #ffffff;
     height:fit-content;
     width: 60%;
@@ -315,13 +320,13 @@ body {
     padding-right: 2%;
     color: #333333;
 }
-.addTaskContainer .right-section .saveBtnDiv{
+.taskContainer .right-section .saveBtnDiv{
     margin-top: 3vh;
     margin-left: 3vh;
     text-align: left;
     height: 10%;
 }
-.addTaskContainer .right-section .saveBtn{
+.taskContainer .right-section .saveBtn{
     border-radius: .25em;
     background-color: #ffffff;
     height: 70%;
@@ -337,4 +342,37 @@ body {
     background-size: 100%;
     color: #fff;
     cursor: pointer;
+}
+
+/* ---------------------View Task--------------------- */
+.taskContainer .taskViewHeader{
+    display: flex;
+    font-weight: 700;
+    font-size: 3em;
+}
+.taskViewHeader button{
+    font-family: 'Poppins', sans-serif;
+    font-size: .5em;
+    margin-left: 2%;
+    color: #333333;
+    height: 100%;
+    border-radius: .5em;
+    border: none;
+    margin-top: auto;
+    margin-bottom: auto;
+    padding-left: 2%;
+    padding-right: 2%;
+}
+.taskViewHeader button a{
+    font-family: 'Poppins', sans-serif;
+    text-decoration: none;
+    color: #333333;
+}
+.taskViewHeader button.del{
+    background-color: #EF5350;
+    cursor: pointer;
+}
+.taskViewHeader button.del i{
+    margin-top: 20%;
+    color: #e0e0e0;
 }

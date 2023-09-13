@@ -146,7 +146,6 @@ def new_task():
         db.session.add(task)
         db.session.commit()
 
-        flash('Task was successfully added')
         return redirect(url_for('product_backlog'))
    return render_template('new_task.html')
 
@@ -181,7 +180,6 @@ def edit_task(task_id):
 
         db.session.commit()
 
-        flash('Task was successfully edited.')
         return redirect(url_for('product_backlog'))
     return render_template('edit_task.html', task = this_task, labels = labels_name)
 
