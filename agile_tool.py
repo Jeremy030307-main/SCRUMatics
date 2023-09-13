@@ -36,6 +36,16 @@ class Tasks(db.Model):
                             primaryjoin="Tasks.id == task_labels.c.task_id",
                             secondaryjoin="Label.name == task_labels.c.label_id")
 
+    def edit(self, name, priority, status, category, assignee, story_points, description, labels):
+        self.name = name
+        self.priority = priority
+        self.status = status
+        self.category = category
+        self.assignee = assignee
+        self.story_points = story_points
+        self.description = description
+        self.labels = labels
+
 def filter_and_sort_tasks(filter_condition=None, sort_column=None, ordering = "ascending"):
     query = Tasks.query
 
@@ -76,6 +86,7 @@ def product_backlog():
         "Testing": Tasks.labels.any(Label.name == "Testing"),
         "UI": Tasks.labels.any(Label.name == "UI"),
         "UX": Tasks.labels.any(Label.name == "UX")}
+    
 
     # the default sorting element
     sorting_style, sorting_element, ordering = "default", "", ""
@@ -135,9 +146,55 @@ def new_task():
         db.session.add(task)
         db.session.commit()
 
-        flash('Task was successfully added')
         return redirect(url_for('product_backlog'))
    return render_template('new_task.html')
+
+@app.route('/addtask/<int:task_id>/edit', methods = ['GET', 'POST'])
+def edit_task(task_id):
+
+    this_task = Tasks.query.get(task_id)
+    labels_name = [label.name for label in this_task.labels]
+
+    if request.method == 'POST':
+        
+        this_task_labels = []
+        for label in request.form.getlist("label_type[]"):
+            # check is there existing label 
+            existing_label = Label.query.filter_by(name=label).first()
+            if existing_label:
+                this_task_labels.append(existing_label)
+            else:
+                this_task_labels.append(Label(name = label))
+
+        # change the task detail
+        this_task.edit(
+            name = request.form["task_name"],
+            priority = request.form["priority_level"],
+            status = request.form["status_type"],
+            category = request.form["category_type"],
+            assignee = request.form["assignee_name"],
+            story_points = request.form['point'],
+            description = request.form["task_description"],
+            labels = this_task_labels
+        )
+
+        db.session.commit()
+
+        return redirect(url_for('product_backlog'))
+    return render_template('edit_task.html', task = this_task, labels = labels_name)
+
+@app.route('/addtask/<int:task_id>', methods = ['GET', 'POST'])
+def view_task(task_id):
+    this_task = Tasks.query.get(task_id)
+    this_task_labels = [label.name for label in this_task.labels]
+
+    if request.method == "POST":
+
+        db.session.delete(this_task)
+        db.session.commit()
+
+        return redirect(url_for('product_backlog'))
+    return render_template("view_task.html", task = this_task, labels = this_task_labels)
 
 @app.route('/clear-database', methods=['GET'])
 def clear_database():
