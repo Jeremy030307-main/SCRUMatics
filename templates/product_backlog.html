@@ -5,22 +5,6 @@
       <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
       <!--ICON-->
       <link href='https://unpkg.com/css.gg@2.0.0/icons/css/add.css' rel='stylesheet'>
-
-      <style>
-         /* CSS to hide the dropdown menu */
-         .dropdown {
-             display: none;
-         }
-     </style>
-
-
-      <style>
-         /* CSS to hide the dropdown menu */
-         .dropdown {
-             display: none;
-         }
-     </style>
-
    </head>
 
 
@@ -32,7 +16,7 @@
 		
       <!--This the link to add new task to product backlog, can chage to a button in future-->
       <!--This the link to add new task to product backlog, can chage to a button in future-->
-      <h3 class="pageTitle">Tasks
+      <h3 class="pageTitle">Product Backlog
          
          <button class="buttons">
             
@@ -94,25 +78,35 @@
                </tr>
             </thead>
 
-         <tbody>
-            {% for task in tasks %}
-               <tr>
-                  <td>{{ task.name }} <a href = "{{ url_for('view_task', task_id = task.id) }}">&#128065</a></td>
-                  
-                  <td>
-                     {% for label in task.labels %}
-                        {{ label.name }},  
-                     {% endfor %}
-                  </td>
-                  
-                  <td 
-                     class = "{% if task.priority == 4 %}urgent-priority{% elif task.priority == 3 %}important-priority{% elif task.priority == 2 %}medium-priority{% elif task.priority == 1 %}low-priority{% endif %}"
-                  >
-                     {{ proirity_map[task.priority] }}
-                  </td>
+            <tbody>
+               {% for task in tasks %}
+                  <tr>
+                     <td>{{ task.name }} <a href = "{{ url_for('view_task', task_id = task.id) }}">&#128065</a></td>
+                     
+                     <td style="text-align: justify; padding-left: 1%;">
+                        {% for label in task.labels %}
+                           <div class="
+                           {%if label.name == "Front End"%} label-front-end 
+                           {%elif label.name == "Back End"%} label-back-end
+                           {%elif label.name == "Testing"%} label-testing
+                           {%elif label.name == "Framework"%} label-framework
+                           {%elif label.name == "API"%} label-api
+                           {%elif label.name == "Database"%} label-database
+                           {%elif label.name == "UI"%}label-ui
+                           {%elif label.name == "UX"%}label-ux
+                           {%endif%}"
+                           >{{ label.name }}</div>
+                        {% endfor %}
+                     </td>
+                     
+                     <td 
+                        class = "{% if task.priority == 4 %}urgent-priority{% elif task.priority == 3 %}important-priority{% elif task.priority == 2 %}medium-priority{% elif task.priority == 1 %}low-priority{% endif %}"
+                     >
+                        {{ proirity_map[task.priority] }}
+                     </td>
 
-                     <td>{{ task.story_points }}</td>
-                  </tr>
+                        <td>{{ task.story_points }}</td>
+                     </tr>
                {% endfor %}
             </tbody>
          </table>

@@ -86,6 +86,7 @@ def product_backlog():
         "Testing": Tasks.labels.any(Label.name == "Testing"),
         "UI": Tasks.labels.any(Label.name == "UI"),
         "UX": Tasks.labels.any(Label.name == "UX")}
+    
 
     # the default sorting element
     sorting_style, sorting_element, ordering = "default", "", ""
@@ -145,7 +146,6 @@ def new_task():
         db.session.add(task)
         db.session.commit()
 
-        flash('Task was successfully added')
         return redirect(url_for('product_backlog'))
    return render_template('new_task.html')
 
@@ -180,7 +180,6 @@ def edit_task(task_id):
 
         db.session.commit()
 
-        flash('Task was successfully edited.')
         return redirect(url_for('product_backlog'))
     return render_template('edit_task.html', task = this_task, labels = labels_name)
 
@@ -194,7 +193,6 @@ def view_task(task_id):
         db.session.delete(this_task)
         db.session.commit()
 
-        flash('Task was successfully deleted')
         return redirect(url_for('product_backlog'))
     return render_template("view_task.html", task = this_task, labels = this_task_labels)
 
