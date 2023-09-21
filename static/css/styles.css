@@ -79,7 +79,7 @@ body {
     margin-bottom: 0;
     display: flex;
     color: #333333;
-    margin-left: 10%;
+    margin-left: 7%;
     margin-right: 10%;
 }
 .pageTitle .buttons{
@@ -413,3 +413,80 @@ body {
     padding-right: 2%;
     color: #333333;
 }
+
+
+/* ------------------ Navigation Bar (Hamburger icon) -------------------*/
+
+.header {
+    display: flex; /* Use flexbox to align items in a row */
+    align-items: center; /* Vertically center items */
+    color: white;
+}
+
+.menu {
+    position: relative;
+    display: inline-block;
+    transition: all 0.4s;
+}
+  
+.menu-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    padding-top: 20px;
+}
+
+.menu-button:hover{
+    color: grey;
+}
+  
+  /* Display the dropdown menu on hover */
+.menu:hover .dropdown-menu {
+    display: block;
+}
+  
+.dropdown-menu {
+    display: none;
+    list-style: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    padding: 0px;
+    margin: 0;
+    background-color: grey;
+    width: 250px;
+    border-radius: 10px;
+    font-size: 20px;
+}
+
+/* Remove bullet points from the list */
+.dropdown-menu ul {
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+}
+  
+.dropdown-menu li  {
+    padding: 0 px;
+}
+  
+.dropdown-menu a {
+    text-decoration: none;
+    color: white;
+    display: block;
+    padding: 15px 20px;
+    margin: 5px;
+}
+  
+  /* Hover effect for links */
+.dropdown-menu a:hover {
+    background-color: lightgrey;
+    border-radius: 10px;
+    color: black;
+}
+  
+
+
+
+  
