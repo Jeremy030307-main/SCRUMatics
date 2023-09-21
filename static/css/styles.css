@@ -414,6 +414,15 @@ body {
     color: #333333;
 }
 
+/* -----------------arrow button ---------------- */
+.arrow-button{
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    padding: 0px;
+    margin-right: 15px;
+}
 
 /* ------------------ Navigation Bar (Hamburger icon) -------------------*/
 
