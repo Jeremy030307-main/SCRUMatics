@@ -245,7 +245,7 @@ body {
     width: 50%;
     border-radius: .25em;
     border:none;
-    margin-top: 1em;
+    margin-top: .5em;
     margin-bottom: 1em;
     font-size: 1.5em;
     padding-left: 2%;
@@ -286,6 +286,8 @@ body {
     border-radius: .25em;
     background-color: #e0e0e0;
     width: 90%;
+    margin-bottom: 1em;
+    margin-top: .5em;
 }
 .taskContainer .right-section .addTaskSelectRight{
     background-color: #ffffff;
