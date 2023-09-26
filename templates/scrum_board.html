@@ -209,40 +209,50 @@
         </div>
     </h1>
 
-    <!-- Pop-up dialog content -->
-    <div id="new-dialog" class="pop-up-dialog">
-        <i class="fa-regular fa-circle-xmark" onclick="closeDialog()" ></i>
-        <h2 class="dialog-heading">Add New Sprint</h2>
-        <hr class="dialog-line"> 
-        <div class="form-field">
-            <label for="sprint-name">Sprint Name:</label>
-            <input type="text" id="sprint-name" name="sprint-name">
-        </div>
-        <div class="form-field">
-            <div class="date-inputs">
-                <label for="sprint-date">Sprint Date:</label>
-                <input type="text" id="sprint-date" class="date-input" placeholder="Select Date Range">
+    <form action="/newSprint" method="POST">
+        <!-- Pop-up dialog content -->
+        <div id="new-dialog" class="pop-up-dialog">
+            <i class="fa-regular fa-circle-xmark" onclick="closeDialog()" ></i>
+            <h2 class="dialog-heading">Add New Sprint</h2>
+            <hr class="dialog-line"> 
+            <div class="form-field">
+                <label for="sprint-name">Sprint Name:</label>
+                <input type="text" id="sprint-name" name="sprint-name">
             </div>
-        </div>
-                     
-        <div class="form-field">
-            <label for="sprint-status">Sprint Status:</label>
-            <div class="status-input-container">
-                <div class="status-circle"></div>
-                <div class="status-inner-container">
-                    <span class="status-text">Not Started</span>
+            <div class="form-field">
+                <div class="date-inputs">
+                    <label for="sprint-date">Sprint Start Date:</label>
+                    <input type="date" name="sprint-start-date" class="date-input" placeholder="Select Date Range">
                 </div>
             </div>
+            <div class="form-field">
+                <div class="date-inputs">
+                    <label for="sprint-date">Sprint End Date:</label>
+                    <input type="date" name="sprint-end-date" class="date-input" placeholder="Select Date Range">
+                </div>
+            </div>
+                        
+            <div class="form-field">
+                <!--Drop-down list of task status-->
+                <label for="status" class="addTaskLabel"> Status</label><br>
+                <select name="sprint-status" onchange="changeColor(this)" class="addTaskSelectLeft" disabled>
+                    <option value="">Select an option</option>
+                    <option value="Not Started" selected>Not Started</option>
+                    <option value="Incomplete">In Progress</option>
+                    <option value="Completed">Completed</option>
+                </select><br><br>
+            </div>
+            
+            
+        
+            
+            <div class="button-container">
+                <input type="submit" value="Save" class="button">
+                <!-- <button class="button" onclick="createSprint()">Create</button> -->
+                <button class="button" onclick="closeDialog()">Cancel</button>
+            </div>
         </div>
-        
-        
-       
-        
-        <div class="button-container">
-            <button class="button" onclick="createSprint()">Create</button>
-            <button class="button" onclick="closeDialog()">Cancel</button>
-        </div>
-    </div>
+    </form>
 
 
     <table>
