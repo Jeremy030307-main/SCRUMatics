@@ -37,6 +37,7 @@ def main_page():
     sprints = Sprint.query.all()
     return render_template('scrum_board.html', sprints=sprints)
 
+
 @app.route('/clear-database', methods=['GET'])
 def clear_database():
     # Drop all tables in the database
