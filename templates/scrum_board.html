@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://kit.fontawesome.com/4b4c250273.js" crossorigin="anonymous"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <!--CSS-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+
+</head>
+<body>
+
+    <h1>
+        <!-- Sprints with icons -->
+        <div class="sprint-name-icon">
+            <i class="fa-solid fa-bars icon" style="margin-right: 120px;"></i>
+            <i class="fa-solid fa-database" style="margin-right: 20px;"></i>Sprints
+        </div>
+    
+        <div class="new-label-container">
+        <div class="new-button" onclick="showDialog()">New</div>
+
+        </div>
+    </h1>
+
+    <!-- Pop-up dialog content -->
+    <div id="new-dialog" class="pop-up-dialog">
+        <i class="fa-regular fa-circle-xmark" onclick="closeDialog()" ></i>
+        <h2 class="dialog-heading">Add New Sprint</h2>
+        <hr class="dialog-line"> 
+        <div class="form-field">
+            <label for="sprint-name">Sprint Name:</label>
+            <input type="text" id="sprint-name" name="sprint-name">
+        </div>
+        <div class="form-field">
+            <div class="date-inputs">
+                <label for="sprint-date">Sprint Date:</label>
+                <input type="text" id="sprint-date" class="date-input" placeholder="Select Date Range">
+            </div>
+        </div>
+                     
+        <div class="form-field">
+            <label for="sprint-status">Sprint Status:</label>
+            <div class="status-input-container">
+                <div class="status-circle"></div>
+                <div class="status-inner-container">
+                    <span class="status-text">Not Started</span>
+                </div>
+            </div>
+        </div>
+        
+        
+       
+        
+        <div class="button-container">
+            <button class="button" onclick="createSprint()">Create</button>
+            <button class="button" onclick="closeDialog()">Cancel</button>
+        </div>
+    </div>
+
+
+    <table>
+        <thead>
+            <tr>
+                <!-- Sprint Name with icon -->
+                <th>
+                    <i class="fa-solid fa-a" style="margin-right: 20px;"></i>
+                    Sprint Name
+                </th>
+                <!-- Sprint Status with icon -->
+                <th>
+                    <i class="fa-solid fa-spinner"></i>
+                    Sprint Status
+                </th>
+                <!-- Sprint Date with icon -->
+                <th>
+                    <i class="fa-solid fa-calendar-days"></i>
+                    Date
+                </th>
+            </tr>
+        </thead>
+    </table>
+
+
+    <script>
+        function showDialog() {
+            document.getElementById("new-dialog").style.display = "block";
+        }
+
+        function closeDialog() {
+            document.getElementById("new-dialog").style.display = "none";
+        }
+
+        function createSprint() {
+            // Logic to create a new sprint here
+            closeDialog(); // Close the dialog after creating
+        }
+
+        $(function() {
+            // Initialize the date-range picker
+            $('#sprint-date').daterangepicker({
+                autoUpdateInput: false,
+                locale: {
+                    cancelLabel: 'Clear'
+                }
+            });
+
+            // Handle date range selection
+            $('#sprint-date').on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+            });
+
+            // Handle clearing the date range
+            $('#sprint-date').on('cancel.daterangepicker', function(ev, picker) {
+                $(this).val('');
+            });
+        });
+    </script>
+</body>
+</html>
