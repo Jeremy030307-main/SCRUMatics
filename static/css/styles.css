@@ -210,7 +210,7 @@ body {
     margin-bottom: auto;
     display: flex;
     border-radius: .5em;
-    height: 90vh;
+    height: auto;
 }
 
 /* Define the left section with a 4:1 ratio */
@@ -324,8 +324,8 @@ body {
 .taskContainer .right-section .saveBtn{
     border-radius: .25em;
     background-color: #ffffff;
-    height: 70%;
-    width: 40%;
+    height: 50px;
+    width: 150px;
     font-size: 100%;
     font-weight:500;
     background-image: linear-gradient(0, #646464, #646464);
@@ -411,5 +411,42 @@ body {
     font-size: 1.25em;
     padding-left: 2%;
     padding-right: 2%;
+    color: #333333;
+}
+
+/* ------------------- View Sprint Task ----------------------------- */
+.bottom-section{
+
+    flex: 1; /* Adjust the flex value as needed */
+    background-color: #e32020; /* Add your desired background color */
+    color: #ffffff; /* Add your desired text color */
+    padding: 20px; /* Add padding or content as needed */
+    border-radius: 0.5em;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+.taskContainer .right-section .log-time-block{
+
+    background-color: #86b2d2;
+    margin-left: 5%;
+    margin-right: 5%;
+    padding: 5%;
+}
+
+.taskContainer .right-section .log-time-block .datetime-label{
+    font-size: 10px;
+    letter-spacing: .05em;
+}
+
+.taskContainer .right-section .log-time-block .select-datetime{
+    background-color: #ffffff;
+    height: 2em;
+    width: 50%;
+    border-radius: .25em;
+    border:none;
+    margin-top: 1em;
+    font-size: 1em;
+    margin-right: 5%;
     color: #333333;
 }
