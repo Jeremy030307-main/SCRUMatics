@@ -62,11 +62,11 @@
         </div>
     </div>
 
-
-    <table>
-        <thead>
-            <tr>
-                <!-- Sprint Name with icon -->
+    <div class="tableContainer">
+        <table class="taskTable" style="width:80%">
+           <thead>
+              <tr>
+                 <!-- Sprint Name with icon -->
                 <th>
                     <i class="fa-solid fa-a" style="margin-right: 20px;"></i>
                     Sprint Name
@@ -81,9 +81,21 @@
                     <i class="fa-solid fa-calendar-days"></i>
                     Date
                 </th>
-            </tr>
-        </thead>
-    </table>
+              </tr>
+           </thead>
+
+           <tbody>
+              {% for s in sprint %}
+                 <tr>
+                    <td>{{ s.sprint_name }}</td>
+                    <td>{{ s.status }}</td>
+                    <td>{{ s.start_date }}</td>
+                    <td>{{ s.end_date }}</td>
+                    </tr>
+              {% endfor %}
+           </tbody>
+        </table>
+     </div>
 
 
     <script>
