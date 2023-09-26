@@ -4,13 +4,13 @@ from datetime import datetime
 
 app = Flask(__name__, static_folder='static')
 app.config['FAVICON'] = 'static/favicon.ico'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///sprints.sqlite3'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tasks.sqlite3'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 app.config['SECRET_KEY'] = "random string"
 
 
-# Create the Sprint model
+# Create the Sprint 
 class Sprint(db.Model):
     sprint_name = db.Column(db.String(100), primary_key=True)
     status = db.Column(db.String(100), nullable=False)
