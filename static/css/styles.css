@@ -14,20 +14,21 @@ body {
 } 
 
 /* ---------------------Product Backlog--------------------- */
-.theForm {
+.sortForm {
     display: flex;
     padding-left: 10%;
     padding-right: 10%;
 }
-.theForm div {
+.sortForm div {
     padding-top: 2%;
-    display: flex;
     margin-right: 5%;
+    width: 15%;
 }
-.theForm div label {
+.sortForm div label {
     margin-right: 5%;
+    font-size: 1.5em;
 }
-.theForm div select {
+.sortForm div select {
     margin-bottom: 5%;
 }
 
@@ -244,7 +245,7 @@ body {
     width: 50%;
     border-radius: .25em;
     border:none;
-    margin-top: 1em;
+    margin-top: .5em;
     margin-bottom: 1em;
     font-size: 1.5em;
     padding-left: 2%;
@@ -285,6 +286,8 @@ body {
     border-radius: .25em;
     background-color: #e0e0e0;
     width: 90%;
+    margin-bottom: 1em;
+    margin-top: .5em;
 }
 .taskContainer .right-section .addTaskSelectRight{
     background-color: #ffffff;
@@ -315,13 +318,15 @@ body {
     padding-right: 2%;
     color: #333333;
 }
-.taskContainer .right-section .saveBtnDiv{
+.taskContainer .right-section .buttonDiv{
     margin-top: 3vh;
-    margin-left: 3vh;
+    /* margin-left: 3vh; */
     text-align: left;
     height: 10%;
+    display: flex;
 }
 .taskContainer .right-section .saveBtn{
+    flex: 1;
     border-radius: .25em;
     background-color: #ffffff;
     height: 70%;
@@ -332,10 +337,28 @@ body {
     background-size: 0;
     transition: .5s;
     background-repeat: no-repeat;
+    margin-left: 2%;
+    margin-right: 2%;
 }
 .right-section .saveBtn:hover{
     background-size: 100%;
     color: #fff;
+    cursor: pointer;
+}
+.right-section .cancelBtn{
+    flex: 1;
+    margin-left: 2%;
+    margin-right: 2%;
+    border-radius: .25em;
+    border-color: #EF5350;
+    background-color: #EF5350;
+    color: #ffffff;
+    height: 70%;
+    width: 40%;
+    font-size: 100%;
+    font-weight:500;
+}
+.right-section .cancelBtn:hover{
     cursor: pointer;
 }
 
