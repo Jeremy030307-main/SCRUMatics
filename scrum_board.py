@@ -18,7 +18,7 @@ class Sprints(db.Model):
     sprint_end_date = db.Column(db.Date, nullable=False)
     sprint_status = db.Column(db.String(100), nullable=False)
 
-    tasks = db.relationship('Tasks', backref='sprint', lazy=True)
+    # tasks = db.relationship('Tasks', backref='Sprints', lazy=True)
 
     def __init__(self, sprint_name, sprint_start_date, sprint_end_date, sprint_status):
         self.sprint_name = sprint_name
@@ -37,15 +37,16 @@ def new_sprint():
         # date_range = request.form['sprint-date']
         start_date = request.form['sprint-start-date']
         end_date = request.form['sprint-end-date']
-        sprint_status = request.form['sprint-status']
+        # sprint_status = request.form["sprint-status"]
 
         # Split date range and parse start and end dates
-        # start_date_str, end_date_str = date_range.split(' - ')
-        # start_date = datetime.strptime(start_date_str, '%m/%d/%Y').date()
-        # end_date = datetime.strptime(end_date_str, '%m/%d/%Y').date()
+        # start_date_str =  start_date.split(' - ')
+        # end_date_str = end_date.split(' - ')
+        start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
+        end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
 
 
-        sprint = Sprints(sprint_name, start_date, end_date, sprint_status)
+        sprint = Sprints(sprint_name, start_date, end_date, "not started")
         db.session.add(sprint)
         db.session.commit()
 
