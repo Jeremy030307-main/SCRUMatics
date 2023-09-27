@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://kit.fontawesome.com/4b4c250273.js" crossorigin="anonymous"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #d7d7d7; 
+        }
+
+        h1 {
+            font-size: 45px;
+            margin-bottom: 30px;
+            margin-left: 10px ;
+        }
+
+        h2 {
+            font-size: 20px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin-top: 10px;
+            margin-left: 130px ;
+        }
+
+        th, td {
+            font-size: 20px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #d7d7d7;
+            border-top: 2px solid #333; /* Darker color for the top border */
+            border-bottom: 2px solid #333; /* Darker color for the bottom border */
+        }
+
+        /* Add left border for Sprint Status and Date columns */
+        th:nth-child(2),
+        td:nth-child(2),
+        th:nth-child(3),
+        td:nth-child(3) {
+            border-left: 2px solid #333;
+        }
+
+  
+        /* Container for the "New" label */
+        .new-label-container {
+            float: right; /* Float the container to the right */
+            margin-top: -30px; /* Adjust the margin to position it correctly */
+            margin-right: 200px;
+            background-color: rgb(0, 76, 255); /* Blue background color */
+            color: rgba(255, 255, 255, 0.956); /* White text color */
+            font-weight: bold; /* Bold text for the label */
+            padding: 5px 10px; /* Add padding for spacing */
+            border-radius: 10px; /* Add rounded corners */
+            font-size: 25px;
+            cursor: pointer;
+        }
+
+        /* Hidden pop-up dialog */
+        .pop-up-dialog {
+            display: none;
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 70px; /* Increase padding for more space */
+            width: 700px; /* Increase width for a larger dialog */
+            background-color: rgb(125, 125, 125);
+            border: 2px solid #333;
+            border-radius: 10px;
+        }
+
+          /* Style for the heading */
+          .dialog-heading {
+            font-size: 50px;
+            margin-top: 10px;
+            color: #d7d7d7;
+        }
+
+        /* Style for the line below the heading */
+        .dialog-line {
+            border: none;
+            height: 5px; /* Adjust the height as needed */
+            background-color: #d7d7d7;
+            margin-bottom: 80px; /* Adjust the margin to control the space between the line and fields */
+        }
+
+          /* Style for the fields */
+        .form-field {
+        margin-bottom: 30px;
+        color: #d7d7d7;
+        }
+
+        /* Increase font size for input fields */
+        .form-field label,
+        .form-field input {
+            font-size: 30px; /* Increase font size for labels and input fields */
+        
+        }
+        .form-field input {
+            background-color: #fff;
+            border-radius: 8px;
+
+        }
+
+        
+        /* Style for buttons */
+        .button-container {
+            float: right;
+            margin-top: 20px;
+        }
+
+        .button {
+            margin-right: 10px;
+            padding: 20px 30px;
+            background-color: rgb(215,215,215);
+            color: rgba(0, 0, 0, 0.956);
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .close-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 30px; /* Increase the font size to make it larger */
+            cursor: pointer;
+        }
+
+        /* Style for the status input container */
+        .status-input-container {
+            display: flex;
+            align-items: center;
+            background-color: #ccc; /* Light grey background color for the container */
+            border-radius: 8px;
+            padding: 5px; /* Adjust padding as needed */
+            width: 190px;
+        }
+
+        /* Style for the status circle */
+        .status-circle {
+            width: 20px;
+            height: 20px;
+            background-color: #5b5a5a; /* Darker grey color for the circle */
+            border-radius: 50%;
+            margin-right: 4px; /* Adjust the spacing between the circle and inner container */
+        }
+
+        /* Style for the inner status container */
+        .status-inner-container {
+            display: flex;
+            align-items: center;
+            background-color: #888787;
+            width: 115px;
+            border-radius: 8px;
+            padding: 5px;
+        }
+
+        /* Style for the status text */
+        .status-text {
+            font-size: 20px;
+        }
+
+        /* Style for the form field */
+        .form-field {
+            margin-bottom: 30px;
+            color: #191919;
+            font-size: 30px;
+            display: flex;
+            flex-direction: row; /* Align items horizontally */
+            align-items: center; /* Vertically center align items */
+        }
+
+        .daterangepicker {
+            font-size: 12px; 
+            width: 660px;   
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>
+        <!-- Sprints with icons -->
+        <div class="sprint-name-icon">
+            <i class="fa-solid fa-bars icon" style="margin-right: 120px;"></i>
+            <i class="fa-solid fa-database" style="margin-right: 20px;"></i>Sprints
+        </div>
+    
+        <div class="new-label-container">
+        <div class="new-button" onclick="showDialog()">New</div>
+
+        </div>
+    </h1>
+
+    <form action="/newSprint" method="POST">
+        <!-- Pop-up dialog content -->
+        <div id="new-dialog" class="pop-up-dialog">
+            <i class="fa-regular fa-circle-xmark" onclick="closeDialog()" ></i>
+            <h2 class="dialog-heading">Add New Sprint</h2>
+            <hr class="dialog-line"> 
+            <div class="form-field">
+                <label for="sprint-name">Sprint Name:</label>
+                <input type="text" id="sprint-name" name="sprint-name" required>
+            </div>
+            <div class="form-field">
+                <div class="date-inputs">
+                    <label for="sprint-date">Sprint Start Date:</label>
+                    <input type="date" name="sprint-start-date" class="date-input" placeholder="Select Date Range" required>
+                </div>
+            </div>
+            <div class="form-field">
+                <div class="date-inputs">
+                    <label for="sprint-date">Sprint End Date:</label>
+                    <input type="date" name="sprint-end-date" class="date-input" placeholder="Select Date Range" required>
+                </div>
+            </div>
+                        
+            <div class="form-field">
+                <!--Drop-down list of task status-->
+                <label for="status" class="addTaskLabel"> Status</label><br>
+                <select name="sprint-status" onchange="changeColor(this)" class="addTaskSelectLeft" disabled>
+                    <option value="">Select an option</option>
+                    <option value="Not Started" selected>Not Started</option>
+                    <option value="Incomplete">In Progress</option>
+                    <option value="Completed">Completed</option>
+                </select><br><br>
+            </div>
+            
+            
+            <div class="button-container">
+                <input type="submit" value="Save" class="button">
+                <!-- <button class="button" onclick="createSprint()">Create</button> -->
+                <button class="button" onclick="closeDialog()">Cancel</button>
+            </div>
+        </div>
+    </form>
+
+
+    <table>
+        <thead>
+            <tr>
+                <!-- Sprint Name with icon -->
+                <th>
+                    <i class="fa-solid fa-a" style="margin-right: 20px;"></i>
+                    Sprint Name
+                </th>
+                <!-- Sprint Status with icon -->
+                <th>
+                    <i class="fa-solid fa-spinner"></i>
+                    Sprint Status
+                </th>
+                <!-- Sprint Date with icon -->
+                <th>
+                    <i class="fa-solid fa-calendar-days"></i>
+                    Date
+                </th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for sprint in sprints %}
+                <tr>
+                    <td><i class="material-icons" style="margin-right: 5%;">directions_run</i>{{ sprint.sprint_name }}</td>
+                    <td>
+                        <!-- to update class for containing sprint status like task label in product backlog -->
+                        <div class="">{{sprint.sprint_status}}</div>
+                    </td>
+                    <td>{{ sprint.sprint_start_date }} &#8594 {{ sprint.sprint_end_date }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+    <script>
+        function showDialog() {
+            document.getElementById("new-dialog").style.display = "block";
+        }
+
+        function closeDialog() {
+            document.getElementById("new-dialog").style.display = "none";
+        }
+
+        function createSprint() {
+            // Logic to create a new sprint here
+            closeDialog(); // Close the dialog after creating
+        }
+
+        $(function() {
+            // Initialize the date-range picker
+            $('#sprint-date').daterangepicker({
+                autoUpdateInput: false,
+                locale: {
+                    cancelLabel: 'Clear'
+                }
+            });
+
+            // Handle date range selection
+            $('#sprint-date').on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('YYYY/MM/DD') + ' - ' + picker.endDate.format('YYYY/MM/DD'));
+            });
+
+            // Handle clearing the date range
+            $('#sprint-date').on('cancel.daterangepicker', function(ev, picker) {
+                $(this).val('');
+            });
+        });
+    </script>
+</body>
+</html>

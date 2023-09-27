@@ -1,9 +1,9 @@
+from datetime import datetime
 from flask import Flask, render_template, request, session, flash, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, collate, Date, Time, Float,TypeDecorator, Interval, event, and_
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
-import datetime
 from datetime import timedelta
 import plotly.express as px
 import pandas as pd
@@ -59,6 +59,22 @@ class Tasks(db.Model):
         self.description = description
         self.labels = labels
 
+class Sprints(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+    sprint_name = db.Column(db.Text, nullable=False)
+    sprint_start_date = db.Column(db.Date, nullable=False)
+    sprint_end_date = db.Column(db.Date, nullable=False)
+    sprint_status = db.Column(db.String(100), nullable=False)
+
+    # tasks = db.relationship('Tasks', backref='Sprints', lazy=True)
+
+    def __init__(self, sprint_name, sprint_start_date, sprint_end_date, sprint_status):
+        self.sprint_name = sprint_name
+        self.sprint_start_date = sprint_start_date
+        self.sprint_end_date = sprint_end_date
+        self.sprint_status = sprint_status
+
 class EntryDate(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     task_id = db.Column(db.Integer, db.ForeignKey('tasks.id'), nullable=False)
@@ -89,7 +105,16 @@ def filter_and_sort_tasks(filter_condition=None, sort_column=None, ordering = "a
 
     return tasks
 
-@app.route('/', methods = ['GET', 'POST'])
+@app.route('/')
+def scrum_board():
+    sprints = Sprints.query.all()
+    return render_template('scrum_board.html', sprints = sprints)
+
+@app.route('/')
+def main_page():
+    return render_template('scrum_board.html')
+
+@app.route('/product-backlog', methods = ['GET', 'POST'])
 def product_backlog():
 
     sort_map = {
@@ -227,6 +252,19 @@ def view_task(task_id):
         return redirect(url_for('product_backlog'))
     return render_template("view_task.html", task = this_task, labels = this_task_labels)  
 
+@app.route('/newSprint', methods=['GET', 'POST'])
+def new_sprint():
+    if request.method == 'POST':
+        sprint_name = request.form['sprint-name']
+        start_date = datetime.strptime(request.form['sprint-start-date'], '%Y-%m-%d').date()
+        end_date = datetime.strptime(request.form['sprint-end-date'], '%Y-%m-%d').date()
+
+        sprint = Sprints(sprint_name, start_date, end_date, "not started")
+        db.session.add(sprint)
+        db.session.commit()
+
+        return redirect(url_for('main_page'))
+
 @app.route('/hahaha/<int:task_id>')
 def view_sprint_task(task_id):
     
@@ -345,4 +383,8 @@ def clear_database():
     return 'Database cleared'
 
 if __name__ == '__main__':
+    with app.app_context():
+        # Create the database tables if they don't exist
+        db.create_all()
+
     app.run(debug=True)
