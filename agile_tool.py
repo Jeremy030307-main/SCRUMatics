@@ -63,6 +63,11 @@ def filter_and_sort_tasks(filter_condition=None, sort_column=None, ordering = "a
 
     return tasks
 
+@app.route('/')
+def scrum_board():
+    sprints = Sprints.query.all()
+    return render_template('scrum_board.html', sprints = sprints)
+
 @app.route('/product-backlog', methods = ['GET', 'POST'])
 def product_backlog():
 

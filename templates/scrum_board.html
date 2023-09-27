@@ -273,6 +273,19 @@
                 </th>
             </tr>
         </thead>
+
+        <tbody>
+            {% for sprint in sprints %}
+                <tr>
+                    <td>{{ sprint.sprint_name }}</td>
+                    <td>
+                        <!-- to update class for containing sprint status like task label in product backlog -->
+                        <div class="">{{sprint.sprint_status}}</div>
+                    </td>
+                    <td>{{ sprint.sprint_start_date }} - {{ sprint.sprint_end_date }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
     </table>
 
 
