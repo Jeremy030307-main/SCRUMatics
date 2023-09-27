@@ -246,7 +246,7 @@ def clear_database():
     db.drop_all()
     
     # Recreate the tables (optional, if needed)
-    # db.create_all()
+    db.create_all()
 
     return 'Database cleared'
 
