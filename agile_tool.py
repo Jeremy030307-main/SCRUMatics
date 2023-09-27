@@ -216,73 +216,123 @@ def view_task(task_id):
 
     if request.method == "POST":
 
+        for entry_date in this_task.entries:
+            for entry_time in entry_date.entry_time:
+                db.session.delete(entry_time)
+            db.session.delete(entry_date)
+
         db.session.delete(this_task)
         db.session.commit()
 
         return redirect(url_for('product_backlog'))
     return render_template("view_task.html", task = this_task, labels = this_task_labels)  
 
-log_time = False
-@app.route('/hahaha/<int:task_id>', methods = ['GET', 'POST'])
+@app.route('/hahaha/<int:task_id>')
 def view_sprint_task(task_id):
     
-    global log_time
+    this_task = Tasks.query.get(task_id)
+    this_task_labels = [label.name for label in this_task.labels]
+    
+    return render_template('view_sprint_task.html', task = this_task, labels = this_task_labels)
+
+@app.route('/hahaha/<int:task_id>/log-time-spent', methods = ['GET', 'POST'])
+def log_time_spent(task_id):
+
     this_task = Tasks.query.get(task_id)
     this_task_labels = [label.name for label in this_task.labels]
 
     if request.method == "POST":
 
         entry_date = datetime.datetime.strptime(request.form["date"], "%Y-%m-%d").date()
-        print(entry_date)
-        existing_entry_date = EntryDate.query.filter(and_(EntryDate.date==entry_date, EntryDate.task_id==task_id)).first()
-        print("Im funcking here ----------------", existing_entry_date)
-        entry_date_id = None
-        if existing_entry_date:
-            entry_date_id = existing_entry_date.id
-        else:
-            existing_entry_date = EntryDate(task_id=task_id, date=entry_date)
-            db.session.add(existing_entry_date)
-            db.session.flush()
-            entry_date_id = existing_entry_date.id
-        
         start_time = datetime.datetime.strptime(request.form["start_time"], '%H:%M')
         end_time = datetime.datetime.strptime(request.form["end_time"], '%H:%M')
 
-        time_spend = EntryTime(
-            entry_date_id = entry_date_id,
-            start_time = start_time.time(),
-            end_time = end_time.time(),
-            duration = end_time - start_time
-            )
-        db.session.add(time_spend)
+        entries = [(entry_date, start_time, end_time)]
+        if end_time < start_time:
 
-        if existing_entry_date.duration is None:
-            existing_entry_date.duration = end_time - start_time
-        else:
-            existing_entry_date.duration += end_time - start_time
+            start_of_day = (start_time + datetime.timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
 
-        task = Tasks.query.get(existing_entry_date.task_id)
-        if task.total_duration is None:
-            task.total_duration = end_time - start_time
-        else:
-            task.total_duration += end_time - start_time
-        
+            entries = [(entry_date, start_time, start_of_day), (entry_date + datetime.timedelta(days=1), start_of_day, end_time + datetime.timedelta(days=1))]
+
+        for entry_date, start_time, end_time in entries:
+
+            existing_entry_date = EntryDate.query.filter(and_(EntryDate.date==entry_date, EntryDate.task_id==task_id)).first()
+            entry_date_id = None
+            if existing_entry_date:
+                entry_date_id = existing_entry_date.id
+            else:
+                existing_entry_date = EntryDate(task_id=task_id, date=entry_date)
+                db.session.add(existing_entry_date)
+                db.session.flush()
+                entry_date_id = existing_entry_date.id
+
+            time_spend = EntryTime(
+                entry_date_id = entry_date_id,
+                start_time = start_time.time(),
+                end_time = end_time.time(),
+                duration = end_time - start_time
+                )
+            db.session.add(time_spend)
+
+            if existing_entry_date.duration is None:
+                existing_entry_date.duration = end_time - start_time
+            else:
+                existing_entry_date.duration += end_time - start_time
+
+            task = Tasks.query.get(existing_entry_date.task_id)
+            if task.total_duration is None:
+                task.total_duration = end_time - start_time
+            else:
+                task.total_duration += end_time - start_time
+            
         db.session.commit()
     
     entries_query = EntryDate.query.filter(EntryDate.task_id==task_id).order_by(EntryDate.date).all()
-    print(entries_query)
-    print([entry.duration.total_seconds()/3600 for entry in entries_query])
+    
+    date_list = []
+    duration_list = []
+    hover_text = []
+
+    if len(entries_query) == 0 or entries_query[0].date != this_task.created_at.date():
+        date_list = [this_task.created_at.date().strftime("%d-%m-%Y")]
+        duration_list = [0]
+        hover_text = [f"Date: {this_task.created_at.date()} <br>Task Created."]
+
+    for entry in entries_query:
+        date_list.append(entry.date.strftime("%d-%m-%Y"))
+        duration_list.append(entry.duration.total_seconds()/3600)
+        text = f"Date: {entry.date}<br><br>Logged Time:<br>"
+        for time_period in entry.entry_time:
+            text += f" • {time_period.start_time} - {time_period.end_time}<br>"
+        
+        hours = entry.duration.seconds // 3600
+        minutes = (entry.duration.seconds // 60) % 60
+
+        # Format the string
+        formatted_time = f"{hours} hours {minutes} minutes"
+        text += f"<br>Effort Per Day: {hours} hours {minutes} minutes<br>"
+        hover_text.append(text)
+
     data = pd.DataFrame({
-        'Date' : [this_task.created_at.date()] + [entry.date for entry in entries_query], 
-        'Duration' : [0] + [entry.duration.total_seconds()/3600 for entry in entries_query] })
+        'Date' : date_list, 
+        'Duration' : duration_list,
+        "HoverText" : hover_text })
 
     # Calculate cumulative sum
-    data['Cumulative'] = data['Duration'].cumsum()
-    print(data['Cumulative'])
-    fig = px.line(data, x='Date', y='Cumulative', title='Accumulation of Effort')
+    data['Effort'] = data['Duration'].cumsum()
+
+    for index, row in data.iterrows():
+        accumulate_effort = row['Effort']
+        data['HoverText'][index] += f"Efforts Accumulate: {int(accumulate_effort)} hours {round((accumulate_effort - int(accumulate_effort))*60) } minutes"
+
+    fig = px.line(data, x='Date', y='Effort', title='Accumulation of Effort', hover_data='HoverText', markers=True)
+    fig.update_traces(hovertemplate='%{customdata[0]}')
+    max_effort = max(data['Effort'])
+    fig.update_layout(yaxis=dict(range=[0, max_effort+1 if max_effort > 0 else 1]))  # Adjust the 'range' parameter
+
     graph_json = json.dumps(fig, cls= plotly.utils.PlotlyJSONEncoder)
-    
-    return render_template('view_sprint_task.html', task = this_task, labels = this_task_labels, log_time=log_time, graphJSON=graph_json)
+
+    return render_template('log_time_spent.html', graphJSON=graph_json, task_id=task_id)
 
 @app.route('/clear-database', methods=['GET'])
 def clear_database():

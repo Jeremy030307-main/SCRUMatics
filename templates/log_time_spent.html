@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+   <!-- Include the CSS file -->
+   <link rel="stylesheet" href="{{ url_for('static', filename='css/log_time_page.css') }}">
+   <script src="{{ url_for('static', filename='status.js') }}"></script>
+   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+   <!-- JavaScript -->
+   <script src="{{ url_for('static', filename='sprint_backlog.js') }}"></script>
+   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+
+</head>
+
+<body>
+
+    <div class="logTimeContainer">
+        <div>
+
+            <div class="header">Task Time Spent</label><br>
+            </div>
+
+            <form action="/hahaha/{{task_id}}/log-time-spent" method="POST" class="logTimeForm"> 
+    
+                <div>
+                    <label for="date" class="formLabel">Date:</label><br>
+                    <input type="date" id="date" name="date" class="formDate"><br><br>
+                </div>
+    
+                <div>
+                    <label for="start_time" class="formLabel">Start Time:</label><br>
+                    <input type="time" id="start_time" name="start_time" class="formDate"><br><br>
+                </div>
+                    
+                <div>
+                    <label for="end_time" class="formLabel">End Time:</label><br>
+                    <input type="time" id="end_time" name="end_time" class="formDate"><br><br>
+                </div>
+                        
+                <div class="logButtonDiv">
+                    <!--Add in the save button to let the user to save the task into product backlog-->
+                    <input type="submit" value="Log" class="logButton"><br><br>
+                </div>
+            </form>
+
+            <div id='chart' class="effortGraphContainer"></div>
+        </div>
+        
+    </div>
+    
+    <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+    <script type='text/javascript'>
+    var graphs = {{graphJSON | safe}};
+    Plotly.plot('chart',graphs,{});
+    </script>
+
+</body>

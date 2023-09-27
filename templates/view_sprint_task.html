@@ -19,7 +19,7 @@
 
 <body>
 
-<form action="/hahaha/{{task.id}}" oninput="calculateTimeDifference()" method="POST" id="log_time">
+<form action="/hahaha/{{task.id}}" oninput="calculateTimeDifference()" method="POST">
    
     <div class="taskContainer">
         <div class="left-section">
@@ -61,14 +61,6 @@
     
             <!--Text box to let user enter the text description. -->
             <textarea name="task_description" id="description" rows="5" cols="80" placeholder="Description" disabled> {{task.description}}</textarea>
-            
-            <div id='chart' ></div>
-
-            <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
-            <script type='text/javascript'>
-            var graphs = {{graphJSON | safe}};
-            Plotly.plot('chart',graphs,{});
-            </script>
 
         </div>
 
@@ -124,26 +116,7 @@
                 <option value=10 {% if task.story_points == 10 %}selected{% endif %}>10</option>
             </select> <br><br>
 
-            <!-- <button type="submit" name="button" value="log time">Log Time</button><br><br> -->
-
-            <div class="log-time-block">
-                <label for="date" style="font-size: medium;" class="datetime-label">Date:</label><br>
-                <input type="date" id="date" name="date" class="select-datetime"><br><br>
-            
-                <label for="start_time" style="font-size: medium;" class="datetime-label">Start Time:</label><br>
-                <input type="time" id="start_time" name="start_time" class="select-datetime"><br><br>
-
-                <label for="end_time" style="font-size: large;" class="datetime-label">End Time:</label><br>
-                <input type="time" id="end_time" name="end_time" class="select-datetime"><br><br>
-                    
-                <div class="saveBtnDiv">
-                    <!--Add in the save button to let the user to save the task into product backlog-->
-                    <input type="submit" value="Log" class="saveBtn">
-                </div>
-            </div>
-
-            <p>{{task.total_duration}}</p>
-
+            <button><a href = "{{ url_for('log_time_spent', task_id=task.id) }}">hahahahaha</a></button>
         </div>
     </div>
     </form>
