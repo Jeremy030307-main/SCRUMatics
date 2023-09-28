@@ -45,7 +45,7 @@ class Tasks(db.Model):
                             primaryjoin="Tasks.id == task_labels.c.task_id",
                             secondaryjoin="Label.name == task_labels.c.label_id")
 
-    sprint = db.Column(db.Integer)
+    sprint_id = db.Column(db.Integer, db.ForeignKey('sprints.id'))
     entries = db.relationship('EntryDate', backref='tasks', lazy=True)
     total_duration = db.Column(Interval)
 
@@ -66,8 +66,7 @@ class Sprints(db.Model):
     sprint_start_date = db.Column(db.Date, nullable=False)
     sprint_end_date = db.Column(db.Date, nullable=False)
     sprint_status = db.Column(db.String(100), nullable=False)
-
-    # tasks = db.relationship('Tasks', backref='Sprints', lazy=True)
+    tasks = db.relationship('Tasks', backref='sprints', lazy=True)
 
     def __init__(self, sprint_name, sprint_start_date, sprint_end_date, sprint_status):
         self.sprint_name = sprint_name
@@ -258,8 +257,9 @@ def new_sprint():
         sprint_name = request.form['sprint-name']
         start_date = datetime.strptime(request.form['sprint-start-date'], '%Y-%m-%d').date()
         end_date = datetime.strptime(request.form['sprint-end-date'], '%Y-%m-%d').date()
+        status = request.form['sprint-status']
 
-        sprint = Sprints(sprint_name, start_date, end_date, "not started")
+        sprint = Sprints(sprint_name, start_date, end_date, status)
         db.session.add(sprint)
         db.session.commit()
 

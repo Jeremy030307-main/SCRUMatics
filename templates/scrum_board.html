@@ -236,11 +236,11 @@
             <div class="form-field">
                 <!--Drop-down list of task status-->
                 <label for="status" class="addTaskLabel"> Status</label><br>
-                <select name="sprint-status" onchange="changeColor(this)" class="addTaskSelectLeft" disabled>
+                <select name="sprint-status" onchange="changeColor(this)" class="addTaskSelectLeft">
                     <option value="">Select an option</option>
                     <option value="Not Started" selected>Not Started</option>
-                    <option value="Incomplete">In Progress</option>
-                    <option value="Completed">Completed</option>
+                    <option value="Incomplete" disabled>In Progress</option>
+                    <option value="Completed" disabled>Completed</option>
                 </select><br><br>
             </div>
             
