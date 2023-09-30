@@ -71,6 +71,7 @@
          <table class="taskTable" style="width:80%">
             <thead>
                <tr>
+                  <th>Select</th>
                   <th>Name</th>
                   <th>Tag</th>
                   <th>Priority</th>
@@ -81,6 +82,9 @@
             <tbody>
                {% for task in tasks %}
                   <tr>
+                     <td>
+                        <input type="checkbox" name="selected_tasks[]" value="{{ task.id }}">
+                    </td>
                      <td>{{ task.name }} <a href = "{{ url_for('view_task', task_id = task.id) }}" style="text-decoration: none; margin-left: 1%; color: #333333;">&#128065</a>
                      </td>
                      
@@ -111,6 +115,7 @@
                {% endfor %}
             </tbody>
          </table>
+         <input type="submit" value="Add to Sprint">
       </div>
    </body>
 </html>

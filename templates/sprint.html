@@ -20,9 +20,10 @@
         <div class="sprint-name-icon">
             <i class="fa-solid fa-database" style="margin-right: 20px;"></i>Sprint Backlog
         </div>
-    
         <div class="new-label-container">
-        <div class="new-button" onclick="showDialog()">New</div>
+            <div class="button-container">
+                <button class="myButton" onclick="addTask()">Add Task</button>
+            </div>
 
         </div>
     </h1>
@@ -105,6 +106,16 @@
 
 
     <script>
+        function addTask() {
+            // Get a reference to the button element by its ID
+            const myButton = document.getElementById("myButton");
+
+            // Add a click event listener to the button
+            myButton.addEventListener("click", function () {
+                // Redirect to another HTML page
+                window.location.href = "select_task.html";
+            });
+        }
         function showDialog() {
             document.getElementById("new-dialog").style.display = "block";
         }
