@@ -215,10 +215,15 @@ def sprint(sprint_id):
     return render_template("sprint_backlog.html", sprint=this_sprint)
 
 # not functioning
-@app.route('/sprint/<int:sprint_id>/select_task')
+@app.route('/sprint/<int:sprint_id>/select_task', methods=['GET', 'POST'])
 def select_task(sprint_id):
-    # Any necessary logic for the select_task page
-    return render_template('select_task.html')
+    tasks = Tasks.query.all()
+    proirity_map = {
+        1 : "Low",
+        2: "Medium",
+        3: "Important", 
+        4: "Urgent"}
+    return render_template('select_task.html', tasks=tasks, proirity_map = proirity_map)
 
 
 class Sprints(db.Model):
