@@ -207,3 +207,16 @@ td:nth-child(3) {
     font-size: 12px;
     width: 660px;
 }
+
+.addTask{
+    background-color: #ddd;
+    color: #333333;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    border-radius: 16px;
+    box-shadow: .3em .3em .3em #999;
+    height: 70%;
+}

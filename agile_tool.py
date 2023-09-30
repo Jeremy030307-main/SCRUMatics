@@ -203,17 +203,22 @@ def view_task(task_id):
     return render_template("view_task.html", task = this_task, labels = this_task_labels)
 
 
-# @app.route('/sprint/<int:sprint_id>', methods = ['GET', 'POST'])
-# def sprint(sprint_id):
-#     this_sprint = Sprints.query.get(sprint_id)
+@app.route('/sprint/<int:sprint_id>', methods=['GET', 'POST'])
+def sprint(sprint_id):
+    this_sprint = Sprints.query.get(sprint_id)
 
-#     if request.method == "POST":
+    if request.method == "POST":
+        db.session.delete(this_sprint)
+        db.session.commit()
+        return redirect(url_for('scrum_board'))
 
-#         db.session.delete(this_sprint)
-#         db.session.commit()
+    return render_template("sprint_backlog.html", sprint=this_sprint)
 
-#         return redirect(url_for('scrum_board'))
-#     return render_template("sprint_backlog.html", sprint = this_sprint)
+# not functioning
+@app.route('/sprint/<int:sprint_id>/select_task')
+def select_task(sprint_id):
+    # Any necessary logic for the select_task page
+    return render_template('select_task.html')
 
 
 class Sprints(db.Model):

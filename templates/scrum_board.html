@@ -97,8 +97,8 @@
             {% for sprint in sprints %}
                 <tr>
                     <td><i class="material-icons" style="margin-right: 5%;">directions_run</i>{{ sprint.sprint_name }}
-                        <button onclick="navigateToSprint(sprint.id)">View Details</button>
-                        </td>
+                        <button class="b">
+                        <a href="{{ url_for('sprint', sprint_id=sprint.id) }}" class="button-link">View Details</a></button>                       </td>
                     <td>
                         <!-- to update class for containing sprint status like task label in product backlog -->
                         <div class="">{{sprint.sprint_status}}</div>

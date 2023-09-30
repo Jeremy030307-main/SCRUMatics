@@ -19,11 +19,14 @@
         <!-- Sprints with icons -->
         <div class="sprint-name-icon">
             <i class="fa-solid fa-database" style="margin-right: 20px;"></i>Sprint Backlog
-            <button id="myButton" onclick="addTask()" style="float: right; font-size: 20px; padding: 10px 20px;">
-                Add Task</button>
+            <button class="addTask">
+                <a href="{{ url_for('select_task', sprint_id=sprint.id) }}" class="add-task-button">Add Task</a>
+            </button>
         </div>   
             
     </h1>
+
+    
     <table>
         <thead>
             <tr>
@@ -56,16 +59,7 @@
 
 
     <script>
-        function addTask() {
-            // Get a reference to the button element by its ID
-            const myButton = document.getElementById("myButton");
-
-            // Add a click event listener to the button
-            myButton.addEventListener("click", function () {
-                // Redirect to another HTML page
-                window.location.href = "select_task.html";
-            });
-        }
+        
     </script>
 </body>
 </html>
