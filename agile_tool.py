@@ -202,6 +202,20 @@ def view_task(task_id):
         return redirect(url_for('product_backlog'))
     return render_template("view_task.html", task = this_task, labels = this_task_labels)
 
+
+@app.route('/sprint/<int:sprint_id>', methods = ['GET', 'POST'])
+def sprint(sprint_id):
+    this_sprint = Sprints.query.get(sprint_id)
+
+    if request.method == "POST":
+
+        db.session.delete(this_sprint)
+        db.session.commit()
+
+        return redirect(url_for('scrum_board'))
+    return render_template("sprint.html", task = this_sprint)
+
+
 class Sprints(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
