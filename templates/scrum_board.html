@@ -111,11 +111,8 @@
 
 
     <script>
-        function navigateToTaskView(taskId) {
-            var url = "{{ url_for('view_task', task_id=0) }}";  // Use a default value for task_id
-            url = url.replace('0', taskId);  // Replace the default value with the actual task ID
-            window.location.href = url;
-        }
+        
+        
         function showDialog() {
             document.getElementById("new-dialog").style.display = "block";
         }
