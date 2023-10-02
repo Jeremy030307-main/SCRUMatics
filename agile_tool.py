@@ -99,6 +99,7 @@ def product_backlog():
     tasks = None
     filter_style = 'default'
     filter_element = None
+    sprint = Sprints.query.first() 
 
     if request.method == "POST":
 
@@ -121,7 +122,7 @@ def product_backlog():
     tasks = filter_and_sort_tasks(filter_element, sorting_element, ordering)
 
     return render_template('product_backlog.html', tasks = tasks, proirity_map = proirity_map, 
-                                selected_sort = sorting_style, selected_order = ordering, selected_filter = filter_style)
+                                selected_sort = sorting_style, selected_order = ordering, selected_filter = filter_style, sprint=sprint)
 
 @app.route('/addtask', methods = ['GET', 'POST'])
 def new_task():
@@ -214,7 +215,6 @@ def sprint(sprint_id):
 
     return render_template("sprint_backlog.html", sprint=this_sprint)
 
-# not functioning
 @app.route('/sprint/<int:sprint_id>/select_task', methods=['GET', 'POST'])
 def select_task(sprint_id):
     tasks = Tasks.query.all()
