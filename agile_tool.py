@@ -1,9 +1,14 @@
 from datetime import datetime
 from flask import Flask, render_template, request, session, flash, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, collate
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, collate, Date, Time, Float,TypeDecorator, Interval, event, and_
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
+from datetime import timedelta
+import plotly.express as px
+import pandas as pd
+import json
+import plotly
 
 app = Flask(__name__, static_folder='static')
 app.config['FAVICON'] = 'static/favicon.ico'
@@ -17,6 +22,9 @@ task_labels = db.Table(
     'task_labels',
     db.Column('task_id', db.Integer, db.ForeignKey('tasks.id')) ,
     db.Column('label_id', db.String(20), db.ForeignKey('label.name')))
+
+from datetime import timedelta
+from sqlalchemy.types import TypeDecorator, Interval
 
 class Label(db.Model):
     name = db.Column(db.String(20), primary_key=True)
@@ -37,6 +45,10 @@ class Tasks(db.Model):
                             primaryjoin="Tasks.id == task_labels.c.task_id",
                             secondaryjoin="Label.name == task_labels.c.label_id")
 
+    sprint_id = db.Column(db.Integer, db.ForeignKey('sprints.id'))
+    entries = db.relationship('EntryDate', backref='tasks', lazy=True)
+    total_duration = db.Column(Interval)
+
     def edit(self, name, priority, status, category, assignee, story_points, description, labels):
         self.name = name
         self.priority = priority
@@ -47,11 +59,42 @@ class Tasks(db.Model):
         self.description = description
         self.labels = labels
 
+class Sprints(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+    sprint_name = db.Column(db.Text, nullable=False)
+    sprint_start_date = db.Column(db.Date, nullable=False)
+    sprint_end_date = db.Column(db.Date, nullable=False)
+    sprint_status = db.Column(db.String(100), nullable=False)
+    tasks = db.relationship('Tasks', backref='sprints', lazy=True)
+
+    def __init__(self, sprint_name, sprint_start_date, sprint_end_date, sprint_status):
+        self.sprint_name = sprint_name
+        self.sprint_start_date = sprint_start_date
+        self.sprint_end_date = sprint_end_date
+        self.sprint_status = sprint_status
+
+class EntryDate(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    task_id = db.Column(db.Integer, db.ForeignKey('tasks.id'), nullable=False)
+    date = db.Column(db.Date, nullable=False)
+    entry_time = db.relationship('EntryTime', backref='entry_date', lazy=True)
+    duration = db.Column(Interval)
+
+class EntryTime(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    entry_date_id = db.Column(db.Integer, db.ForeignKey('entry_date.id'), nullable=False)  # Use 'entry_date.id' here
+    start_time = db.Column(db.Time, nullable=False)
+    end_time = db.Column(db.Time, nullable=True)
+    duration = db.Column(Interval)
+
 def filter_and_sort_tasks(filter_condition=None, sort_column=None, ordering = "ascending"):
     query = Tasks.query
 
     if filter_condition is not None:
-        query = query.filter(filter_condition)
+        query = query.filter(and_(filter_condition, Tasks.sprint_id.is_(None)))
+    else:
+        query = query.filter(Tasks.sprint_id.is_(None))
 
     if sort_column is not None:
         if ordering == "ascending":
@@ -67,6 +110,10 @@ def filter_and_sort_tasks(filter_condition=None, sort_column=None, ordering = "a
 def scrum_board():
     sprints = Sprints.query.all()
     return render_template('scrum_board.html', sprints = sprints)
+
+# @app.route('/')
+# def main_page():
+#     return render_template('scrum_board.html')
 
 @app.route('/product-backlog', methods = ['GET', 'POST'])
 def product_backlog():
@@ -92,7 +139,6 @@ def product_backlog():
         "Testing": Tasks.labels.any(Label.name == "Testing"),
         "UI": Tasks.labels.any(Label.name == "UI"),
         "UX": Tasks.labels.any(Label.name == "UX")}
-    
 
     # the default sorting element
     sorting_style, sorting_element, ordering = "default", "", ""
@@ -197,50 +243,48 @@ def view_task(task_id):
 
     if request.method == "POST":
 
+        for entry_date in this_task.entries:
+            for entry_time in entry_date.entry_time:
+                db.session.delete(entry_time)
+            db.session.delete(entry_date)
+
         db.session.delete(this_task)
         db.session.commit()
 
         return redirect(url_for('product_backlog'))
-    return render_template("view_task.html", task = this_task, labels = this_task_labels)
-
+    return render_template("view_task.html", task = this_task, labels = this_task_labels)  
 
 @app.route('/sprint/<int:sprint_id>', methods=['GET', 'POST'])
 def sprint(sprint_id):
-    this_sprint = Sprints.query.get(sprint_id)
+    task_list = Tasks.query.filter(Tasks.sprint_id == sprint_id).all()
 
     if request.method == "POST":
         db.session.delete(this_sprint)
         db.session.commit()
         return redirect(url_for('scrum_board'))
 
-    return render_template("sprint_backlog.html", sprint=this_sprint)
+    return render_template("sprint_backlog.html", sprint_id=sprint_id, tasks = task_list)
 
 @app.route('/sprint/<int:sprint_id>/select_task', methods=['GET', 'POST'])
 def select_task(sprint_id):
-    tasks = Tasks.query.all()
+
+    tasks = Tasks.query.filter(Tasks.sprint_id.is_(None))
     proirity_map = {
         1 : "Low",
         2: "Medium",
         3: "Important", 
         4: "Urgent"}
-    return render_template('select_task.html', tasks=tasks, proirity_map = proirity_map)
 
+    if request.method == "POST":
+        task_ids = request.form.getlist("selected_tasks[]")
+        for task_id in task_ids:
+            task = Tasks.query.get(task_id)
+            task.sprint_id = sprint_id
+        
+        db.session.commit()
+        return redirect(url_for("sprint", sprint_id = sprint_id))
 
-class Sprints(db.Model):
-
-    id = db.Column(db.Integer, primary_key=True)
-    sprint_name = db.Column(db.Text, nullable=False)
-    sprint_start_date = db.Column(db.Date, nullable=False)
-    sprint_end_date = db.Column(db.Date, nullable=False)
-    sprint_status = db.Column(db.String(100), nullable=False)
-
-    # tasks = db.relationship('Tasks', backref='Sprints', lazy=True)
-
-    def __init__(self, sprint_name, sprint_start_date, sprint_end_date, sprint_status):
-        self.sprint_name = sprint_name
-        self.sprint_start_date = sprint_start_date
-        self.sprint_end_date = sprint_end_date
-        self.sprint_status = sprint_status
+    return render_template('select_task.html', sprint_id = sprint_id, tasks=tasks, proirity_map = proirity_map)
 
 @app.route('/')
 def main_page():
@@ -250,24 +294,133 @@ def main_page():
 def new_sprint():
     if request.method == 'POST':
         sprint_name = request.form['sprint-name']
-        print(type(sprint_name))
-        # date_range = request.form['sprint-date']
-        start_date = request.form['sprint-start-date']
-        end_date = request.form['sprint-end-date']
-        # sprint_status = request.form["sprint-status"]
+        start_date = datetime.strptime(request.form['sprint-start-date'], '%Y-%m-%d').date()
+        end_date = datetime.strptime(request.form['sprint-end-date'], '%Y-%m-%d').date()
+        status = request.form['sprint-status']
 
-        # Split date range and parse start and end dates
-        # start_date_str =  start_date.split(' - ')
-        # end_date_str = end_date.split(' - ')
-        start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
-        end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
-
-
-        sprint = Sprints(sprint_name, start_date, end_date, "not started")
+        sprint = Sprints(sprint_name, start_date, end_date, status)
         db.session.add(sprint)
         db.session.commit()
 
         return redirect(url_for('main_page'))
+
+@app.route('/hahaha/<int:task_id>')
+def view_sprint_task(task_id):
+    
+    this_task = Tasks.query.get(task_id)
+    this_task_labels = [label.name for label in this_task.labels]
+    
+    return render_template('view_sprint_task.html', task = this_task, labels = this_task_labels)
+
+def is_overlap(range1_start, range1_end, range2_start, range2_end):
+    return range1_start <= range2_end and range1_end >= range2_start
+
+@app.route('/hahaha/<int:task_id>/log-time-spent', methods = ['GET', 'POST'])
+def log_time_spent(task_id):
+
+    this_task = Tasks.query.get(task_id)
+    this_task_labels = [label.name for label in this_task.labels]
+
+    if request.method == "POST":
+
+        entry_date = datetime.strptime(request.form["date"], "%Y-%m-%d").date()
+        start_time = datetime.strptime(request.form["start_time"], '%H:%M')
+        end_time = datetime.strptime(request.form["end_time"], '%H:%M')
+
+        entries = [(entry_date, start_time, end_time)]
+        if end_time < start_time:
+
+            start_of_day = (start_time + datetime.timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
+
+            entries = [(entry_date, start_time, start_of_day), (entry_date + datetime.timedelta(days=1), start_of_day, end_time + datetime.timedelta(days=1))]
+
+        for entry_date, start_time, end_time in entries:
+
+            existing_entry_date = EntryDate.query.filter(and_(EntryDate.date==entry_date, EntryDate.task_id==task_id)).first()
+            entry_date_id = None
+            if existing_entry_date:
+                entry_date_id = existing_entry_date.id
+            else:
+                existing_entry_date = EntryDate(task_id=task_id, date=entry_date)
+                db.session.add(existing_entry_date)
+                db.session.flush()
+                entry_date_id = existing_entry_date.id
+
+            existing_entry_time = existing_entry_date.entry_time
+            overlap_time = False
+            for entry_time in existing_entry_time:
+                overlap_time = is_overlap(entry_time.start_time, entry_time.end_time, start_time.time(), end_time.time())
+
+            if not overlap_time:
+                time_spend = EntryTime(
+                    entry_date_id = entry_date_id,
+                    start_time = start_time.time(),
+                    end_time = end_time.time(),
+                    duration = end_time - start_time
+                    )
+                db.session.add(time_spend)
+
+                if existing_entry_date.duration is None:
+                    existing_entry_date.duration = end_time - start_time
+                else:
+                    existing_entry_date.duration += end_time - start_time
+
+                task = Tasks.query.get(existing_entry_date.task_id)
+                if task.total_duration is None:
+                    task.total_duration = end_time - start_time
+                else:
+                    task.total_duration += end_time - start_time
+            else:
+                flash("Time Logged Overlap.", 'error')
+            
+        db.session.commit()
+    
+    entries_query = EntryDate.query.filter(EntryDate.task_id==task_id).order_by(EntryDate.date).all()
+    
+    date_list = []
+    duration_list = []
+    hover_text = []
+
+    if len(entries_query) == 0 or entries_query[0].date != this_task.created_at.date():
+        date_list = [this_task.created_at.date().strftime("%d-%m-%Y")]
+        duration_list = [0]
+        hover_text = [f"Date: {this_task.created_at.date()} <br>Task Created."]
+
+    for entry in entries_query:
+        date_list.append(entry.date.strftime("%d-%m-%Y"))
+        duration_list.append(entry.duration.total_seconds()/3600)
+        text = f"Date: {entry.date}<br><br>Logged Time:<br>"
+        for time_period in entry.entry_time:
+            text += f" • {time_period.start_time} - {time_period.end_time}<br>"
+        
+        hours = entry.duration.seconds // 3600
+        minutes = (entry.duration.seconds // 60) % 60
+
+        # Format the string
+        formatted_time = f"{hours} hours {minutes} minutes"
+        text += f"<br>Effort Per Day: {hours} hours {minutes} minutes<br>"
+        hover_text.append(text)
+
+    data = pd.DataFrame({
+        'Date' : date_list, 
+        'Duration' : duration_list,
+        "HoverText" : hover_text })
+
+    # Calculate cumulative sum
+    data['Effort'] = data['Duration'].cumsum()
+
+    for index, row in data.iterrows():
+        accumulate_effort = row['Effort']
+        data['HoverText'][index] += f"Efforts Accumulate: {int(accumulate_effort)} hours {round((accumulate_effort - int(accumulate_effort))*60) } minutes"
+
+    fig = px.line(data, x='Date', y='Effort', title='Accumulation of Effort', hover_data='HoverText', markers=True)
+    fig.update_traces(hovertemplate='%{customdata[0]}')
+    max_effort = max(data['Effort'])
+    fig.update_layout(yaxis=dict(range=[0, max_effort+1 if max_effort > 0 else 1]))  # Adjust the 'range' parameter
+
+    graph_json = json.dumps(fig, cls= plotly.utils.PlotlyJSONEncoder)
+
+    return render_template('log_time_spent.html', graphJSON=graph_json, task_id=task_id, created_date=this_task.created_at.strftime("%Y-%m-%d"))
 
 @app.route('/clear-database', methods=['GET'])
 def clear_database():

@@ -21,7 +21,7 @@
             <i class="fa-solid fa-bars icon" style="margin-right: 120px;"></i>
             <i class="fa-solid fa-database" style="margin-right: 20px;"></i>Sprint Backlog
             <button class="addTask">
-                <a href="{{ url_for('select_task', sprint_id=sprint.id) }}" class="add-task-button">Add Task</a>
+                <a href="{{ url_for('select_task', sprint_id=sprint_id) }}" class="add-task-button">Add Task</a>
             </button>
         </div>   
             
@@ -44,8 +44,31 @@
         </thead>
 
         <tbody>
+<<<<<<< HEAD
             
+=======
+            {% for task in tasks %}
+                <tr>
+                    <td>
+                        {% if task.status == "Not Started"%}
+                            {{task.name}}
+                        {% endif %}                     
+                    </td>
+                    <td>
+                        {% if task.status == "Incomplete"%}
+                            {{task.name}}
+                        {% endif %}  
+                    </td>
+                    <td>
+                        {% if task.status == "Completed"%}
+                            {{task.name}}
+                        {% endif %}  
+                    </td>
+                </tr>
+            {% endfor %}
+>>>>>>> 8cca443ecf52437e32f38ffd416a62c6a34889c1
         </tbody>
+
     </table>
 
 
