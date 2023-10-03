@@ -21,7 +21,7 @@
             <i class="fa-solid fa-bars icon" style="margin-right: 120px;"></i>
             <i class="fa-solid fa-database" style="margin-right: 20px;"></i>Sprint Backlog
             <button class="addTask">
-                <a href="{{ url_for('select_task', sprint_id=sprint.id) }}" class="add-task-button">Add Task</a>
+                <a href="{{ url_for('select_task', sprint_id=sprint_id) }}" class="add-task-button">Add Task</a>
             </button>
         </div>   
             
@@ -45,17 +45,27 @@
         </thead>
 
         <tbody>
-            {% for sprint in sprints %}
+            {% for task in tasks %}
                 <tr>
-                    <td><i class="material-icons" style="margin-right: 5%;">directions_run</i>{{ sprint.sprint_name }}</td>
                     <td>
-                        <!-- to update class for containing sprint status like task label in product backlog -->
-                        <div class="">{{sprint.sprint_status}}</div>
+                        {% if task.status == "Not Started"%}
+                            {{task.name}}
+                        {% endif %}                     
                     </td>
-                    <td>{{ sprint.sprint_start_date }} &#8594 {{ sprint.sprint_end_date }}</td>
+                    <td>
+                        {% if task.status == "Incomplete"%}
+                            {{task.name}}
+                        {% endif %}  
+                    </td>
+                    <td>
+                        {% if task.status == "Completed"%}
+                            {{task.name}}
+                        {% endif %}  
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>
+
     </table>
 
 

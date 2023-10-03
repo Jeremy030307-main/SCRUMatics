@@ -92,7 +92,9 @@ def filter_and_sort_tasks(filter_condition=None, sort_column=None, ordering = "a
     query = Tasks.query
 
     if filter_condition is not None:
-        query = query.filter(filter_condition)
+        query = query.filter(and_(filter_condition, Tasks.sprint_id.is_(None)))
+    else:
+        query = query.filter(Tasks.sprint_id.is_(None))
 
     if sort_column is not None:
         if ordering == "ascending":
@@ -252,27 +254,37 @@ def view_task(task_id):
         return redirect(url_for('product_backlog'))
     return render_template("view_task.html", task = this_task, labels = this_task_labels)  
 
-
 @app.route('/sprint/<int:sprint_id>', methods=['GET', 'POST'])
 def sprint(sprint_id):
-    this_sprint = Sprints.query.get(sprint_id)
+    task_list = Tasks.query.filter(Tasks.sprint_id == sprint_id).all()
 
     if request.method == "POST":
         db.session.delete(this_sprint)
         db.session.commit()
         return redirect(url_for('scrum_board'))
 
-    return render_template("sprint_backlog.html", sprint=this_sprint)
+    return render_template("sprint_backlog.html", sprint_id=sprint_id, tasks = task_list)
 
 @app.route('/sprint/<int:sprint_id>/select_task', methods=['GET', 'POST'])
 def select_task(sprint_id):
-    tasks = Tasks.query.all()
+
+    tasks = Tasks.query.filter(Tasks.sprint_id.is_(None))
     proirity_map = {
         1 : "Low",
         2: "Medium",
         3: "Important", 
         4: "Urgent"}
-    return render_template('select_task.html', tasks=tasks, proirity_map = proirity_map)
+
+    if request.method == "POST":
+        task_ids = request.form.getlist("selected_tasks[]")
+        for task_id in task_ids:
+            task = Tasks.query.get(task_id)
+            task.sprint_id = sprint_id
+        
+        db.session.commit()
+        return redirect(url_for("sprint", sprint_id = sprint_id))
+
+    return render_template('select_task.html', sprint_id = sprint_id, tasks=tasks, proirity_map = proirity_map)
 
 @app.route('/')
 def main_page():
