@@ -5,6 +5,10 @@
       <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
       <!--ICON-->
       <link href='https://unpkg.com/css.gg@2.0.0/icons/css/add.css' rel='stylesheet'>
+      
+      <!--font awesome-->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
    </head>
 
 
@@ -16,13 +20,29 @@
 		
       <!--This the link to add new task to product backlog, can chage to a button in future-->
       <!--This the link to add new task to product backlog, can chage to a button in future-->
-      <h3 class="pageTitle">Product Backlog
+      <div class = "header">
          
-         <button class="buttons">
-            
-            <a href = "{{ url_for('new_task') }}"><i class="gg-add"></i></a>
-         </button>
-      </h3>
+         <div class="menu">
+            <button class="menu-button">
+              <i class="fa-solid fa-bars fa-3x"></i> <!-- Hamburger icon from Font Awesome -->
+            </button>
+            <div class="dropdown-menu">
+              <ul>
+                <li><a href="#">Product Backlog</a></li>  
+                <li><a href="#">Sprint Backlog</a></li> <!-- put sprint backlog html link when finish-->
+              </ul>
+            </div>
+          </div>
+      
+         <h3 class="pageTitle">Product Backlog 
+         
+            <button class="buttons">
+               
+               <a href = "{{ url_for('new_task') }}"><i class="gg-add"></i></a>
+            </button>
+         </h3>
+      </div>
+      
 
       <div class="sortOptions">
          <!--This is the drop down menu to let user choose whihc to sort-->
