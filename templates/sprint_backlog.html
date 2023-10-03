@@ -31,7 +31,6 @@
     <table>
         <thead>
             <tr>
-                
                 <th>
                     Not Started
                 </th>
@@ -45,14 +44,11 @@
         </thead>
 
         <tbody>
-            {% for sprint in sprints %}
+            {% for sprint_task in sprint_tasks %}
                 <tr>
-                    <td><i class="material-icons" style="margin-right: 5%;">directions_run</i>{{ sprint.sprint_name }}</td>
-                    <td>
-                        <!-- to update class for containing sprint status like task label in product backlog -->
-                        <div class="">{{sprint.sprint_status}}</div>
-                    </td>
-                    <td>{{ sprint.sprint_start_date }} &#8594 {{ sprint.sprint_end_date }}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                 </tr>
             {% endfor %}
         </tbody>
