@@ -8,6 +8,10 @@
    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
    <script src="{{ url_for('static', filename='status.js') }}"></script>
    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!--font awesome-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 </head>
 
 <body>
@@ -24,6 +28,10 @@
             <!-- Content for the left section goes here -->
             <!--Block to let user enter task name-->
             <div class="taskViewHeader">
+                <a href="javascript:history.back()" class="arrow-button">
+                    <i class="fa-solid fa-arrow-left" style="color: #ffffff; font-size: 0.8em;"></i> <!--Arrow icon from Font Awesome-->
+                </a>
+
                 <label for = "task_name">Task Name</label><br>
                 
                 <button class="add"><a href='/addtask/{{ task.id }}/edit'>Edit</a></button>
