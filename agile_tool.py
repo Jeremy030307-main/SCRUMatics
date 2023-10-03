@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import Flask, render_template, request, session, flash, redirect, url_for
+from flask import Flask, render_template, request, session, flash, redirect, url_for, abort
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, collate
 from sqlalchemy.orm import relationship
@@ -268,6 +268,55 @@ def new_sprint():
         db.session.commit()
 
         return redirect(url_for('main_page'))
+    
+@app.route('/sprint/<int:sprint_id>/edit', methods=['GET', 'POST'])
+def edit_sprint(sprint_id):
+    this_sprint = Sprints.query.get(sprint_id)
+
+    if not this_sprint:
+        abort(404)  # Return a 404 error if the sprint is not found
+
+    if request.method == 'POST':
+        if this_sprint.sprint_status == "not started":
+            if 'delete' in request.form:
+                # Move associated tasks back to the product backlog
+                tasks_to_move = this_sprint.tasks
+                for task in tasks_to_move:
+                    task.status = "Not Started"
+                    task.sprint_id = None  # Remove association with the sprint
+                db.session.commit()
+
+                # Delete the sprint
+                db.session.delete(this_sprint)
+                db.session.commit()
+
+                return redirect(url_for('scrum_board'))
+            else:
+                # Update sprint details
+                sprint_name = request.form['sprint-name']
+                start_date = request.form['sprint-start-date']
+                end_date = request.form['sprint-end-date']
+                sprint_status = request.form['sprint-status']
+
+                # Parse start and end dates
+                start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
+                end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
+
+                # Update sprint details
+                this_sprint.sprint_name = sprint_name
+                this_sprint.sprint_start_date = start_date
+                this_sprint.sprint_end_date = end_date
+                this_sprint.sprint_status = sprint_status
+
+                db.session.commit()
+
+                return redirect(url_for('scrum_board'))
+        else:
+            flash("Cannot delete a sprint that is not in 'Not Started' status.")
+            return redirect(url_for('edit_sprint', sprint_id=sprint_id))
+
+    return render_template('edit_sprint.html', sprint=this_sprint)
+
 
 @app.route('/clear-database', methods=['GET'])
 def clear_database():
