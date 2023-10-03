@@ -294,7 +294,7 @@ def new_sprint():
         db.session.add(sprint)
         db.session.commit()
 
-        return redirect(url_for('main_page'))
+        return redirect(url_for('scrum_board'))
 
 @app.route('/hahaha/<int:task_id>')
 def view_sprint_task(task_id):
