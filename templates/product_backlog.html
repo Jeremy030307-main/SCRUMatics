@@ -29,7 +29,7 @@
             <div class="dropdown-menu">
               <ul>
                 <li><a href="#">Product Backlog</a></li>  
-                <li><a href="#">Sprint Backlog</a></li> <!-- put sprint backlog html link when finish-->
+                <li><a href="{{ url_for('scrum_board') }}">Scrum Board</a></li> <!-- put sprint backlog html link when finish-->
               </ul>
             </div>
           </div>
@@ -46,22 +46,20 @@
 
       <div class="sortOptions">
          <!--This is the drop down menu to let user choose whihc to sort-->
-         <form action="/" method="POST" class="theForm">
+         <form action="/product-backlog" method="POST" class="theForm">
             <div>
                <!--Drop-down list of Sorting Element-->
-               <label for="sort_style" style="font-size: large;">Sorting</label><br>
+               <label for="sort_style" >Sorting</label><br>
                <select id="sorting_style" name="sorting style" onchange="this.form.submit()">
                   <option value="default" {% if selected_sort == 'default' %}selected{% endif %}>Default</option>
-                  <option value="name" {% if selected_sort == 'name' %}selected{% endif %}>Name</option>
                   <option value="created_at" {% if selected_sort == 'created_at' %}selected{% endif %}>Date Created</option>
                   <option value="priority" {% if selected_sort == 'priority' %}selected{% endif %}>Priority</option>
-                  <option value="story_points" {% if selected_sort == 'story_points' %}selected{% endif %}>Story Points</option>
                </select> <br><br>
             </div>
             <div>
                <!--Drop down list of chossing ascending or descending.-->
                {% if selected_sort != 'default' %}
-                  <label for="ordering" style="font-size: large;">Ordering</label><br>
+                  <label for="ordering" >Ordering</label><br>
                   <select id="ordering" name="ordering" onchange="this.form.submit()">
                      <option value="ascending" {% if selected_order == 'ascending' %}selected{% endif %}>Ascending</option>
                      <option value="descending" {% if selected_order == 'descending' %}selected{% endif %}>Descending</option>
@@ -70,7 +68,7 @@
             </div>
             <div>
                <!--Drop down list for choosing the filter-->
-               <label for="filter" style="font-size: large;">Filter</label><br>
+               <label for="filter" >Filter Tags</label><br>
                <select id="filter_element" name="filter_element" onchange="this.form.submit()">
                   <option value="default" {% if selected_filter == 'default' %}selected{% endif %}>No filter</option>
                   <option value="Front End" {% if selected_filter == 'Front End' %}selected{% endif %}>Front End</option>
