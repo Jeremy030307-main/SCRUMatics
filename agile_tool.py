@@ -111,10 +111,6 @@ def scrum_board():
     sprints = Sprints.query.all()
     return render_template('scrum_board.html', sprints = sprints)
 
-# @app.route('/')
-# def main_page():
-#     return render_template('scrum_board.html')
-
 @app.route('/product-backlog', methods = ['GET', 'POST'])
 def product_backlog():
 
