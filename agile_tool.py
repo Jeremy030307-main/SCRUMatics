@@ -279,7 +279,6 @@ def select_task(sprint_id):
         
         db.session.commit()
         return redirect(url_for("sprint", sprint_id = sprint_id))
-
     return render_template('select_task.html', sprint_id = sprint_id, tasks=tasks, proirity_map = proirity_map)
 
 @app.route('/newSprint', methods=['GET', 'POST'])
@@ -294,7 +293,7 @@ def new_sprint():
         db.session.add(sprint)
         db.session.commit()
 
-        return redirect(url_for('main_page'))
+        return redirect(url_for('scrum_board'))
 
 @app.route('/hahaha/<int:task_id>')
 def view_sprint_task(task_id):
