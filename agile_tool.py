@@ -265,7 +265,7 @@ def sprint(sprint_id):
 
     return render_template("sprint_backlog.html", sprint_id=sprint_id, tasks = task_list)
 
-@app.route('/sprint/<int:sprint_id>/select_task', methods=['GET', 'POST'])
+@app.route('/sprint/<int:sprint_id>/select-task', methods=['GET', 'POST'])
 def select_task(sprint_id):
 
     tasks = Tasks.query.filter(Tasks.sprint_id.is_(None))
