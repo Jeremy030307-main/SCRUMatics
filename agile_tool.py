@@ -261,7 +261,7 @@ def sprint(sprint_id):
 
     return render_template("sprint_backlog.html", sprint_id=sprint_id, tasks = task_list)
 
-@app.route('/sprint/<int:sprint_id>/select_task', methods=['GET', 'POST'])
+@app.route('/sprint/<int:sprint_id>/select-task', methods=['GET', 'POST'])
 def select_task(sprint_id):
 
     tasks = Tasks.query.filter(Tasks.sprint_id.is_(None))
@@ -279,12 +279,7 @@ def select_task(sprint_id):
         
         db.session.commit()
         return redirect(url_for("sprint", sprint_id = sprint_id))
-
     return render_template('select_task.html', sprint_id = sprint_id, tasks=tasks, proirity_map = proirity_map)
-
-@app.route('/')
-def main_page():
-    return render_template('scrum_board.html')
 
 @app.route('/newSprint', methods=['GET', 'POST'])
 def new_sprint():
@@ -298,7 +293,7 @@ def new_sprint():
         db.session.add(sprint)
         db.session.commit()
 
-        return redirect(url_for('main_page'))
+        return redirect(url_for('scrum_board'))
 
 @app.route('/hahaha/<int:task_id>')
 def view_sprint_task(task_id):
@@ -307,9 +302,6 @@ def view_sprint_task(task_id):
     this_task_labels = [label.name for label in this_task.labels]
     
     return render_template('view_sprint_task.html', task = this_task, labels = this_task_labels)
-
-def is_overlap(range1_start, range1_end, range2_start, range2_end):
-    return range1_start <= range2_end and range1_end >= range2_start
 
 @app.route('/hahaha/<int:task_id>/log-time-spent', methods = ['GET', 'POST'])
 def log_time_spent(task_id):
@@ -434,3 +426,8 @@ if __name__ == '__main__':
         db.create_all()
 
     app.run(debug=True)
+
+# addtional function 
+def is_overlap(range1_start, range1_end, range2_start, range2_end):
+    return range1_start <= range2_end and range1_end >= range2_start
+

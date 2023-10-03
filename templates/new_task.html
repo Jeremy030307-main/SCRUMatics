@@ -22,12 +22,16 @@
             <div class="left-section">
                 <!-- Content for the left section goes here -->
                 <!--Block to let user enter task name-->
-                <label for = "task_name" class="addTaskInput">Task Name</label><br>
-                <input type="text" id="task_name" name="task_name" placeholder="Enter task name"> <br><br>
+                <label for = "task_name" class="addTaskLabel">Task Name</label><br>
+                <input type="text" id="task_name" name="task_name" placeholder="Enter task name" required> <br><br>
+
+                <!--Text box to let user enter the text description. -->
+                <label for = "task_description" class="addTaskLabel">Task Description</label><br>
+                <textarea name="task_description" id="description" rows="5" cols="80" placeholder="Enter Task Description" required></textarea>
         
                 <!--Drop-down list of Priority-->
                 <label for="priority" class="addTaskLabel"> Priority</label><br>
-                <select id="priority_level" name="priority_level" class="addTaskSelectLeft">
+                <select id="priority_level" name="priority_level" class="addTaskSelectLeft" required>
                     <option value="" disabled selected>Select an option</option>
                     <option value=1>Low</option>
                     <option value=2>Medium</option>
@@ -44,15 +48,13 @@
                     <option value="Completed" disabled>Completed</option>
                 </select><br><br>
         
-                <!--Text box to let user enter the text description. -->
-                <textarea name="task_description" id="description" rows="5" cols="80" placeholder="Enter Task Description"></textarea>
             </div>
 
             <div class="right-section">
                 <!-- Content for the right section goes here -->
                 <!--Drop-down list of Category-->
                 <label for="catogory" style="font-size: large;" class="addTaskLabel">Category</label><br>
-                <select id="category_type" name="category_type" class="addTaskSelectRight">
+                <select id="category_type" name="category_type" class="addTaskSelectRight" required>
                     <option value="" disabled selected>Select an option</option>
                     <option value="Story">Story</option>
                     <option value="Bug">Bug</option>
@@ -60,7 +62,7 @@
 
                 <!--Drop-down list of Labels-->
                 <label for="labels" style="font-size: large;" class="addTaskLabel">Tags</label><br>
-                <select id="label_type" name="label_type[]" multiple class="addTaskSelectRightMultiple">
+                <select id="label_type" name="label_type[]" multiple class="addTaskSelectRightMultiple" required>
                     <option value="" disabled selected>Select an option</option>
                     <option value="Front End">Front End</option>
                     <option value="Back End">Back End</option>
@@ -74,7 +76,7 @@
 
                 <!--Drop-down list of Assignee-->
                 <label for="assignee" style="font-size: large;" class="addTaskLabel">Assignee</label><br>
-                <select id="assignee_name" name="assignee_name" class="addTaskSelectRight">
+                <select id="assignee_name" name="assignee_name" class="addTaskSelectRight" required>
                     <option value="" disabled selected>Select an option</option>
                     <option value="Sheena">Sheena</option>
                     <option value="Jean">Jean</option>
@@ -86,7 +88,7 @@
 
                 <!--Drop-down list of Story Point-->
                 <label for="story_point" style="font-size: large;" class="addTaskLabel">Story Point</label><br>
-                <select id="point" name="point" class="addTaskSelectRight">
+                <select id="point" name="point" class="addTaskSelectRight" required>
                     <option value="" disabled selected>Select an option</option>
                     <option value=1>1</option>
                     <option value=2>2</option>
@@ -100,9 +102,10 @@
                     <option value=10>10</option>
                 </select> <br><br>
 
-                <div class="saveBtnDiv">
+                <div class="buttonDiv">
                     <!--Add in the save button to let the user to save the task into product backlog-->
                     <input type="submit" value="Save" class="saveBtn">
+                    <input type="button" value="Cancel" class="cancelBtn" onclick="history.back()">
                 </div>
                 
             </div>

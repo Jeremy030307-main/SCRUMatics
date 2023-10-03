@@ -8,6 +8,32 @@
    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
    <script src="{{ url_for('static', filename='status.js') }}"></script>
    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!--font awesome-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script>
+        window.onload = function() {
+          var previousPage = document.referrer;
+          var hideButton = false;
+    
+          if (previousPage.endsWith("/select-task")) {
+            hideButton = true;
+          }
+    
+          if (hideButton) {
+            // Hide the button if the previous page is "select task"
+            var button1 = document.getElementById("editButton");
+            var button2 = document.getElementById("deleteButton")
+            if (button1) {
+              button1.style.display = "none";
+            }
+            if (button2) {
+              button2.style.display = "none";
+            }
+          }
+        }
+      </script>    
+
 </head>
 
 <body>
@@ -24,10 +50,14 @@
             <!-- Content for the left section goes here -->
             <!--Block to let user enter task name-->
             <div class="taskViewHeader">
-                <label for = "task_name">Task Name</label><br>
+                <a href="javascript:history.back()" class="arrow-button">
+                    <i class="fa-solid fa-arrow-left" style="color: #ffffff; font-size: 0.8em;"></i> <!--Arrow icon from Font Awesome-->
+                </a>
+
+                <label for = "task_name" >Task Name</label><br>
                 
-                <button class="add"><a href='/addtask/{{ task.id }}/edit'>Edit</a></button>
-                <button type="submit" formaction="/addtask/{{ task.id }}" class="del"><i class="material-icons">delete_forever</i></button>
+                <button id ="editButton" class="add"><a href='/addtask/{{ task.id }}/edit'>Edit</a></button>
+                <button id = "deleteButton" type="submit" formaction="/addtask/{{ task.id }}" class="del"><i class="material-icons">delete_forever</i></button>
             </div>
 
             <input type="text" id="task_name" name="task_name" value= "{{ task.name }}" disabled> <br><br>
