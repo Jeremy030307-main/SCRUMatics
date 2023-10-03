@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Include necessary stylesheets and scripts -->
+    <script src="https://kit.fontawesome.com/4b4c250273.js" crossorigin="anonymous"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <!--CSS-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/sprint.css') }}">
+</head>
+<body>
+    <!-- Header and Navigation (same as your original code) -->
+
+    <h1>
+        <!-- Sprint Edit with icons -->
+        <div class="sprint-name-icon">
+            <i class="fa-solid fa-pen icon" style="margin-right: 120px;"></i>
+            <i class="fa-solid fa-database" style="margin-right: 20px;"></i>Edit Sprint
+        </div>
+    </h1>
+
+    <form action="/editSprint/{{ sprint.id }}" method="POST">
+        <!-- Pop-up dialog content for editing a sprint -->
+        <div id="edit-dialog" class="pop-up-dialog">
+            <i class="fa-regular fa-circle-xmark" onclick="closeEditDialog()"></i>
+            <h2 class="dialog-heading">Edit Sprint</h2>
+            <hr class="dialog-line">
+            <div class="form-field">
+                <label for="edit-sprint-name">Sprint Name:</label>
+                <input type="text" id="edit-sprint-name" name="edit-sprint-name" value="{{ sprint.sprint_name }}" required>
+            </div>
+            <div class="form-field">
+                <div class="date-inputs">
+                    <label for="edit-sprint-start-date">Sprint Start Date:</label>
+                    <input type="date" name="edit-sprint-start-date" class="date-input" value="{{ sprint.sprint_start_date }}" required>
+                </div>
+            </div>
+            <div class="form-field">
+                <div class="date-inputs">
+                    <label for="edit-sprint-end-date">Sprint End Date:</label>
+                    <input type="date" name="edit-sprint-end-date" class="date-input" value="{{ sprint.sprint_end_date }}" required>
+                </div>
+            </div>
+                        
+            <div class="form-field">
+                <!-- Drop-down list of task status for editing -->
+                <label for="edit-sprint-status" class="addTaskLabel">Status</label><br>
+                <select name="edit-sprint-status" class="addTaskSelectLeft" required>
+                    <option value="Not Started" {% if sprint.sprint_status == "Not Started" %}selected{% endif %}>Not Started</option>
+                    <option value="Incomplete" {% if sprint.sprint_status == "Incomplete" %}selected{% endif %}>In Progress</option>
+                    <option value="Completed" {% if sprint.sprint_status == "Completed" %}selected{% endif %}>Completed</option>
+                </select><br><br>
+            </div>
+            
+            <div class="button-container">
+                <input type="submit" value="Save" class="button">
+                <button class="button" onclick="closeEditDialog()">Cancel</button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Table displaying sprints (same as your original code) -->
+
+    <!-- JavaScript functions (same as your original code) -->
+</body>
+</html>
