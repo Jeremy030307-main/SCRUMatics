@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -8,56 +10,26 @@
    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
    <script src="{{ url_for('static', filename='status.js') }}"></script>
    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-    <!--font awesome-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script>
-        window.onload = function() {
-          var previousPage = document.referrer;
-          var hideButton = false;
-    
-          if (previousPage.endsWith("/select-task")) {
-            hideButton = true;
-          }
-    
-          if (hideButton) {
-            // Hide the button if the previous page is "select task"
-            var button1 = document.getElementById("editButton");
-            var button2 = document.getElementById("deleteButton")
-            if (button1) {
-              button1.style.display = "none";
-            }
-            if (button2) {
-              button2.style.display = "none";
-            }
-          }
-        }
-      </script>    
+   <!-- JavaScript -->
+   <script src="{{ url_for('static', filename='sprint_backlog.js') }}"></script>
+   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
 
 </head>
 
 <body>
-      
-      {%- for category, message in get_flashed_messages(with_categories = true) %}
-         <div class = "alert alert-danger">
-            {{ message }}
-         </div>
-      {%- endfor %}
 
-    <form action="/addtask/{{ task.id }}" method="POST">
+<form action="/hahaha/{{task.id}}" oninput="calculateTimeDifference()" method="POST">
+   
     <div class="taskContainer">
         <div class="left-section">
             <!-- Content for the left section goes here -->
             <!--Block to let user enter task name-->
             <div class="taskViewHeader">
-                <a href="javascript:history.back()" class="arrow-button">
-                    <i class="fa-solid fa-arrow-left" style="color: #ffffff; font-size: 0.8em;"></i> <!--Arrow icon from Font Awesome-->
-                </a>
-
-                <label for = "task_name" >Task Name</label><br>
+                <label for = "task_name">Task Name</label><br>
                 
-                <button id ="editButton" class="add"><a href='/addtask/{{ task.id }}/edit'>Edit</a></button>
-                <button id = "deleteButton" type="submit" formaction="/addtask/{{ task.id }}" class="del"><i class="material-icons">delete_forever</i></button>
+                <button class="add"><a href='/addtask/{{ task.id }}/edit'>Edit</a></button>
+                <button type="submit" formaction="/addtask/{{ task.id }}" class="del" name="button" value="delete"><i class="material-icons">delete_forever</i></button>
             </div>
 
             <input type="text" id="task_name" name="task_name" value= "{{ task.name }}" disabled> <br><br>
@@ -89,6 +61,7 @@
     
             <!--Text box to let user enter the text description. -->
             <textarea name="task_description" id="description" rows="5" cols="80" placeholder="Description" disabled> {{task.description}}</textarea>
+
         </div>
 
         <div class="right-section">
@@ -143,13 +116,14 @@
                 <option value=10 {% if task.story_points == 10 %}selected{% endif %}>10</option>
             </select> <br><br>
 
-
+            <button><a href = "{{ url_for('log_time_spent', task_id=task.id) }}">hahahahaha</a></button>
         </div>
     </div>
     </form>
 
-    
-
 </body>
-
 </html>
+
+
+
+

@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;700&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    background-color: #fff;
+    color: #000;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 3%;
+    margin-bottom: auto;
+    padding: 0;
+} 
+
+.logTimeContainer{
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: auto;
+    margin-bottom: auto;
+    border-radius: .5em;
+    height: auto;
+    background-color: #646464;
+    padding-top: 1.5%;
+    padding-left: 4.2%;
+    padding-right: 5%;
+    padding-bottom: 1%;
+}
+
+.logTimeContainer .header{
+    font-size: 3em;
+    font-family:'Poppins', sans-serif;
+    font-weight: 600;
+    color: #eeeeee;
+}
+
+.logTimeContainer .formLabel{
+    font-size:1.5em;
+    font-weight: 300;
+}
+
+.logTimeContainer .formDate{
+    background-color: #ffffff;
+    height: 1.8em;
+    width: 150%;
+    border-radius: .25em;
+    border:none;
+    font-size: 1.25em;
+    padding-left: 2%;
+    padding-right: 2%;
+    color: #333333;
+}
+
+.logTimeForm {
+    display: flex;
+    margin-top: 2%;
+    padding-right: 20%;
+}
+
+.logTimeForm div {
+    margin-right: auto;
+    margin-left: 4%;
+}
+
+.logTimeForm div label {
+    margin-left: 2%;
+    font-family: 'Poppins', sans-serif;
+    color: #eeeeee;
+    font-size: 3em;
+}
+
+.logTimeForm .logButtonDiv{
+    margin-top: 3vh;
+    margin-left: 5vh;
+    text-align: left;
+    height: 10%;
+}
+
+.logButtonDiv .logButton{
+    border-radius: .6em;
+    border: none;
+    background-color: #50c5bf;
+    height: 40px;
+    width: 80px;
+    font-size: 100%;
+    font-weight:500;
+    background-image: linear-gradient(0, #646464, #646464);
+    background-size: 0;
+    transition: .5s;
+    background-repeat: no-repeat;
+}
+
+.logTimeContainer .effortGraphContainer{
+    margin-top: 1%;
+}
+
+#chart{
+    width: 85%; /* Adjust the width as needed */
+    height: 60%;
+    margin: 0 auto; /* Center the graph horizontally */
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+#chart .js-plotly-plot {
+    width: 100%; /* Adjust the width of the plot content within the container */
+    height: 100%; /* Adjust the height of the plot content within the container */
+}
+
+/* CSS styling for the Plotly graph title */
+.plotly .main-title {
+    font-size: 18px; /* Adjust the font size as needed */
+    font-weight: bold; /* Adjust the font weight as needed */
+    color: #333; /* Adjust the text color as needed */
+    /* Add any other CSS properties to style the title */
+}
+
