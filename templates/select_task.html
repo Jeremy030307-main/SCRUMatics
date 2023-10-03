@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang = "en">
+   <head>
+      <!--CSS-->
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+      <!--ICON-->
+      <link href='https://unpkg.com/css.gg@2.0.0/icons/css/add.css' rel='stylesheet'>
+   </head>
+
+
+   <body>
+   
+      {%- for message in get_flashed_messages() %}
+         {{ message }}
+      {%- endfor %}
+		
+      <!--This the link to add new task to product backlog, can chage to a button in future-->
+      <!--This the link to add new task to product backlog, can chage to a button in future-->
+      <h3 class="pageTitle">Product Backlog</h3>
+
+      <form action = "/sprint/{{sprint_id}}/select_task", method = "POST">
+         <div class="tableContainer">
+            <table class="taskTable" style="width:80%">
+               <thead>
+                  <tr>
+                     <th>Select</th>
+                     <th>Name</th>
+                     <th>Tag</th>
+                     <th>Priority</th>
+                     <th>Story Point</th>
+                  </tr>
+               </thead>
+   
+               <tbody>
+                  {% for task in tasks %}
+                     <tr>
+                        <td>
+                           <input type="checkbox" name="selected_tasks[]" value="{{ task.id }}">
+                       </td>
+                        <td>{{ task.name }} <a href = "{{ url_for('view_task', task_id = task.id) }}" style="text-decoration: none; margin-left: 1%; color: #333333;">&#128065</a>
+                        </td>
+                        
+                        <td style="text-align: justify; padding-left: 1%;">
+                           {% for label in task.labels %}
+                              <div class="
+                              {%if label.name == "Front End"%} label-front-end 
+                              {%elif label.name == "Back End"%} label-back-end
+                              {%elif label.name == "Testing"%} label-testing
+                              {%elif label.name == "Framework"%} label-framework
+                              {%elif label.name == "API"%} label-api
+                              {%elif label.name == "Database"%} label-database
+                              {%elif label.name == "UI"%}label-ui
+                              {%elif label.name == "UX"%}label-ux
+                              {%endif%}"
+                              >{{ label.name }}</div>
+                           {% endfor %}
+                        </td>
+                        
+                        <td 
+                           class = "{% if task.priority == 4 %}urgent-priority{% elif task.priority == 3 %}important-priority{% elif task.priority == 2 %}medium-priority{% elif task.priority == 1 %}low-priority{% endif %}"
+                        >
+                           {{ proirity_map[task.priority] }}
+                        </td>
+   
+                           <td>{{ task.story_points }}</td>
+                        </tr>
+                  {% endfor %}
+               </tbody>
+            </table>
+            <div class="button-container">
+               <input type="submit" value="Add to Sprint" class="button">
+               <input type="button" value="Cancel" onclick="history.back()">
+               
+           </div>
+         </div>
+      </form>
+   </body>
+</html>
