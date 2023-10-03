@@ -25,11 +25,21 @@
             <div class="header">Task Time Spent</label><br>
             </div>
 
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <ul class="flash-messages">
+                        {% for category, message in messages %}
+                            <li class="{{ category }}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+
             <form action="/hahaha/{{task_id}}/log-time-spent" method="POST" class="logTimeForm"> 
     
                 <div>
                     <label for="date" class="formLabel">Date:</label><br>
-                    <input type="date" id="date" name="date" class="formDate"><br><br>
+                    <input type="date" id="date" name="date" class="formDate" min="{{ created_date }}"><br><br>
                 </div>
     
                 <div>

@@ -273,6 +273,9 @@ def view_sprint_task(task_id):
     
     return render_template('view_sprint_task.html', task = this_task, labels = this_task_labels)
 
+def is_overlap(range1_start, range1_end, range2_start, range2_end):
+    return range1_start <= range2_end and range1_end >= range2_start
+
 @app.route('/hahaha/<int:task_id>/log-time-spent', methods = ['GET', 'POST'])
 def log_time_spent(task_id):
 
@@ -281,9 +284,9 @@ def log_time_spent(task_id):
 
     if request.method == "POST":
 
-        entry_date = datetime.datetime.strptime(request.form["date"], "%Y-%m-%d").date()
-        start_time = datetime.datetime.strptime(request.form["start_time"], '%H:%M')
-        end_time = datetime.datetime.strptime(request.form["end_time"], '%H:%M')
+        entry_date = datetime.strptime(request.form["date"], "%Y-%m-%d").date()
+        start_time = datetime.strptime(request.form["start_time"], '%H:%M')
+        end_time = datetime.strptime(request.form["end_time"], '%H:%M')
 
         entries = [(entry_date, start_time, end_time)]
         if end_time < start_time:
@@ -304,24 +307,32 @@ def log_time_spent(task_id):
                 db.session.flush()
                 entry_date_id = existing_entry_date.id
 
-            time_spend = EntryTime(
-                entry_date_id = entry_date_id,
-                start_time = start_time.time(),
-                end_time = end_time.time(),
-                duration = end_time - start_time
-                )
-            db.session.add(time_spend)
+            existing_entry_time = existing_entry_date.entry_time
+            overlap_time = False
+            for entry_time in existing_entry_time:
+                overlap_time = is_overlap(entry_time.start_time, entry_time.end_time, start_time.time(), end_time.time())
 
-            if existing_entry_date.duration is None:
-                existing_entry_date.duration = end_time - start_time
-            else:
-                existing_entry_date.duration += end_time - start_time
+            if not overlap_time:
+                time_spend = EntryTime(
+                    entry_date_id = entry_date_id,
+                    start_time = start_time.time(),
+                    end_time = end_time.time(),
+                    duration = end_time - start_time
+                    )
+                db.session.add(time_spend)
 
-            task = Tasks.query.get(existing_entry_date.task_id)
-            if task.total_duration is None:
-                task.total_duration = end_time - start_time
+                if existing_entry_date.duration is None:
+                    existing_entry_date.duration = end_time - start_time
+                else:
+                    existing_entry_date.duration += end_time - start_time
+
+                task = Tasks.query.get(existing_entry_date.task_id)
+                if task.total_duration is None:
+                    task.total_duration = end_time - start_time
+                else:
+                    task.total_duration += end_time - start_time
             else:
-                task.total_duration += end_time - start_time
+                flash("Time Logged Overlap.", 'error')
             
         db.session.commit()
     
@@ -370,7 +381,7 @@ def log_time_spent(task_id):
 
     graph_json = json.dumps(fig, cls= plotly.utils.PlotlyJSONEncoder)
 
-    return render_template('log_time_spent.html', graphJSON=graph_json, task_id=task_id)
+    return render_template('log_time_spent.html', graphJSON=graph_json, task_id=task_id, created_date=this_task.created_at.strftime("%Y-%m-%d"))
 
 @app.route('/clear-database', methods=['GET'])
 def clear_database():
