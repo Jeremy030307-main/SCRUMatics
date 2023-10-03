@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://kit.fontawesome.com/4b4c250273.js" crossorigin="anonymous"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <!--CSS-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/sprint.css') }}">
+    
+</head>
+<body>
+    
+    <h1>
+        <!-- Sprints with icons -->
+        <div class="sprint-name-icon">
+            <i class="fa-solid fa-bars icon" style="margin-right: 120px;"></i>
+            <i class="fa-solid fa-database" style="margin-right: 20px;"></i>Sprint Backlog
+            <button class="addTask">
+                <a href="{{ url_for('select_task', sprint_id=sprint.id) }}" class="add-task-button">Add Task</a>
+            </button>
+        </div>   
+            
+    </h1>
+
+    
+    <table>
+        <thead>
+            <tr>
+                
+                <th>
+                    Not Started
+                </th>
+                <th>
+                    In Progress
+                </th>
+                <th>
+                    Completed
+                </th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for sprint in sprints %}
+                <tr>
+                    <td><i class="material-icons" style="margin-right: 5%;">directions_run</i>{{ sprint.sprint_name }}</td>
+                    <td>
+                        <!-- to update class for containing sprint status like task label in product backlog -->
+                        <div class="">{{sprint.sprint_status}}</div>
+                    </td>
+                    <td>{{ sprint.sprint_start_date }} &#8594 {{ sprint.sprint_end_date }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+    <script>
+        
+    </script>
+</body>
+</html>

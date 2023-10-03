@@ -109,9 +109,9 @@ def scrum_board():
     sprints = Sprints.query.all()
     return render_template('scrum_board.html', sprints = sprints)
 
-@app.route('/')
-def main_page():
-    return render_template('scrum_board.html')
+# @app.route('/')
+# def main_page():
+#     return render_template('scrum_board.html')
 
 @app.route('/product-backlog', methods = ['GET', 'POST'])
 def product_backlog():
@@ -143,6 +143,7 @@ def product_backlog():
     tasks = None
     filter_style = 'default'
     filter_element = None
+    sprint = Sprints.query.first() 
 
     if request.method == "POST":
 
@@ -165,7 +166,7 @@ def product_backlog():
     tasks = filter_and_sort_tasks(filter_element, sorting_element, ordering)
 
     return render_template('product_backlog.html', tasks = tasks, proirity_map = proirity_map, 
-                                selected_sort = sorting_style, selected_order = ordering, selected_filter = filter_style)
+                                selected_sort = sorting_style, selected_order = ordering, selected_filter = filter_style, sprint=sprint)
 
 @app.route('/addtask', methods = ['GET', 'POST'])
 def new_task():
@@ -250,6 +251,32 @@ def view_task(task_id):
 
         return redirect(url_for('product_backlog'))
     return render_template("view_task.html", task = this_task, labels = this_task_labels)  
+
+
+@app.route('/sprint/<int:sprint_id>', methods=['GET', 'POST'])
+def sprint(sprint_id):
+    this_sprint = Sprints.query.get(sprint_id)
+
+    if request.method == "POST":
+        db.session.delete(this_sprint)
+        db.session.commit()
+        return redirect(url_for('scrum_board'))
+
+    return render_template("sprint_backlog.html", sprint=this_sprint)
+
+@app.route('/sprint/<int:sprint_id>/select_task', methods=['GET', 'POST'])
+def select_task(sprint_id):
+    tasks = Tasks.query.all()
+    proirity_map = {
+        1 : "Low",
+        2: "Medium",
+        3: "Important", 
+        4: "Urgent"}
+    return render_template('select_task.html', tasks=tasks, proirity_map = proirity_map)
+
+@app.route('/')
+def main_page():
+    return render_template('scrum_board.html')
 
 @app.route('/newSprint', methods=['GET', 'POST'])
 def new_sprint():

@@ -413,3 +413,22 @@ body {
     padding-right: 2%;
     color: #333333;
 }
+
+/* select task  */
+
+.button-link {
+    display: inline-block;
+    padding: 10px 20px; /* Adjust padding to your liking */
+    background-color: #007bff; /* Change to your preferred button color */
+    color: white;
+    text-decoration: none;
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth hover effect */
+    font-size: 14px; /* Adjust the font size to your preference */
+}
+
+.button-link:hover {
+    background-color: #0056b3; /* Change to a darker shade on hover */
+}
+
