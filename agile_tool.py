@@ -298,24 +298,42 @@ def new_sprint():
 
 @app.route('/sprint/<int:sprint_id>/edit', methods=['GET', 'POST'])
 def edit_sprint(sprint_id):
-  sprint = Sprints.query.get(sprint_id)
+    sprint = Sprints.query.get(sprint_id)
 
-  if request.method == 'POST':
-    sprint.sprint_name = request.form['sprint-name']
-    sprint.sprint_start_date = datetime.strptime(request.form['sprint-start-date'], '%Y-%m-%d').date()
-    sprint.sprint_end_date = datetime.strptime(request.form['sprint-end-date'], '%Y-%m-%d').date()
+    if request.method == 'POST':
+        if request.form.get('delete_sprint'):
+            # Delete the sprint
+            Tasks.query.filter_by(sprint_id=sprint_id).update({'sprint_id': None})
+            db.session.delete(sprint)
+            db.session.commit()
 
-    # Prevent users from changing a sprint status back to "Not Started" if the sprint has already been started
-    if sprint.is_started() and request.form['sprint-status'] == "Not Started":
-      raise ValidationError("Cannot change sprint status back to 'Not Started' if sprint has already been started.")
+            return redirect(url_for('product_backlog'))
 
-    sprint.sprint_status = request.form['sprint-status']
+        # Update the sprint
+        sprint.sprint_name = request.form['sprint-name']
+        sprint.sprint_start_date = datetime.strptime(request.form['sprint-start-date'], '%Y-%m-%d').date()
+        sprint.sprint_end_date = datetime.strptime(request.form['sprint-end-date'], '%Y-%m-%d').date()
+        sprint.sprint_status = request.form['sprint-status']
 
-    db.session.commit()
+        # Prevent users from changing a sprint status back to "Not Started" if the sprint has already been started
+        if sprint.is_started() and request.form['sprint-status'] == "Not Started":
+            raise ValidationError("Cannot change sprint status back to 'Not Started' if sprint has already been started.")
 
-    return redirect(url_for('scrum_board'))
+        # Update the sprint's labels
+        sprint.labels = []
+        for label in request.form.getlist("labels[]"):
+            # Check if the label exists
+            existing_label = Label.query.filter_by(name=label).first()
+            if existing_label:
+                sprint.labels.append(existing_label)
+            else:
+                sprint.labels.append(Label(name=label))
 
-  return render_template('edit_sprint.html', sprint=sprint)
+        db.session.commit()
+
+        return redirect(url_for('scrum_board'))
+    
+    return render_template('edit_sprint.html', sprint=sprint)
 
 
 @app.route('/hahaha/<int:task_id>')
