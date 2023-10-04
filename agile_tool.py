@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, collate, Date, Time, Float,TypeDecorator, Interval, event, and_
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
+from wtforms.validators import ValidationError
 from datetime import timedelta
 import plotly.express as px
 import pandas as pd
@@ -294,6 +295,28 @@ def new_sprint():
         db.session.commit()
 
         return redirect(url_for('scrum_board'))
+
+@app.route('/sprint/<int:sprint_id>/edit', methods=['GET', 'POST'])
+def edit_sprint(sprint_id):
+  sprint = Sprints.query.get(sprint_id)
+
+  if request.method == 'POST':
+    sprint.sprint_name = request.form['sprint-name']
+    sprint.sprint_start_date = datetime.strptime(request.form['sprint-start-date'], '%Y-%m-%d').date()
+    sprint.sprint_end_date = datetime.strptime(request.form['sprint-end-date'], '%Y-%m-%d').date()
+
+    # Prevent users from changing a sprint status back to "Not Started" if the sprint has already been started
+    if sprint.is_started() and request.form['sprint-status'] == "Not Started":
+      raise ValidationError("Cannot change sprint status back to 'Not Started' if sprint has already been started.")
+
+    sprint.sprint_status = request.form['sprint-status']
+
+    db.session.commit()
+
+    return redirect(url_for('scrum_board'))
+
+  return render_template('edit_sprint.html', sprint=sprint)
+
 
 @app.route('/hahaha/<int:task_id>')
 def view_sprint_task(task_id):

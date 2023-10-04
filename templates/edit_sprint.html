@@ -1,41 +1,45 @@
-<table>
-    <thead>
-      <tr>
-        <th>
-          <i class="fa-solid fa-a" style="margin-right: 20px;"></i>
-          Sprint Name
-        </th>
-        <th>
-          <i class="fa-solid fa-spinner"></i>
-          Sprint Status
-        </th>
-        <th>
-          <i class="fa-solid fa-calendar-days"></i>
-          Date
-        </th>
-        <th>
-          Actions
-        </th>
-      </tr>
-    </thead>
-  
-    <tbody>
-      {% for sprint in sprints %}
-        <tr>
-          <td><i class="material-icons" style="margin-right: 5%;">directions_run</i>{{ sprint.sprint_name }}
-            <button class="b">
-              <a href="{{ url_for('sprint', sprint_id=sprint.id) }}" class="button-link">View Details</a></button>
-            </td>
-          <td>
-            <!-- to update class for containing sprint status like task label in product backlog -->
-            <div class="">{{sprint.sprint_status}}</div>
-          </td>
-          <td>{{ sprint.sprint_start_date }} &#8594 {{ sprint.sprint_end_date }}</td>
-          <td>
-            <button class="edit-sprint-button" data-sprint-id="{{ sprint.id }}" onclick="openEditSprintDialog(this)">Edit</button>
-            <button class="delete-sprint-button" data-sprint-id="{{ sprint.id }}" onclick="openDeleteSprintDialog(this)">Delete</button>
-          </td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+
+</head>
+
+<body>
+
+  <form action="/sprint/<int:sprint_id>/edit" method="POST" class="addTaskForm">
+
+    <input type="hidden" name="sprint_id" value="{{ sprint.id }}">
+
+    <div class="taskContainer">
+      <div class="left-section">
+        <label for="sprint_name" class="addTaskInput">Sprint Name</label><br>
+        <input type="text" id="sprint_name" name="sprint_name" value="{{ sprint.sprint_name }}"> <br><br>
+
+        <label for="sprint_start_date" class="addTaskInput">Sprint Start Date</label><br>
+        <input type="date" id="sprint_start_date" name="sprint_start_date" value="{{ sprint.sprint_start_date }}"> <br><br>
+
+        <label for="sprint_end_date" class="addTaskInput">Sprint End Date</label><br>
+        <input type="date" id="sprint_end_date" name="sprint_end_date" value="{{ sprint.sprint_end_date }}"> <br><br>
+
+        <label for="sprint_status" class="addTaskInput">Sprint Status</label><br>
+        <select id="sprint_status" name="sprint_status" class="addTaskSelectLeft">
+          <option value="Not Started">Not Started</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Completed">Completed</option>
+        </select> <br><br>
+      </div>
+    </div>
+
+    <div class="saveBtnDiv">
+      <input type="submit" value="Save" class="saveBtn">
+    </div>
+
+  </form>
+
+</body>
+
+</html>
