@@ -18,9 +18,12 @@
         <!-- Sprints with icons -->
         <div class="sprint-name-icon">
             <i class="fa-solid fa-bars icon" style="margin-right: 120px;"></i>
-            <i class="fa-solid fa-database" style="margin-right: 20px;"></i>Sprint Backlog
+            <i class="fa-solid fa-database" style="margin-right: 20px;"></i>{{sprint.sprint_name}}
             <button class="addTask">
-                <a href="{{ url_for('select_task', sprint_id=sprint_id) }}" class="add-task-button">Add Task</a>
+                <a href="{{ url_for('select_task', sprint_id=sprint.id) }}" class="add-task-button">Add Task</a>
+            </button>
+            <button class="addTask">
+                <a href="{{ url_for('scrum_board', sprint_id=sprint_id) }}" >Back</a>
             </button>
         </div>   
             
@@ -82,13 +85,73 @@
                         {% endif %}                     
                     </td>
                     <td>
-                        {% if task.status == "Incomplete"%}
-                            {{task.name}}
-                        {% endif %}  
+                        {% if task.status == "In Progress"%}
+                       
+                            <div class="card">
+                                <div class="taskName">{{task.name}} 
+                                    <div class="
+                                    {%if task.priority == 4%} urgent-priority 
+                                    {%elif task.priority == 3%} important-priority
+                                    {%elif task.priority == 2%} medium-priority
+                                    {%elif task.priority == 1%} low-priority
+                                    {%endif%}"
+                                    ></div>
+                                </div>
+                                
+                                {% for label in task.labels %}
+                                    <div class="
+                                    {%if label.name == "Front End"%} label-front-end 
+                                    {%elif label.name == "Back End"%} label-back-end
+                                    {%elif label.name == "Testing"%} label-testing
+                                    {%elif label.name == "Framework"%} label-framework
+                                    {%elif label.name == "API"%} label-api
+                                    {%elif label.name == "Database"%} label-database
+                                    {%elif label.name == "UI"%}label-ui
+                                    {%elif label.name == "UX"%}label-ux
+                                    {%endif%}"
+                                    >{{ label.name }}</div>
+                                {% endfor %}
+                                <br><br>
+                                <div class="circle">{{task.story_points}}</div>
+                                
+                                
+                            </div>
+                            
+                        {% endif %} 
                     </td>
                     <td>
                         {% if task.status == "Completed"%}
-                            {{task.name}}
+                       
+                            <div class="card">
+                                <div class="taskName">{{task.name}} 
+                                    <div class="
+                                    {%if task.priority == 4%} urgent-priority 
+                                    {%elif task.priority == 3%} important-priority
+                                    {%elif task.priority == 2%} medium-priority
+                                    {%elif task.priority == 1%} low-priority
+                                    {%endif%}"
+                                    ></div>
+                                </div>
+                                
+                                {% for label in task.labels %}
+                                    <div class="
+                                    {%if label.name == "Front End"%} label-front-end 
+                                    {%elif label.name == "Back End"%} label-back-end
+                                    {%elif label.name == "Testing"%} label-testing
+                                    {%elif label.name == "Framework"%} label-framework
+                                    {%elif label.name == "API"%} label-api
+                                    {%elif label.name == "Database"%} label-database
+                                    {%elif label.name == "UI"%}label-ui
+                                    {%elif label.name == "UX"%}label-ux
+                                    {%endif%}"
+                                    >{{ label.name }}</div>
+                                {% endfor %}
+                                <br><br>
+                                <div class="circle">{{task.story_points}}</div>
+                                
+                                
+                            </div>
+                            
                         {% endif %}  
                     </td>
                 </tr>
