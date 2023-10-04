@@ -10,6 +10,8 @@
   <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/sprint.css') }}">
+  <!--font awesome-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   
 </head>
 <body>
@@ -17,8 +19,10 @@
     <h1>
         <!-- Sprints with icons -->
         <div class="sprint-name-icon">
-            <a href="{{ url_for('scrum_board')}}" class="add-task-button"><i class="fa-solid fa-bars icon" style="margin-right: 120px;"></i></a>
-            <i class="fa-solid fa-database" style="margin-right: 20px;"></i>{{sprint.sprint_name}}
+            <a href="javascript:history.back()" class="arrow-button">
+                <i class="fa-solid fa-arrow-left" style="color: #000000; font-size: 0.8em;"></i> <!--Arrow icon from Font Awesome-->
+            </a>
+            <i class="fa-solid fa-database" style="margin-right: 20px;"></i> {{sprint.sprint_name}}
 
             {% if sprint.sprint_status == "Not Started" %}
                 <button class="addTask">
@@ -175,7 +179,7 @@
                 </tr>
             {% endfor %}
 
-            <button><a href = "{{ url_for('burndown_chart', task_id=tasks.id, sprint_id=sprint.id) }}">Log Time</a></button>
+            <button><a href = "{{ url_for('burndown_chart', task_id=tasks.id, sprint_id=sprint.id) }}">Burndown Chart</a></button>
         </tbody>
 
   </table>

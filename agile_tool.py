@@ -191,15 +191,10 @@ def new_task():
             labels = this_task_labels
         )
 
-        sprint_id = this_task.sprint_id
-
         db.session.add(task)
         db.session.commit()
-        
-        if sprint_id is None:
-            return redirect(url_for('product_backlog'))
-        else:
-            return redirect(url_for('sprint', sprint_id = sprint_id))
+
+        return redirect(url_for('product_backlog'))
 
         return redirect(url_for('product_backlog'))
    return render_template('new_task.html')
@@ -255,8 +250,15 @@ def view_task(task_id):
                 db.session.delete(entry_time)
             db.session.delete(entry_date)
 
+        sprint_id = this_task.sprint_id
+
         db.session.delete(this_task)
         db.session.commit()
+
+        if sprint_id is None:
+            return redirect(url_for('product_backlog'))
+        else:
+            return redirect(url_for('sprint', sprint_id = sprint_id))
 
         return redirect(url_for('product_backlog'))
     return render_template("view_task.html", task = this_task, labels = this_task_labels)  
@@ -359,9 +361,9 @@ def log_time_spent(sprint_id, task_id):
         entries = [(entry_date, start_time, end_time)]
         if end_time < start_time:
 
-            start_of_day = (start_time + datetime.timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
+            start_of_day = (start_time + timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
 
-            entries = [(entry_date, start_time, start_of_day), (entry_date + datetime.timedelta(days=1), start_of_day, end_time + datetime.timedelta(days=1))]
+            entries = [(entry_date, start_time, start_of_day), (entry_date + timedelta(days=1), start_of_day, end_time + timedelta(days=1))]
 
         for entry_date, start_time, end_time in entries:
 
