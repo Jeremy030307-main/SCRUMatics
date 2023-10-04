@@ -14,6 +14,8 @@
    <script src="{{ url_for('static', filename='sprint_backlog.js') }}"></script>
    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+   <!--font awesome-->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 </head>
 
@@ -22,7 +24,11 @@
     <div class="logTimeContainer">
         <div>
 
-            <div class="header">Task Time Spent</label><br>
+            <div class="header">
+                <a href="javascript:history.back()" class="arrow-button">
+                    <i class="fa-solid fa-arrow-left" style="color: #ffffff; font-size: 0.8em;"></i> <!--Arrow icon from Font Awesome-->
+                </a>
+                <label>Time Spent</label><br>
             </div>
 
             {% with messages = get_flashed_messages(with_categories=true) %}
@@ -39,22 +45,22 @@
     
                 <div>
                     <label for="date" class="formLabel">Date:</label><br>
-                    <input type="date" id="date" name="date" class="formDate" min="{{ created_date }}"><br><br>
+                    <input type="date" id="date" name="date" class="formDate" min="{{ created_date }}" required><br><br>
                 </div>
     
                 <div>
                     <label for="start_time" class="formLabel">Start Time:</label><br>
-                    <input type="time" id="start_time" name="start_time" class="formDate"><br><br>
+                    <input type="time" id="start_time" name="start_time" class="formDate" required><br><br>
                 </div>
                     
                 <div>
                     <label for="end_time" class="formLabel">End Time:</label><br>
-                    <input type="time" id="end_time" name="end_time" class="formDate"><br><br>
+                    <input type="time" id="end_time" name="end_time" class="formDate" required><br><br>
                 </div>
                         
                 <div class="logButtonDiv">
                     <!--Add in the save button to let the user to save the task into product backlog-->
-                    <input type="submit" value="Log" class="logButton"><br><br>
+                    <input type="submit" value="Log" class="logButton" required><br><br>
                 </div>
             </form>
 

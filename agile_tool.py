@@ -195,6 +195,8 @@ def new_task():
         db.session.commit()
 
         return redirect(url_for('product_backlog'))
+
+        return redirect(url_for('product_backlog'))
    return render_template('new_task.html')
 
 @app.route('/addtask/<int:task_id>/edit', methods = ['GET', 'POST'])
@@ -226,9 +228,14 @@ def edit_task(task_id):
             labels = this_task_labels
         )
 
-        db.session.commit()
+        sprint_id = this_task.sprint_id
 
-        return redirect(url_for('product_backlog'))
+        db.session.commit()
+        if sprint_id is None:
+            return redirect(url_for('product_backlog'))
+        else:
+            return redirect(url_for('sprint', sprint_id = sprint_id))
+
     return render_template('edit_task.html', task = this_task, labels = labels_name)
 
 @app.route('/addtask/<int:task_id>', methods = ['GET', 'POST'])
@@ -243,8 +250,15 @@ def view_task(task_id):
                 db.session.delete(entry_time)
             db.session.delete(entry_date)
 
+        sprint_id = this_task.sprint_id
+
         db.session.delete(this_task)
         db.session.commit()
+
+        if sprint_id is None:
+            return redirect(url_for('product_backlog'))
+        else:
+            return redirect(url_for('sprint', sprint_id = sprint_id))
 
         return redirect(url_for('product_backlog'))
     return render_template("view_task.html", task = this_task, labels = this_task_labels)  
@@ -324,7 +338,6 @@ def edit_sprint(sprint_id):
 
   return render_template('edit_sprint.html', sprint=sprint)
 
-
 @app.route('/sprint/<int:sprint_id>/task/<int:task_id>')
 def view_sprint_task(sprint_id, task_id):
     
@@ -348,9 +361,9 @@ def log_time_spent(sprint_id, task_id):
         entries = [(entry_date, start_time, end_time)]
         if end_time < start_time:
 
-            start_of_day = (start_time + datetime.timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
+            start_of_day = (start_time + timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
 
-            entries = [(entry_date, start_time, start_of_day), (entry_date + datetime.timedelta(days=1), start_of_day, end_time + datetime.timedelta(days=1))]
+            entries = [(entry_date, start_time, start_of_day), (entry_date + timedelta(days=1), start_of_day, end_time + timedelta(days=1))]
 
         for entry_date, start_time, end_time in entries:
 
