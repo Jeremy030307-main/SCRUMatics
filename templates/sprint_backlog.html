@@ -46,11 +46,32 @@
             </tr>
         </thead>
 
+<<<<<<< HEAD
+=======
+    
+    <table>
+        <thead>
+            <tr>
+                
+                <th>
+                    Not Started
+                </th>
+                <th>
+                    In Progress
+                </th>
+                <th>
+                    Completed
+                </th>
+            </tr>
+        </thead>
+
+>>>>>>> origin/bryan
         <tbody>
             {% for task in tasks %}
                 <tr>
                     <td>
                         {% if task.status == "Not Started"%}
+<<<<<<< HEAD
                        
                             <div class="card">
                                 <div class="taskName">{{task.name}} 
@@ -82,10 +103,14 @@
                                 
                             </div>
                             
+=======
+                            {{task.name}}
+>>>>>>> origin/bryan
                         {% endif %}                     
                     </td>
                     <td>
                         {% if task.status == "In Progress"%}
+<<<<<<< HEAD
                        
                             <div class="card">
                                 <div class="taskName">{{task.name}} 
@@ -152,6 +177,14 @@
                                 
                             </div>
                             
+=======
+                            {{task.name}}
+                        {% endif %}  
+                    </td>
+                    <td>
+                        {% if task.status == "Completed"%}
+                            {{task.name}}
+>>>>>>> origin/bryan
                         {% endif %}  
                     </td>
                 </tr>
