@@ -1,80 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="https://kit.fontawesome.com/4b4c250273.js" crossorigin="anonymous"></script>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-    <!--CSS-->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/sprint.css') }}">
-    
+  <script src="https://kit.fontawesome.com/4b4c250273.js" crossorigin="anonymous"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/sprint.css') }}">
+  
 </head>
 <body>
-    
-    <h1>
-        <!-- Sprints with icons -->
-        <div class="sprint-name-icon">
-            <i class="fa-solid fa-bars icon" style="margin-right: 120px;"></i>
-            <i class="fa-solid fa-database" style="margin-right: 20px;"></i>Sprint Backlog
-            <button class="addTask">
-                <a href="{{ url_for('select_task', sprint_id=sprint_id) }}" class="add-task-button">Add Task</a>
-            </button>
-            <!-- Edit button -->
-            <button class="editSprint">
-                <a href="{{ url_for('edit_sprint', sprint_id=sprint_id) }}" class="edit-sprint-button">Edit Sprint</a>
-            </button>
-        </div>   
-            
-    </h1>
+  
+  <h1>
+    <div class="sprint-name-icon">
+      <i class="fa-solid fa-bars icon" style="margin-right: 120px;"></i>
+      <i class="fa-solid fa-database" style="margin-right: 20px;"></i>Sprint Backlog
+      <button class="addTask">
+        <a href="{{ url_for('select_task', sprint_id=sprint.id) }}" class="add-task-button">Add Task</a>
+      </button>
+      <button class="sprintStatus">
+        <select id="sprint_status" name="sprint_status" onchange="this.form.submit()">
+          <option value="Not Started" {% if sprint.sprint_status == "Not Started"%}selected{%endif%}>Not Started</option>
+          <option value="In Progress" {% if sprint.sprint_status == "In Progress"%}selected{%endif%}>In Progress</option>
+          <option value="Completed" {% if sprint.sprint_status == "Completed"%}selected{%endif%}>Completed</option>
+        </select>
+      </button>
+      <button class="editSprint">
+        <a href="{{ url_for('edit_sprint', sprint_id=sprint.id) }}" class="edit-sprint-button">Edit Sprint</a>
+      </button>
+    </div>   
+  </h1>
 
-    
-    <table>
-        <thead>
-            <tr>
-                
-                <th>
-                    Not Started
-                </th>
-                <th>
-                    In Progress
-                </th>
-                <th>
-                    Completed
-                </th>
-            </tr>
-        </thead>
-
-        <tbody>
-            {% for task in tasks %}
-                <tr>
-                    <td>
-                        {% if task.status == "Not Started"%}
-                            {{task.name}}
-                        {% endif %}                     
-                    </td>
-                    <td>
-                        {% if task.status == "Incomplete"%}
-                            {{task.name}}
-                        {% endif %}  
-                    </td>
-                    <td>
-                        {% if task.status == "Completed"%}
-                            {{task.name}}
-                        {% endif %}  
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-
-    </table>
-
-
-    <script>
+  
+  <table>
+    <thead>
+      <tr>
         
-    </script>
+        <th>
+          Not Started
+        </th>
+        <th>
+          In Progress
+        </th>
+        <th>
+          Completed
+        </th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for task in tasks %}
+        <tr>
+          <td>
+            {% if task.status == "Not Started"%}
+              {{task.name}}
+            {% endif %}                     
+          </td>
+          <td>
+            {% if task.status == "In Progress"%}
+              {{task.name}}
+            {% endif %} 
+          </td>
+          <td>
+            {% if task.status == "Completed"%}
+              {{task.name}}
+            {% endif %} 
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+
+  </table>
+
+
+  <script>
+    
+  </script>
 </body>
 </html>
