@@ -77,15 +77,15 @@
             <!--Drop-down list of task status-->
             <label for="status" class="addTaskLabel"> Status</label><br>
             <select id="status_type" name="status_type" class="
-                {%if task.status == "Not Started"%} addTaskSelectLeft-not-started 
-                {%elif task.status == "In Progress"%} addTaskSelectLeft-incomplete
-                {%elif task.status == "Completed"%} addTaskSelectLeft-complete
+                {%if task.status == "not-started"%} addTaskSelectLeft-not-started 
+                {%elif task.status == "in-progress"%} addTaskSelectLeft-incomplete
+                {%elif task.status == "completed"%} addTaskSelectLeft-complete
                 {%endif%}"
                 disabled>
                 <option value="" disabled>Select an option</option>
-                <option value="Not Started" {% if task.status == 'Not Started' %}selected{% endif %}>Not Started</option>
-                <option value="In Progress" {% if task.status == 'In Progress' %}selected{% endif %}>In Progress</option>
-                <option value="Completed" {% if task.status == 'Completed' %}selected{% endif %}>Completed</option>
+                <option value="not-started" {% if task.status == 'not-started' %}selected{% endif %}>Not Started</option>
+                <option value="in-progress" {% if task.status == 'in-progress' %}selected{% endif %}>In Progress</option>
+                <option value="completed" {% if task.status == 'completed' %}selected{% endif %}>Completed</option>
             </select><br><br>
     
             <!--Text box to let user enter the text description. -->

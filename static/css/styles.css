@@ -248,7 +248,8 @@ body {
     font-weight: 600;
     color: #eeeeee;
 }
-.taskContainer .left-section input[type=text]{
+.taskContainer .left-section input[type=text],
+.taskContainer .left-section input[type=date]{
     background-color: #e0e0e0;
     height: 2.5em;
     width: 50%;
@@ -334,7 +335,7 @@ body {
     height: 10%;
     display: flex;
 }
-.taskContainer .right-section .saveBtn{
+.taskContainer .saveBtn{
     flex: 1;
     border-radius: .25em;
     background-color: #ffffff;
@@ -531,10 +532,6 @@ body {
 }
   
 
-
-
-  
-
 /* select task  */
 
 .button-link {
@@ -547,9 +544,44 @@ body {
     cursor: pointer;
     transition: background-color 0.3s ease; /* Smooth hover effect */
     font-size: 14px; /* Adjust the font size to your preference */
+    font-weight: bold;
 }
 
 .button-link:hover {
     background-color: #0056b3; /* Change to a darker shade on hover */
 }
 
+/** Edit Sprint **/
+.edit-sprint-buttons .saveBtn{
+    border-radius: .25em;
+    background-color: #ffffff;
+    height: 50px;
+    width: fit-content;
+    font-size: 100%;
+    font-weight:500;
+    background-size: 0;
+    transition: .5s;
+    background-repeat: no-repeat;
+    padding-left: 5%;
+    padding-right: 5%;
+    margin-left: 2%;
+    margin-right: 2%;
+    cursor: pointer;
+}
+.deleteBtn{
+    margin-left: 2%;
+    margin-right: 2%;
+    border-radius: .25em;
+    border-color: #EF5350;
+    background-color: #EF5350;
+    color: #ffffff;
+    height: 50px;
+    width: fit-content;
+    font-size: 100%;
+    font-weight:500;
+    padding-left: 2%;
+    padding-right: 2%;
+    margin-left: 2%;
+    margin-right: 2%;
+    cursor: pointer;
+}
