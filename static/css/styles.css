@@ -544,6 +544,7 @@ body {
     cursor: pointer;
     transition: background-color 0.3s ease; /* Smooth hover effect */
     font-size: 14px; /* Adjust the font size to your preference */
+    font-weight: bold;
 }
 
 .button-link:hover {
