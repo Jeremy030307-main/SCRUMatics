@@ -17,7 +17,10 @@
     <h1>
         <!-- Sprints with icons -->
         <div class="sprint-name-icon">
-            <a href="{{ url_for('scrum_board')}}" class="add-task-button"><i class="fa-solid fa-bars icon" style="margin-right: 120px;"></i></a>
+            <div class="sprint-name-icon">
+                <button class="arrow-button">
+                     <a href="{{ url_for('scrum_board', sprint_id=sprint_id) }}" ><i class="fa-solid fa-arrow-left"></i></a>
+                 </button>
             <i class="fa-solid fa-database" style="margin-right: 20px;"></i>{{sprint.sprint_name}}
 
             {% if sprint.sprint_status == "Not Started" %}
@@ -26,9 +29,7 @@
                 </button>
             {% endif %}
 
-            <button class="addTask">
-                <a href="{{ url_for('scrum_board', sprint_id=sprint_id) }}" >Back</a>
-            </button>
+        
 
             <button class="sprintStatus">
                 <form action="/sprint/{{sprint.id}}" method="POST">
