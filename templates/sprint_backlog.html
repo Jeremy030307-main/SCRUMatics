@@ -18,20 +18,26 @@
     <div class="sprint-name-icon">
       <i class="fa-solid fa-bars icon" style="margin-right: 120px;"></i>
       <i class="fa-solid fa-database" style="margin-right: 20px;"></i>Sprint Backlog
-      <button class="addTask">
-        <a href="{{ url_for('select_task', sprint_id=sprint.id) }}" class="add-task-button">Add Task</a>
-      </button>
+
+      {% if sprint.sprint_status == "Not Started" %}
+        <button class="addTask">
+            <a href="{{ url_for('select_task', sprint_id=sprint.id) }}" class="add-task-button">Add Task</a>
+        </button>
+      {%endif%}
+      
       <button class="sprintStatus">
-        <select id="sprint_status" name="sprint_status" onchange="this.form.submit()">
-          <option value="Not Started" {% if sprint.sprint_status == "Not Started"%}selected{%endif%}>Not Started</option>
-          <option value="In Progress" {% if sprint.sprint_status == "In Progress"%}selected{%endif%}>In Progress</option>
-          <option value="Completed" {% if sprint.sprint_status == "Completed"%}selected{%endif%}>Completed</option>
-        </select>
+        <form action="/sprint/{{sprint.id}}" method="POST">
+            <select id="sprint_status" name="sprint_status" onchange="this.form.submit()">
+                <option value="Not Started" {% if sprint.sprint_status == "Not Started"%}selected{%endif%}>Not Started</option>
+                <option value="In Progress" {% if sprint.sprint_status == "In Progress"%}selected{%endif%}>In Progress</option>
+                <option value="Completed" {% if sprint.sprint_status == "Completed"%}selected{%endif%}>Completed</option>
+            </select>
+        </form>
       </button>
       <button class="editSprint">
         <a href="{{ url_for('edit_sprint', sprint_id=sprint.id) }}" class="edit-sprint-button">Edit Sprint</a>
       </button>
-    </div>   
+    </div>
   </h1>
 
   
@@ -57,17 +63,17 @@
           <td>
             {% if task.status == "Not Started"%}
               {{task.name}}
-            {% endif %}                     
+            {% endif %}
           </td>
           <td>
             {% if task.status == "In Progress"%}
               {{task.name}}
-            {% endif %} 
+            {% endif %}
           </td>
           <td>
             {% if task.status == "Completed"%}
               {{task.name}}
-            {% endif %} 
+            {% endif %}  
           </td>
         </tr>
       {% endfor %}
@@ -77,7 +83,26 @@
 
 
   <script>
-    
+    $(document).ready(function() {
+      $("#sprint_status").change(function() {
+        var sprintStatus = $(this).val();
+
+        // Confirmation prompt
+        if (confirm("Are you sure you want to change the sprint status to " + sprintStatus + "?")) {
+          // Update the sprint status in the database
+          $.ajax({
+            url: "/sprint/{{ sprint.id }}/update-status",
+            method: "POST",
+            data: {
+              sprint_status: sprintStatus
+            },
+            success: function() {
+              // Reload the page to display the updated sprint status
+              location.reload();
+            }
+          });
+        }
+      });
+    });
   </script>
 </body>
-</html>

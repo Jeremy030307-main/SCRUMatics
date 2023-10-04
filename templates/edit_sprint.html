@@ -24,13 +24,6 @@
 
         <label for="sprint_end_date" class="addTaskInput">Sprint End Date</label><br>
         <input type="date" id="sprint_end_date" name="sprint_end_date" value="{{ sprint.sprint_end_date }}"> <br><br>
-
-        <label for="sprint_status" class="addTaskInput">Sprint Status</label><br>
-        <select id="sprint_status" name="sprint_status" class="addTaskSelectLeft">
-          <option value="Not Started" {% if sprint.sprint_status == "Not Started"%}selected{%endif%}>Not Started</option>
-          <option value="In Progress" {% if sprint.sprint_status == "In Progress"%}selected{%endif%}>In Progress</option>
-          <option value="Completed" {% if sprint.sprint_status == "Completed"%}selected{%endif%}>Completed</option>
-        </select> <br><br>
       </div>
     </div>
 

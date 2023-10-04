@@ -298,32 +298,34 @@ def new_sprint():
 
 @app.route('/sprint/<int:sprint_id>/edit', methods=['GET', 'POST'])
 def edit_sprint(sprint_id):
-    sprint = Sprints.query.get(sprint_id)
+  sprint = Sprints.query.get(sprint_id)
 
-    if request.method == 'POST':
-        if request.form.get('delete_sprint'):
-            # Delete the sprint
-            Tasks.query.filter_by(sprint_id=sprint_id).update({'sprint_id': None})
-            db.session.delete(sprint)
-            db.session.commit()
+  if request.method == 'POST':
+    if request.form.get('delete_sprint'):
+      # Delete the sprint
+      Tasks.query.filter_by(sprint_id=sprint_id).update({'sprint_id': None})
+      db.session.delete(sprint)
+      db.session.commit()
 
-            return redirect(url_for('product_backlog'))
+      return redirect(url_for('product_backlog'))
 
-        # Update the sprint
-        sprint.sprint_name = request.form['sprint_name']
-        sprint.sprint_start_date = datetime.strptime(request.form['sprint_start_date'], '%Y-%m-%d').date()
-        sprint.sprint_end_date = datetime.strptime(request.form['sprint_end_date'], '%Y-%m-%d').date()
-        sprint.sprint_status = request.form['sprint_status']
+    # Update the sprint
+    sprint.sprint_name = request.form['sprint_name']
+    sprint.sprint_start_date = datetime.strptime(request.form['sprint_start_date'], '%Y-%m-%d').date()
+    sprint.sprint_end_date = datetime.strptime(request.form['sprint_end_date'], '%Y-%m-%d').date()
 
-        # Prevent users from changing a sprint status back to "Not Started" if the sprint has already been started
-        # if sprint.is_started() and request.form['sprint-status'] == "Not Started":
-        #     raise ValidationError("Cannot change sprint status back to 'Not Started' if sprint has already been started.")
+    # Get the sprint status from the request form, or use a default value if the field is not present
 
-        db.session.commit()
+    # Prevent users from changing a sprint status back to "Not Started" if the sprint has already been started
+    # if sprint.is_started() and sprint_status == "Not Started":
+    #   raise ValidationError("Cannot change sprint status back to 'Not Started' if sprint has already been started.")
 
-        return redirect(url_for('scrum_board'))
-    
-    return render_template('edit_sprint.html', sprint=sprint)
+    db.session.commit()
+
+    return redirect(url_for('scrum_board'))
+
+  return render_template('edit_sprint.html', sprint=sprint)
+
 
 @app.route('/hahaha/<int:task_id>')
 def view_sprint_task(task_id):
