@@ -127,11 +127,6 @@ td:nth-child(3) {
 }
 
 
-/* Style for buttons */
-.button-container {
-    float: right;
-    margin-top: 20px;
-}
 
 .button {
     margin-right: 10px;
@@ -221,6 +216,10 @@ td:nth-child(3) {
     height: 70%;
     margin-left: 5%;
     width: 100%;
+}
+.addTask a{
+    text-decoration: none;
+    color: #333333;
 }
 
 .card{

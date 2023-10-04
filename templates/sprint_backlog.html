@@ -31,11 +31,6 @@
                     </button>
                 </div>
             {% endif %}
-            <div style="width: 5%;">
-                <button class="addTask">
-                    <a href="{{ url_for('scrum_board', sprint_id=sprint_id) }}" >Back</a>
-                </button>
-            </div>
 
             <div>
                 <form action="/sprint/{{sprint.id}}" method="POST">
