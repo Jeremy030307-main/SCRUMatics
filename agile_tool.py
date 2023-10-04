@@ -477,15 +477,16 @@ def burndown_chart(sprint_id):
     end_date = current_sprint.sprint_end_date
     
     # store the data for ideal velocity in lists
-    story_point_data = [total_story_point, 0]
+    story_point_data = [0, total_story_point]
     date_data = [start_date, end_date]
     line_type = ["Ideal Velocity", "Ideal Velocity"]
 
+    accumulate_story_points = 0
     for task in sprint_task:
         if task.completion_date is None:
             break
-        total_story_point -= task.story_points
-        story_point_data.append(total_story_point)
+        accumulate_story_points += task.story_points
+        story_point_data.append(accumulate_story_points)
         date_data.append(task.completion_date)
         line_type.append("Actual Velocity")
     

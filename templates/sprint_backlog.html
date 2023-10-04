@@ -24,7 +24,7 @@
             </a>
             <i class="fa-solid fa-database" style="margin-right: 20px;"></i>{{sprint.sprint_name}}
 
-            {% if sprint.sprint_status == "Not Started" %}
+            {% if sprint.sprint_status == "not-started" %}
                 <div style="width: 10%;">
                     <button class="addTask">
                         <a href="{{ url_for('select_task', sprint_id=sprint.id) }}" class="add-task-button">Add Task</a>
@@ -95,6 +95,12 @@
             </div>
         </div>
         {% endfor %}
+
+        <div style="width: 30%;">
+            <button class="addTask">
+                <a href="{{ url_for('burndown_chart', sprint_id=sprint.id) }}" class="add-task-button">Burndown Chart</a>
+            </button>
+        </div>
         
     </div>
 
