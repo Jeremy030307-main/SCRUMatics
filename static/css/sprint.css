@@ -24,7 +24,7 @@ h2 {
 table {
     border-collapse: collapse;
     width: 80%;
-    margin-top: 10px;
+    margin-top: 40px;
     margin-left: 130px;
 }
 
@@ -51,14 +51,29 @@ td:nth-child(3) {
     border-left: 2px solid #333;
 }
 
+.outer-container {
+    position: relative;
+    margin-right: 650px;
+    display: inline-block;
+    
+}
+
+.new-button{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 10px;
+    margin-right:10px;
+}
 
 /* Container for the "New" label */
 .new-label-container {
     float: right;
     /* Float the container to the right */
-    margin-top: -30px;
-    /* Adjust the margin to position it correctly */
-    margin-right: 200px;
+    margin-top: 50px;
+    margin-left: 400px;
+    margin-right: 400px;
+     /* Adjust the margin to position it correctly */
+
     background-color: rgb(0, 76, 255);
     /* Blue background color */
     color: rgba(255, 255, 255, 0.956);
@@ -69,7 +84,7 @@ td:nth-child(3) {
     /* Add padding for spacing */
     border-radius: 10px;
     /* Add rounded corners */
-    font-size: 25px;
+    font-size: 20px;
     cursor: pointer;
 }
 

@@ -20,28 +20,35 @@
 </head>
 <body>
 
-    <h1>
-        <!-- Sprints with icons -->
-        <div class="sprint-name-icon">
-            <div class="menu">
-                <button class="menu-button">
-                  <i class="fa-solid fa-bars fa-3x"></i> <!-- Hamburger icon from Font Awesome -->
-                </button>
-                <div class="dropdown-menu">
-                  <ul>
-                    <li><a href="{{ url_for('product_backlog') }}">Product Backlog</a></li>  
-                    <li><a href="#">Scrum Board</a></li> <!-- put sprint backlog html link when finish-->
-                  </ul>
-                </div>
+    <div class = "header">
+        <div class="menu">
+            <button class="menu-button">
+              <i class="fa-solid fa-bars fa-3x"></i> <!-- Hamburger icon from Font Awesome -->
+            </button>
+            <div class="dropdown-menu">
+              <ul>
+                <li><a href="{{ url_for('product_backlog') }}">Product Backlog</a></li>  
+                <li><a href="#">Scrum Board</a></li> <!-- put sprint backlog html link when finish-->
+              </ul>
             </div>
-            <i class="fa-solid fa-database" style="margin-right: 20px;"></i>Sprints
-        </div>
-    
-        <div class="new-label-container">
-        <div class="new-button" onclick="showDialog()">New</div>
+          </div>
+      
+         <h3 class="pageTitle"><i class="fa-solid fa-database" style="margin-top: 20px; font-size: 60px; margin-right: 30px;"></i> <!-- Adjust margin as needed -->
+            Sprints
 
-        </div>
-    </h1>
+            <div class="outer-container">
+                <button class="new-label-container">
+                    <div class="new-button" onclick="showDialog()">New</div>
+                </button>
+            </div>
+           
+         </h3>
+    </div>
+
+    
+
+
+    
 
     <form action="/newSprint" method="POST">
         <!-- Pop-up dialog content -->
@@ -85,7 +92,7 @@
         </div>
     </form>
 
-
+    
     <table>
         <thead>
             <tr>
