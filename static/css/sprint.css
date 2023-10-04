@@ -51,40 +51,22 @@ td:nth-child(3) {
     border-left: 2px solid #333;
 }
 
-.outer-container {
-    position: relative;
-    margin-right: 650px;
-    display: inline-block;
-    
-}
-
-.new-button{
-    margin-top: 5px;
-    margin-bottom: 5px;
-    margin-left: 10px;
-    margin-right:10px;
-}
-
 /* Container for the "New" label */
-.new-label-container {
-    float: right;
-    /* Float the container to the right */
-    margin-top: 50px;
-    margin-left: 400px;
-    margin-right: 400px;
-     /* Adjust the margin to position it correctly */
-
+.new-button{
+    right: 18%;
+    position: absolute;
+    border: none;
     background-color: rgb(0, 76, 255);
     /* Blue background color */
     color: rgba(255, 255, 255, 0.956);
     /* White text color */
     font-weight: bold;
     /* Bold text for the label */
-    padding: 5px 10px;
+    padding: 10px 18px;
     /* Add padding for spacing */
     border-radius: 10px;
     /* Add rounded corners */
-    font-size: 20px;
+    font-size: 25px;
     cursor: pointer;
 }
 
