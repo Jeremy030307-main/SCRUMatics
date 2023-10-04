@@ -40,44 +40,44 @@
     </div>
   </h1>
 
-  
-  <table>
-    <thead>
-      <tr>
-        
-        <th>
-          Not Started
-        </th>
-        <th>
-          In Progress
-        </th>
-        <th>
-          Completed
-        </th>
-      </tr>
-    </thead>
+    
+    <table>
+        <thead>
+            <tr>
+                
+                <th>
+                    Not Started
+                </th>
+                <th>
+                    In Progress
+                </th>
+                <th>
+                    Completed
+                </th>
+            </tr>
+        </thead>
 
-    <tbody>
-      {% for task in tasks %}
-        <tr>
-          <td>
-            {% if task.status == "Not Started"%}
-              {{task.name}}
-            {% endif %}
-          </td>
-          <td>
-            {% if task.status == "In Progress"%}
-              {{task.name}}
-            {% endif %}
-          </td>
-          <td>
-            {% if task.status == "Completed"%}
-              {{task.name}}
-            {% endif %}  
-          </td>
-        </tr>
-      {% endfor %}
-    </tbody>
+        <tbody>
+            {% for task in tasks %}
+                <tr>
+                    <td>
+                        {% if task.status == "Not Started"%}
+                            {{task.name}}
+                        {% endif %}                     
+                    </td>
+                    <td>
+                        {% if task.status == "In Progress"%}
+                            {{task.name}}
+                        {% endif %}  
+                    </td>
+                    <td>
+                        {% if task.status == "Completed"%}
+                            {{task.name}}
+                        {% endif %}  
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
 
   </table>
 
