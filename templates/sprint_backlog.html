@@ -13,71 +13,87 @@
   
 </head>
 <body>
-  
-  <h1>
-    <div class="sprint-name-icon">
-      <i class="fa-solid fa-bars icon" style="margin-right: 120px;"></i>
-      <i class="fa-solid fa-database" style="margin-right: 20px;"></i>{{sprint.sprint_name}}
+    
+    <h1>
+        <!-- Sprints with icons -->
+        <div class="sprint-name-icon">
+            <i class="fa-solid fa-bars icon" style="margin-right: 120px;"></i>
+            <i class="fa-solid fa-database" style="margin-right: 20px;"></i>Sprint Backlog
+            <button class="addTask">
+                <a href="{{ url_for('select_task', sprint_id=sprint_id) }}" class="add-task-button">Add Task</a>
+            </button>
+        </div>   
+            
+    </h1>
 
-      {% if sprint.sprint_status == "Not Started" %}
-        <button class="addTask">
-            <a href="{{ url_for('select_task', sprint_id=sprint.id) }}" class="add-task-button">Add Task</a>
-        </button>
-      {%endif%}
-      
-      <button class="sprintStatus">
-        <form action="/sprint/{{sprint.id}}" method="POST">
-            <select id="sprint_status" name="sprint_status" onchange="this.form.submit()">
-                <option value="Not Started" {% if sprint.sprint_status == "Not Started"%}selected{%endif%}>Not Started</option>
-                <option value="In Progress" {% if sprint.sprint_status == "In Progress"%}selected{%endif%}>In Progress</option>
-                <option value="Completed" {% if sprint.sprint_status == "Completed"%}selected{%endif%}>Completed</option>
-            </select>
-        </form>
-      </button>
-      <button class="editSprint">
-        <a href="{{ url_for('edit_sprint', sprint_id=sprint.id) }}" class="edit-sprint-button">Edit Sprint</a>
-      </button>
-    </div>
-  </h1>
+    
+    <table>
+        <thead>
+            <tr>
+                
+                <th>
+                    Not Started
+                </th>
+                <th>
+                    In Progress
+                </th>
+                <th>
+                    Completed
+                </th>
+            </tr>
+        </thead>
 
-  
-  <table>
-    <thead>
-      <tr>
-        
-        <th>
-          Not Started
-        </th>
-        <th>
-          In Progress
-        </th>
-        <th>
-          Completed
-        </th>
-      </tr>
-    </thead>
-
-    <tbody>
-      {% for task in tasks %}
-        <tr>
-          <td>
-            {% if task.status == "Not Started"%}
-              {{task.name}}
-            {% endif %}
-          </td>
-          <td>
-            {% if task.status == "In Progress"%}
-              {{task.name}}
-            {% endif %}
-          </td>
-          <td>
-            {% if task.status == "Completed"%}
-              {{task.name}}
-            {% endif %}  
-          </td>
-        </tr>
-      {% endfor %}
-    </tbody>
+        <tbody>
+            {% for task in tasks %}
+                <tr>
+                    <td>
+                        {% if task.status == "Not Started"%}
+                       
+                            <div class="card">
+                                <div class="taskName">{{task.name}} 
+                                    <div class="
+                                    {%if task.priority == 4%} urgent-priority 
+                                    {%elif task.priority == 3%} important-priority
+                                    {%elif task.priority == 2%} medium-priority
+                                    {%elif task.priority == 1%} low-priority
+                                    {%endif%}"
+                                    ></div>
+                                </div>
+                                
+                                {% for label in task.labels %}
+                                    <div class="
+                                    {%if label.name == "Front End"%} label-front-end 
+                                    {%elif label.name == "Back End"%} label-back-end
+                                    {%elif label.name == "Testing"%} label-testing
+                                    {%elif label.name == "Framework"%} label-framework
+                                    {%elif label.name == "API"%} label-api
+                                    {%elif label.name == "Database"%} label-database
+                                    {%elif label.name == "UI"%}label-ui
+                                    {%elif label.name == "UX"%}label-ux
+                                    {%endif%}"
+                                    >{{ label.name }}</div>
+                                {% endfor %}
+                                <br><br>
+                                <div class="circle">{{task.story_points}}</div>
+                                
+                                
+                            </div>
+                            
+                        {% endif %}                     
+                    </td>
+                    <td>
+                        {% if task.status == "Incomplete"%}
+                            {{task.name}}
+                        {% endif %}  
+                    </td>
+                    <td>
+                        {% if task.status == "Completed"%}
+                            {{task.name}}
+                        {% endif %}  
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
 
   </table>
 
