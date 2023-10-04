@@ -14,6 +14,15 @@ body {
 } 
 
 /* ---------------------Product Backlog--------------------- */
+.theForm{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-left: 11%;
+    padding-top: 25px;
+    padding-bottom: 25px;
+}
+
 .sortForm {
     display: flex;
     padding-left: 10%;
