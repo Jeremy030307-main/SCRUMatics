@@ -1,7 +1,7 @@
 from datetime import datetime
 from flask import Flask, render_template, request, session, flash, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, collate, Date, Time, Float,TypeDecorator, Interval, event, and_
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, collate, Date, Time, Float,TypeDecorator, Interval, event, and_, nulls_last
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from datetime import timedelta
@@ -48,6 +48,7 @@ class Tasks(db.Model):
     sprint_id = db.Column(db.Integer, db.ForeignKey('sprints.id'))
     entries = db.relationship('EntryDate', backref='tasks', lazy=True)
     total_duration = db.Column(Interval)
+    completion_date = db.Column(db.DateTime(timezone=True))
 
     def edit(self, name, priority, status, category, assignee, story_points, description, labels):
         self.name = name
@@ -252,7 +253,7 @@ def view_task(task_id):
 
 @app.route('/sprint/<int:sprint_id>', methods=['GET', 'POST'])
 def sprint(sprint_id):
-    task_list = Tasks.query.filter(Tasks.sprint_id == sprint_id).all()
+    task_list = Sprints.query.get(sprint_id).tasks
 
     if request.method == "POST":
         db.session.delete(this_sprint)
@@ -409,6 +410,53 @@ def log_time_spent(task_id):
     graph_json = json.dumps(fig, cls= plotly.utils.PlotlyJSONEncoder)
 
     return render_template('log_time_spent.html', graphJSON=graph_json, task_id=task_id, created_date=this_task.created_at.strftime("%Y-%m-%d"))
+
+# Define an event listener that triggers when 'your_column' changes
+@event.listens_for(Tasks.status, 'set')
+def task_complete_listner(target, value, oldvalue, initiator):
+    specific_value = 'Completed'
+    if value == specific_value:
+        # Update 'timestamp_column' with the current timestamp
+        target.completion_date = datetime.utcnow()
+
+@app.route('/sprint/<int:sprint_id>/burndown-chart')
+def burndown_chart(sprint_id):
+
+    current_sprint = Sprints.query.get(sprint_id)
+    sprint_task = Tasks.query.filter(Tasks.sprint_id == sprint_id).order_by(nulls_last(Tasks.completion_date.asc()))
+
+    # get the total story point of the sprint
+    total_story_point = 0
+    for task in sprint_task:
+        total_story_point += task.story_points
+
+    # get the start and end date of the sprint
+    start_date = current_sprint.sprint_start_date
+    end_date = current_sprint.sprint_end_date
+    
+    # store the data for ideal velocity in lists
+    story_point_data = [total_story_point, 0]
+    date_data = [start_date, end_date]
+    line_type = ["Ideal Velocity", "Ideal Velocity"]
+
+    for task in sprint_task:
+        if task.completion_date is None:
+            break
+        total_story_point -= task.story_points
+        story_point_data.append(total_story_point)
+        date_data.append(task.completion_date)
+        line_type.append("Actual Velocity")
+    
+    data = pd.DataFrame({
+        'Date' : date_data, 
+        'Story Point' : story_point_data,
+        "velocity_type" : line_type })
+
+    print(date_data)
+    print(story_point_data)
+    fig = px.line(data, x='Date', y='Story Point', color="velocity_type", title='Burndown Chart of Sprint: ' + current_sprint.sprint_name, markers=True)
+    graph_json = json.dumps(fig, cls= plotly.utils.PlotlyJSONEncoder)
+    return render_template('burndown_chart.html', graphJSON=graph_json)
 
 @app.route('/clear-database', methods=['GET'])
 def clear_database():
