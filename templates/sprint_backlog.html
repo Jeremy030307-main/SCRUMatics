@@ -17,8 +17,9 @@
     <h1>
         <!-- Sprints with icons -->
         <div class="sprint-name-icon">
-            <i class="fa-solid fa-bars icon" style="margin-right: 120px;"></i>
+            <a href="{{ url_for('scrum_board')}}" class="add-task-button"><i class="fa-solid fa-bars icon" style="margin-right: 120px;"></i></a>
             <i class="fa-solid fa-database" style="margin-right: 20px;"></i>{{sprint.sprint_name}}
+
             {% if sprint.sprint_status == "Not Started" %}
                 <button class="addTask">
                     <a href="{{ url_for('select_task', sprint_id=sprint.id) }}" class="add-task-button">Add Task</a>

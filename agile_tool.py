@@ -191,8 +191,15 @@ def new_task():
             labels = this_task_labels
         )
 
+        sprint_id = this_task.sprint_id
+
         db.session.add(task)
         db.session.commit()
+        
+        if sprint_id is None:
+            return redirect(url_for('product_backlog'))
+        else:
+            return redirect(url_for('sprint', sprint_id = sprint_id))
 
         return redirect(url_for('product_backlog'))
    return render_template('new_task.html')
@@ -226,9 +233,14 @@ def edit_task(task_id):
             labels = this_task_labels
         )
 
-        db.session.commit()
+        sprint_id = this_task.sprint_id
 
-        return redirect(url_for('product_backlog'))
+        db.session.commit()
+        if sprint_id is None:
+            return redirect(url_for('product_backlog'))
+        else:
+            return redirect(url_for('sprint', sprint_id = sprint_id))
+
     return render_template('edit_task.html', task = this_task, labels = labels_name)
 
 @app.route('/addtask/<int:task_id>', methods = ['GET', 'POST'])
@@ -323,7 +335,6 @@ def edit_sprint(sprint_id):
     return redirect(url_for('scrum_board'))
 
   return render_template('edit_sprint.html', sprint=sprint)
-
 
 @app.route('/sprint/<int:sprint_id>/task/<int:task_id>')
 def view_sprint_task(sprint_id, task_id):
