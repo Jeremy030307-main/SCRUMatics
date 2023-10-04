@@ -40,7 +40,7 @@
                 <select id="status_type" name="status_type" onchange="changeColor(this)" class="addTaskSelectLeft">
                     <option value="" disabled>Select an option</option>
                     <option value="Not Started" {% if task.status == 'Not Started' %}selected{% endif %}>Not Started</option>
-                    <option value="Incomplete" {% if task.status == 'Incomplete' %}selected{% endif %}>In Progress</option>
+                    <option value="In Progress" {% if task.status == 'In Progress' %}selected{% endif %}>In Progress</option>
                     <option value="Completed" {% if task.status == 'Completed' %}selected{% endif %}>Completed</option>
                 </select><br><br>
         

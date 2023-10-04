@@ -18,12 +18,15 @@
     
           if (previousPage.endsWith("/select-task")) {
             hideButton = true;
+          }else if (previousPage/endsWith()){
+
           }
     
           if (hideButton) {
             // Hide the button if the previous page is "select task"
             var button1 = document.getElementById("editButton");
             var button2 = document.getElementById("deleteButton")
+
             if (button1) {
               button1.style.display = "none";
             }
@@ -77,13 +80,13 @@
             <label for="status" class="addTaskLabel"> Status</label><br>
             <select id="status_type" name="status_type" class="
                 {%if task.status == "Not Started"%} addTaskSelectLeft-not-started 
-                {%elif task.status == "Incomplete"%} addTaskSelectLeft-incomplete
+                {%elif task.status == "In Progress"%} addTaskSelectLeft-incomplete
                 {%elif task.status == "Completed"%} addTaskSelectLeft-complete
                 {%endif%}"
                 disabled>
                 <option value="" disabled>Select an option</option>
                 <option value="Not Started" {% if task.status == 'Not Started' %}selected{% endif %}>Not Started</option>
-                <option value="Incomplete" {% if task.status == 'Incomplete' %}selected{% endif %}>In Progress</option>
+                <option value="In Progress" {% if task.status == 'In Progress' %}selected{% endif %}>In Progress</option>
                 <option value="Completed" {% if task.status == 'Completed' %}selected{% endif %}>Completed</option>
             </select><br><br>
     

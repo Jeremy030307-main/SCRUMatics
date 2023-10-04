@@ -4,12 +4,12 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, collate, Date, Time, Float,TypeDecorator, Interval, event, and_, nulls_last
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
-from wtforms.validators import ValidationError
 from datetime import timedelta
 import plotly.express as px
 import pandas as pd
 import json
 import plotly
+from sqlalchemy.types import TypeDecorator, Interval
 
 app = Flask(__name__, static_folder='static')
 app.config['FAVICON'] = 'static/favicon.ico'
@@ -23,9 +23,6 @@ task_labels = db.Table(
     'task_labels',
     db.Column('task_id', db.Integer, db.ForeignKey('tasks.id')) ,
     db.Column('label_id', db.String(20), db.ForeignKey('label.name')))
-
-from datetime import timedelta
-from sqlalchemy.types import TypeDecorator, Interval
 
 class Label(db.Model):
     name = db.Column(db.String(20), primary_key=True)
@@ -256,7 +253,6 @@ def view_task(task_id):
 def sprint(sprint_id):
     current_sprint = Sprints.query.get(sprint_id)
     task_list = Tasks.query.filter(Tasks.sprint_id == sprint_id).all()
-    this_sprint = Sprints.query.get(sprint_id)
 
     if request.method == "POST":
         current_sprint.sprint_status = request.form["sprint_status"]
@@ -329,16 +325,16 @@ def edit_sprint(sprint_id):
   return render_template('edit_sprint.html', sprint=sprint)
 
 
-@app.route('/hahaha/<int:task_id>')
-def view_sprint_task(task_id):
+@app.route('/sprint/<int:sprint_id>/task/<int:task_id>')
+def view_sprint_task(sprint_id, task_id):
     
     this_task = Tasks.query.get(task_id)
     this_task_labels = [label.name for label in this_task.labels]
     
-    return render_template('view_sprint_task.html', task = this_task, labels = this_task_labels)
+    return render_template('view_sprint_task.html', sprint_id=sprint_id, task = this_task, labels = this_task_labels)
 
-@app.route('/hahaha/<int:task_id>/log-time-spent', methods = ['GET', 'POST'])
-def log_time_spent(task_id):
+@app.route('/sprint/<int:sprint_id>/task/<int:task_id>/log-time', methods = ['GET', 'POST'])
+def log_time_spent(sprint_id, task_id):
 
     this_task = Tasks.query.get(task_id)
     this_task_labels = [label.name for label in this_task.labels]
@@ -442,7 +438,7 @@ def log_time_spent(task_id):
 
     graph_json = json.dumps(fig, cls= plotly.utils.PlotlyJSONEncoder)
 
-    return render_template('log_time_spent.html', graphJSON=graph_json, task_id=task_id, created_date=this_task.created_at.strftime("%Y-%m-%d"))
+    return render_template('log_time_spent.html', sprint_id=sprint_id, graphJSON=graph_json, task_id=task_id, created_date=this_task.created_at.strftime("%Y-%m-%d"))
 
 # Define an event listener that triggers when 'your_column' changes
 @event.listens_for(Tasks.status, 'set')

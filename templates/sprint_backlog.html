@@ -19,12 +19,16 @@
         <div class="sprint-name-icon">
             <i class="fa-solid fa-bars icon" style="margin-right: 120px;"></i>
             <i class="fa-solid fa-database" style="margin-right: 20px;"></i>{{sprint.sprint_name}}
-            <button class="addTask">
-                <a href="{{ url_for('select_task', sprint_id=sprint.id) }}" class="add-task-button">Add Task</a>
-            </button>
+            {% if sprint.sprint_status == "Not Started" %}
+                <button class="addTask">
+                    <a href="{{ url_for('select_task', sprint_id=sprint.id) }}" class="add-task-button">Add Task</a>
+                </button>
+            {% endif %}
+
             <button class="addTask">
                 <a href="{{ url_for('scrum_board', sprint_id=sprint_id) }}" >Back</a>
             </button>
+
             <button class="sprintStatus">
                 <form action="/sprint/{{sprint.id}}" method="POST">
                     <select id="sprint_status" name="sprint_status" onchange="this.form.submit()">
@@ -65,7 +69,8 @@
                         {% if task.status == "Not Started"%}
                        
                             <div class="card">
-                                <div class="taskName">{{task.name}} 
+                                <div class="taskName">
+                                    <a href="{{ url_for('view_sprint_task', sprint_id=sprint.id, task_id=task.id) }}">{{task.name}}</a> 
                                     <div class="
                                     {%if task.priority == 4%} urgent-priority 
                                     {%elif task.priority == 3%} important-priority
@@ -100,7 +105,8 @@
                         {% if task.status == "In Progress"%}
                        
                             <div class="card">
-                                <div class="taskName">{{task.name}} 
+                                <div class="taskName">
+                                    <a href="{{ url_for('view_sprint_task', sprint_id=sprint.id, task_id=task.id) }}">{{task.name}}</a> 
                                     <div class="
                                     {%if task.priority == 4%} urgent-priority 
                                     {%elif task.priority == 3%} important-priority
@@ -135,7 +141,8 @@
                         {% if task.status == "Completed"%}
                        
                             <div class="card">
-                                <div class="taskName">{{task.name}} 
+                                <div class="taskName">
+                                    <a href="{{ url_for('view_sprint_task', sprint_id=sprint.id, task_id=task.id) }}">{{task.name}}</a> 
                                     <div class="
                                     {%if task.priority == 4%} urgent-priority 
                                     {%elif task.priority == 3%} important-priority
@@ -159,15 +166,15 @@
                                     >{{ label.name }}</div>
                                 {% endfor %}
                                 <br><br>
-                                <div class="circle">{{task.story_points}}</div>
-                                
-                                
+                                <div class="circle">{{task.story_points}}</div>  
                             </div>
                             
                         {% endif %}  
                     </td>
                 </tr>
             {% endfor %}
+
+            <button><a href = "{{ url_for('burndown_chart', task_id=tasks.id, sprint_id=sprint.id) }}">Log Time</a></button>
         </tbody>
 
   </table>

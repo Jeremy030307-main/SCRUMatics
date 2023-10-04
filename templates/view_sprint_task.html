@@ -19,7 +19,7 @@
 
 <body>
 
-<form action="/hahaha/{{task.id}}" oninput="calculateTimeDifference()" method="POST">
+<form action="/sprint/{{sprint_id}}/task/{{task.id}}" oninput="calculateTimeDifference()" method="POST">
    
     <div class="taskContainer">
         <div class="left-section">
@@ -33,7 +33,6 @@
             </div>
 
             <input type="text" id="task_name" name="task_name" value= "{{ task.name }}" disabled> <br><br>
-    
 
             <!--Drop-down list of Priority-->
             <label for="priority" class="addTaskLabel"> Priority</label><br>
@@ -49,13 +48,13 @@
             <label for="status" class="addTaskLabel"> Status</label><br>
             <select id="status_type" name="status_type" class="
                 {%if task.status == "Not Started"%} addTaskSelectLeft-not-started 
-                {%elif task.status == "Incomplete"%} addTaskSelectLeft-incomplete
+                {%elif task.status == "In Progress"%} addTaskSelectLeft-incomplete
                 {%elif task.status == "Completed"%} addTaskSelectLeft-complete
                 {%endif%}"
                 disabled>
                 <option value="" disabled>Select an option</option>
                 <option value="Not Started" {% if task.status == 'Not Started' %}selected{% endif %}>Not Started</option>
-                <option value="Incomplete" {% if task.status == 'Incomplete' %}selected{% endif %}>In Progress</option>
+                <option value="In Progress" {% if task.status == 'In Progress' %}selected{% endif %}>In Progress</option>
                 <option value="Completed" {% if task.status == 'Completed' %}selected{% endif %}>Completed</option>
             </select><br><br>
     
@@ -116,7 +115,7 @@
                 <option value=10 {% if task.story_points == 10 %}selected{% endif %}>10</option>
             </select> <br><br>
 
-            <button><a href = "{{ url_for('log_time_spent', task_id=task.id) }}">hahahahaha</a></button>
+            <button><a href = "{{ url_for('log_time_spent', task_id=task.id, sprint_id=sprint_id) }}">Log Time</a></button>
         </div>
     </div>
     </form>
