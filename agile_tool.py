@@ -253,6 +253,7 @@ def view_task(task_id):
 @app.route('/sprint/<int:sprint_id>', methods=['GET', 'POST'])
 def sprint(sprint_id):
     task_list = Tasks.query.filter(Tasks.sprint_id == sprint_id).all()
+    this_sprint = Sprints.query.get(sprint_id)
 
     if request.method == "POST":
         db.session.delete(this_sprint)
