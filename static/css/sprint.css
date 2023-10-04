@@ -68,7 +68,10 @@ td:nth-child(3) {
     /* Add rounded corners */
     font-size: 25px;
     cursor: pointer;
+    text-decoration: none;
+
 }
+
 
 /* Hidden pop-up dialog */
 .pop-up-dialog {
@@ -208,14 +211,16 @@ td:nth-child(3) {
 .addTask{
     background-color: #ddd;
     color: #333333;
-    padding: 10px 20px;
+    padding: 10% 10%;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     cursor: pointer;
-    border-radius: 16px;
+    border-radius: 1em;
     box-shadow: .3em .3em .3em #999;
     height: 70%;
+    margin-left: 5%;
+    width: 100%;
 }
 
 .card{
@@ -404,4 +409,49 @@ td:nth-child(3) {
 .completed{
     grid-column: 3;
     text-align: center;
+}
+
+/* Sprint status dropdown */
+.sprint-status-dropdown {
+    background-color: #ffffff;
+    height: 2.5em;
+    width: 120%;
+    border-radius: 1em;
+    border:none;
+    margin-top: auto;
+    margin-bottom: auto;
+    font-size: 40%;
+    padding-left: 5%;
+    padding-right: 5%;
+    color: #333333;
+}
+.sprint-status-dropdown select[open]{
+    z-index: 1;
+}
+
+.sprint-header{
+    display: flex;
+    align-items: center;
+    margin-bottom: 1em;
+    gap: 2%;
+}
+
+.edit-sprint-button{
+    right: 5%;
+    position: absolute;
+    border: none;
+    background-color: rgb(0, 76, 255);
+    /* Blue background color */
+    color: rgba(255, 255, 255, 0.956);
+    /* White text color */
+    font-weight: bold;
+    /* Bold text for the label */
+    padding: 0.5%;
+    /* Add padding for spacing */
+    border-radius: 10px;
+    /* Add rounded corners */
+    font-size: 50%;
+    cursor: pointer;
+    text-decoration: none;
+
 }
