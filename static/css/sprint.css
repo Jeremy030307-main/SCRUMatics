@@ -203,7 +203,7 @@ td:nth-child(3) {
     width: 660px;
 }
 
-.addTask{
+.addTaskBut{
     background-color: #ddd;
     color: #333333;
     padding: 10% 10%;
@@ -216,12 +216,38 @@ td:nth-child(3) {
     height: 70%;
     margin-left: 5%;
     width: 100%;
+    bottom: 40px;
+    right: 50px;
+    margin: 0;
 }
-.addTask a{
+.addTaskBut a{
     text-decoration: none;
     color: #333333;
 }
 
+
+
+.addTask {
+    background-color: #ddd;
+    color: #333333;
+    padding: 1% 1%;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    border-radius: 1em;
+    box-shadow: .3em .3em .3em #999;
+    height: 1px;
+    position: fixed;
+    bottom: 40px;
+    right: 50px;
+    margin: 0;
+}
+
+.addTask a {
+    text-decoration: none;
+    color: #333333;
+}
 .card{
     display: inline-block; 
     background-color: #4f4f4f;

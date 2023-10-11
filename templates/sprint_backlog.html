@@ -26,7 +26,7 @@
 
             {% if sprint.sprint_status == "not-started" %}
                 <div style="width: 10%;">
-                    <button class="addTask">
+                    <button class="addTaskBut">
                         <a href="{{ url_for('select_task', sprint_id=sprint.id) }}" class="add-task-button">Add Task</a>
                     </button>
                 </div>
@@ -42,10 +42,11 @@
                 </form>
             </div>
 
+            {% if sprint.sprint_status == "not-started" %}
             <div>
                 <a href="{{ url_for('edit_sprint', sprint_id=sprint.id) }}" class="edit-sprint-button">Edit Sprint</a>
             </div>
-
+            {% endif %}
         </div>   
             
     </h1>
