@@ -9,7 +9,7 @@
    <script src="{{ url_for('static', filename='status.js') }}"></script>
 </head>
 
-<body>
+<body style="margin: 0%;padding: 0;">
       
       {%- for category, message in get_flashed_messages(with_categories = true) %}
          <div class = "alert alert-danger">
@@ -78,12 +78,9 @@
                 <label for="assignee" style="font-size: large;" class="addTaskLabel">Assignee</label><br>
                 <select id="assignee_name" name="assignee_name" class="addTaskSelectRight" required>
                     <option value="" disabled selected>Select an option</option>
-                    <option value="Sheena">Sheena</option>
-                    <option value="Jean">Jean</option>
-                    <option value="Jie Ru">Jie Ru</option>
-                    <option value="Bryan">Bryan</option>
-                    <option value="Benjamin">Benjamin</option>
-                    <option value="Jeremy">Jeremy</option>
+                    {% for member in team %}
+                        <option value={{member.username}}>{{member.username}}</option>
+                    {% endfor %}
                 </select> <br><br>
 
                 <!--Drop-down list of Story Point-->

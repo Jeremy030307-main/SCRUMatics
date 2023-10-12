@@ -13,16 +13,16 @@
    <!-- JavaScript -->
    <script src="{{ url_for('static', filename='sprint_backlog.js') }}"></script>
    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
 
     <!--font awesome-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 </head>
 
-<body>
+<body style="margin: 0%;padding: 0;">
 
-<form action="/sprint/{{sprint_id}}/task/{{task.id}}" oninput="calculateTimeDifference()" method="POST">
+<form action="/sprint/{{sprint_id}}/task/{{task.id}}" method="POST">
    
     <div class="taskContainer">
 
@@ -30,9 +30,6 @@
             <!-- Content for the left section goes here -->
             <!--Block to let user enter task name-->
             <div class="taskViewHeader">
-                <a href="javascript:history.back()" class="arrow-button">
-                    <i class="fa-solid fa-arrow-left" style="color: #ffffff; font-size: 0.8em;"></i> <!--Arrow icon from Font Awesome-->
-                </a>
                 <label for = "task_name">Task Name</label><br>
                 
                 <button class="add"><a href='/addtask/{{ task.id }}/edit'>Edit</a></button>
@@ -122,7 +119,9 @@
                 <option value=10 {% if task.story_points == 10 %}selected{% endif %}>10</option>
             </select> <br><br>
 
-            <button class="firstButton"><a href = "{{ url_for('log_time_spent', task_id=task.id, sprint_id=sprint_id) }}">Log Time</a></button>
+            <button class="edit-sprint-button" style="border-radius: 0.5em;border-width: 0.5px;height:3em;width: 9em;background-color: #50c5bf;">
+                <a href="{{ url_for('log_time_spent', task_id=task.id, sprint_id=sprint_id) }}" class="add-task-button" style="text-decoration: none;color: #444444;font-size: large;">Log Time</a>
+            </button>
         </div>
     </div>
     </form>

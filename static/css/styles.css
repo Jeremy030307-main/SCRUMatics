@@ -4,7 +4,7 @@
 body {
     font-family: 'Poppins', sans-serif;
     font-size: 14px;
-    background-color: #fff;
+    background-color: #d7d7d7;
     color: #000;
     margin-left: 5%;
     margin-right: 5%;
@@ -52,7 +52,7 @@ body {
     background-color: #646464;
     font-size: 2em;
     height: 2em;
-}
+} 
 .taskTable th:first-of-type{
     border-top-left-radius: .5em;
 }  
@@ -61,16 +61,10 @@ body {
 }
 .taskTable td{
     color: #333333;
-    
+    background-color: #ffffff77;
     font-size: 1.5em;
     height: 2em;
     text-align: center;
-}
-
-.taskTable td:nth-child(1),
-.taskTable td:nth-child(2),
-.taskTable td:nth-child(4){
-    background-color: #d9d9d9;
 }
 
 .taskTable tr:last-of-type td:first-of-type{
@@ -83,8 +77,8 @@ body {
 .pageTitle{
     text-align: left;
     font-family: 'Poppins', sans-serif;
-    font-size: 5em;
-    font-weight: 700;
+    font-size: 4em;
+    font-weight: 600;
     margin-top: 0;
     margin-bottom: 0;
     display: flex;
@@ -110,6 +104,7 @@ body {
     box-shadow: .3em .3em .3em #999;
     height: 70%;
 }
+
 .buttons a{
     text-decoration: none;
     color: #333333;
@@ -214,8 +209,6 @@ body {
 
 /* ---------------------Add Task--------------------- */
 .taskContainer{
-    margin-left: 5%;
-    margin-right: 5%;
     margin-top: auto;
     margin-bottom: auto;
     display: flex;
@@ -503,6 +496,7 @@ body {
     width: 250px;
     border-radius: 10px;
     font-size: 20px;
+    z-index: 1;
 }
 
 /* Remove bullet points from the list */
