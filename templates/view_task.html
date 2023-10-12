@@ -10,7 +10,6 @@
    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <!--font awesome-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script>
         window.onload = function() {
           var previousPage = document.referrer;
@@ -37,7 +36,7 @@
 
 </head>
 
-<body>
+<body style="margin: 0%;padding: 0;">
       
       {%- for category, message in get_flashed_messages(with_categories = true) %}
          <div class = "alert alert-danger">
@@ -45,7 +44,7 @@
          </div>
       {%- endfor %}
 
-    <form action="/addtask/{{ task.id }}" method="POST">
+    <form action="/addtask/{{ task.id }}" method="POST" class="addTaskForm">
     <div class="taskContainer">
         <div class="left-section">
             <!-- Content for the left section goes here -->
@@ -55,14 +54,17 @@
                     <i class="fa-solid fa-arrow-left" style="color: #ffffff; font-size: 0.8em;"></i> <!--Arrow icon from Font Awesome-->
                 </a>
 
-                <label for = "task_name" >Task Name</label><br>
-                
+                <label for = "task_name">Task Name</label><br>
+        
                 <button id ="editButton" class="add"><a href='/addtask/{{ task.id }}/edit'>Edit</a></button>
                 <button id = "deleteButton" type="submit" formaction="/addtask/{{ task.id }}" class="del"><i class="material-icons">delete_forever</i></button>
             </div>
 
             <input type="text" id="task_name" name="task_name" value= "{{ task.name }}" disabled> <br><br>
     
+            <!--Text box to let user enter the text description. -->
+            <label for = "task_description" class="addTaskLabel">Task Description</label><br>
+            <textarea name="task_description" id="description" rows="5" cols="80" placeholder="Description" disabled> {{task.description}}</textarea>
 
             <!--Drop-down list of Priority-->
             <label for="priority" class="addTaskLabel"> Priority</label><br>
@@ -88,8 +90,6 @@
                 <option value="completed" {% if task.status == 'completed' %}selected{% endif %}>Completed</option>
             </select><br><br>
     
-            <!--Text box to let user enter the text description. -->
-            <textarea name="task_description" id="description" rows="5" cols="80" placeholder="Description" disabled> {{task.description}}</textarea>
         </div>
 
         <div class="right-section">
@@ -120,12 +120,9 @@
             <label for="assignee" style="font-size: large;" class="addTaskLabel">Assignee</label><br>
             <select id="assignee_name" name="assignee_name" class="addTaskSelectRight" disabled>
                 <option value="" disabled selected>Select an option</option>
-                <option value="Sheena" {% if task.assignee == 'Sheena' %}selected{% endif %}>Sheena</option>
-                <option value="Jean" {% if task.assignee == 'Jean' %}selected{% endif %}>Jean</option>
-                <option value="Jie Ru" {% if task.assignee == 'Jie Ru' %}selected{% endif %}>Jie Ru</option>
-                <option value="Bryan" {% if task.assignee == 'Bryan' %}selected{% endif %}>Bryan</option>
-                <option value="Benjamin" {% if task.assignee == 'Benjamin' %}selected{% endif %}>Benjamin</option>
-                <option value="Jeremy" {% if task.assignee == 'Jeremy' %}selected{% endif %}>Jeremy</option>
+                {% for member in team %}
+                    <option value={{member.username}} {% if task.assignee == member.username %}selected{% endif %}>{{member.username}}</option>
+                {% endfor %}
             </select> <br><br>
 
             <!--Drop-down list of Story Point-->
@@ -148,9 +145,6 @@
         </div>
     </div>
     </form>
-
-    
-
 </body>
 
 </html>

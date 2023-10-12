@@ -2,13 +2,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;700&display=swap');
 
 
-body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-    padding: 20px;
-    background-color: #d7d7d7;
-}
-
 h1 {
     font-size: 45px;
     margin-bottom: 30px;
@@ -21,21 +14,21 @@ h2 {
     margin-bottom: 10px;
 }
 
-table {
+.sprintTable {
     border-collapse: collapse;
     width: 80%;
     margin-top: 40px;
     margin-left: 130px;
 }
 
-th,
-td {
+.sprintTable th,
+.sprintTable td {
     font-size: 20px;
     padding: 10px;
     text-align: center;
 }
 
-th {
+.sprintTable th {
     background-color: #d7d7d7;
     border-top: 2px solid #333;
     /* Darker color for the top border */
@@ -44,10 +37,10 @@ th {
 }
 
 /* Add left border for Sprint Status and Date columns */
-th:nth-child(2),
-td:nth-child(2),
-th:nth-child(3),
-td:nth-child(3) {
+.sprintTable th:nth-child(2),
+.sprintTable td:nth-child(2),
+.sprintTable th:nth-child(3),
+.sprintTable td:nth-child(3) {
     border-left: 2px solid #333;
 }
 
@@ -206,7 +199,7 @@ td:nth-child(3) {
 .addTaskBut{
     background-color: #ddd;
     color: #333333;
-    padding: 10% 10%;
+    padding: 10%;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -214,7 +207,6 @@ td:nth-child(3) {
     border-radius: 1em;
     box-shadow: .3em .3em .3em #999;
     height: 70%;
-    margin-left: 5%;
     width: 100%;
     bottom: 40px;
     right: 50px;
@@ -259,6 +251,7 @@ td:nth-child(3) {
     position: relative;
     text-align: left;
     position: relative;
+    margin-bottom: 10px;
 }
 
 .taskName{
@@ -422,11 +415,13 @@ td:nth-child(3) {
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
     justify-content: center;
+    min-height: 1000px;
 }
 .not-started{
     grid-column: 1;
-    text-align: center;
+    text-align: center; 
 }
+
 .in-progress{
     grid-column: 2;
     text-align: center;
@@ -438,18 +433,22 @@ td:nth-child(3) {
 
 /* Sprint status dropdown */
 .sprint-status-dropdown {
-    background-color: #ffffff;
-    height: 2.5em;
-    width: 120%;
+    background-color: #ddd;
+    height: 3.5em;
+    width: 10em;
     border-radius: 1em;
-    border:none;
+    border-width: 2px;
     margin-top: auto;
     margin-bottom: auto;
-    font-size: 40%;
-    padding-left: 5%;
-    padding-right: 5%;
+    margin: 30%;
+    text-align: center;
     color: #333333;
+    display: inline-block;
+    cursor: pointer;
+    box-shadow: .3em .3em .3em #999;
+    text-decoration: none;
 }
+
 .sprint-status-dropdown select[open]{
     z-index: 1;
 }
@@ -462,21 +461,18 @@ td:nth-child(3) {
 }
 
 .edit-sprint-button{
-    right: 5%;
-    position: absolute;
-    border: none;
+    margin-right: 5%;
     background-color: rgb(0, 76, 255);
-    /* Blue background color */
-    color: rgba(255, 255, 255, 0.956);
-    /* White text color */
-    font-weight: bold;
-    /* Bold text for the label */
-    padding: 0.5%;
-    /* Add padding for spacing */
-    border-radius: 10px;
-    /* Add rounded corners */
-    font-size: 50%;
+    height: 3.5em;
+    width: 4em;
+    border-radius: 1em;
+    border-width: 2px;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 150px;
+    text-align: center;
+    display: inline-block;
     cursor: pointer;
+    box-shadow: .3em .3em .3em #999;
     text-decoration: none;
-
 }
