@@ -1,0 +1,89 @@
+body{
+  margin: 0;
+  padding: 0;
+  font-family: montserrat;  
+  height: 100vh;
+  overflow: hidden;
+  
+}
+
+.center{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 550px;
+  background: white;
+  border-radius: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.center h1{
+  text-align: center;
+  padding: 0 10px 10px 0;
+  border-bottom: 1px  silver;
+}
+
+.center form{
+  padding: 0 40px;
+  box-sizing: border-box;
+}
+
+form .txt_field{
+  position: relative;
+  border-bottom: 2px solid #adadad;
+  margin: 30px 0;
+
+}
+
+.txt_field input{
+  width: 100%;
+  padding: 0 5px;
+  height: 40px;
+  font-size: 16px;
+  border: none;
+  background: none;
+  outline: none;
+}
+
+.txt_field label{
+  font-family: montserrat;
+  font-size: 15px;
+  top: 50%;
+  left: 5px;
+  transition: .5s;
+  font-weight: bold;
+}
+
+.txt_field input:focus ~ label, 
+.txt_field input:valid ~ label{
+  top: -5px;
+  color: #2691d9;
+}
+
+.login_btn{
+  display: flex;
+  /* align-items: center; */
+  justify-content: center;
+  
+}
+
+input[type="submit"]{
+  width: 40%; 
+  height: 50px;
+  border: 1px solid;
+  background: #558f76;
+  border-radius: 25px;
+  font-size: 16px;
+  color: #e9f4fb;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  margin-bottom: 20px;
+}
+
+input[type="submit"]:hover{
+  border-color: #2691d9;
+  transition: .7s;
+}
