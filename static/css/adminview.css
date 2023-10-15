@@ -198,3 +198,46 @@ a.article:hover {
 .nav-item.dropdown {
     display: none;
 }
+
+
+.blue-container {
+    background-color: blue; /* Set the background color to blue */
+    padding: 10px; /* Add some padding to create spacing between the text and the container */
+    display: inline-block; /* Make it an inline-block to keep it on the same line as the trash icon */
+    margin-left: 10px; /* Add some left margin for spacing between the icons */
+  }
+  
+  .blue-container a {
+    color: white; /* Set the text color to white */
+    text-decoration: none; /* Remove the underline from the link */
+  }
+  
+
+.your-list {
+    /* Apply styles similar to the .sprintTable class */
+    list-style: none; /* Remove default list bullets */
+    padding: 0;
+}
+
+.your-list li {
+    font-size: 20px;
+    padding: 10px;
+    text-align: center;
+    border-top: 2px solid #333; /* Darker color for top border */
+    border-bottom: 2px solid #333; /* Darker color for bottom border */
+    border-left: 2px solid #333; /* Left border for list items */
+}
+
+/* Remove left border for the first list item */
+.your-list li:first-child {
+    border-left: none;
+}
+
+/* Additional styles for your list items */
+.your-list li:nth-child(odd) {
+    background-color: #d7d7d7; /* Alternate background color */
+}
+
+.your-list li:nth-child(even) {
+    background-color: #fff; /* Alternate background color */
+}
