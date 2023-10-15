@@ -36,7 +36,17 @@
     
 {% endblock %}
 
+<<<<<<< HEAD
+            {% if sprint.sprint_status == "not-started" %}
+                <div style="width: 10%;">
+                    <button class="addTaskBut">
+                        <a href="{{ url_for('select_task', sprint_id=sprint.id) }}" class="add-task-button">Add Task</a>
+                    </button>
+                </div>
+            {% endif %}
+=======
 {% block main %}
+>>>>>>> 5fa8ede0c5204ce228d10cfc21520b2cc295b37c
 
     <div id="selectTaskModal" class="modal">
         <!-- Modal content -->
@@ -46,6 +56,16 @@
         </div>
     </div>
 
+<<<<<<< HEAD
+            {% if sprint.sprint_status == "not-started" %}
+            <div>
+                <a href="{{ url_for('edit_sprint', sprint_id=sprint.id) }}" class="edit-sprint-button">Edit Sprint</a>
+            </div>
+            {% endif %}
+        </div>   
+            
+    </h1>
+=======
     <div id="viewSprintTaskModal" class="modal">
         <!-- Modal content -->
         <div class="modal-content">
@@ -53,6 +73,7 @@
             <iframe src="" id="view_sprint_task_iframe" name="view_sprint_task_iframe" scrolling="no" class="viewTaskIframe" style="padding-top: 0%;"></iframe>
         </div>
      </div>
+>>>>>>> 5fa8ede0c5204ce228d10cfc21520b2cc295b37c
 
     <div class="sprint-backlog-container">
         <div class="not-started" id="not-started">
