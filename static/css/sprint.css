@@ -354,41 +354,49 @@ td:nth-child(3) {
 .urgent-priority {
     background-color: rgb(247, 81, 81);
     border-radius: 50%;
-    padding: 5px;
+    padding: 2%;
     width: 20px;
     height: 20px;
     display: inline-block;
     margin-top: 2%;
+    font-size: .75em;
+    text-align: center;
 }
 
 .important-priority {
     background-color: orange;
     border-radius: 50%;
-    padding: 5px;
+    padding: 2%;
     width: 20px;
     height: 20px;
     display: inline-block;
     margin-top: 2%;
+    font-size: .75em;
+    text-align: center;
 }
 
 .medium-priority {
     background-color: yellow;
     border-radius: 50%;
-    padding: 5px;
+    padding: 2%;
     width: 20px;
     height: 20px;
     display: inline-block;
     margin-top: 2%;
+    font-size: .75em;
+    text-align: center;
 }
 
 .low-priority {
     background-color: rgb(100, 255, 100);
     border-radius: 50%;
-    padding: 5px;
+    padding: 2%;
     width: 20px;
     height: 20px;
     display: inline-block;
     margin-top: 2%;
+    font-size: .75em;
+    text-align: center;
 }
 
 .sprint-backlog-container{
