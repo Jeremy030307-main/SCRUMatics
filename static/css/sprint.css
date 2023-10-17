@@ -423,7 +423,6 @@ td:nth-child(3) {
     border-radius: 3%;
     border: .1em solid #333333;
     opacity: 0.9;
-    
     position: absolute;
     z-index: 1;
 }
