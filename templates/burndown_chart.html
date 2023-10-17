@@ -14,18 +14,22 @@
    <script src="{{ url_for('static', filename='sprint_backlog.js') }}"></script>
    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+   <!--font awesome-->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 </head>
 
-<body>
+<body style="margin: 0%;padding: 0; background-color: #646464;">
 
     <div class="logTimeContainer">
-        <div>
-
-            <div class="header">Burndown Chart</label><br></div><br><br>
-
-            <div id='chart' class="effortGraphContainer"></div>
+        <div class = "header">
+            <a href="javascript:history.back()" class="arrow-button">
+                <i class="fa-solid fa-arrow-left" style="color: #ffffff; font-size: 0.8em;"></i> <!--Arrow icon from Font Awesome-->
+            </a>
+            <label>Burndown Chart</label><br>
         </div>
+
+        <div id='chart' class="effortGraphContainer"></div>
         
     </div>
     

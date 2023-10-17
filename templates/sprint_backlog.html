@@ -1,86 +1,188 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <script src="https://kit.fontawesome.com/4b4c250273.js" crossorigin="anonymous"></script>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/sprint.css') }}">
-  
-</head>
-<body>
-  
-  <h1>
-    <div class="sprint-name-icon">
-      <i class="fa-solid fa-bars icon" style="margin-right: 120px;"></i>
-      <i class="fa-solid fa-database" style="margin-right: 20px;"></i>{{sprint.sprint_name}}
+{% extends 'base.html' %}
 
-      {% if sprint.sprint_status == "Not Started" %}
-        <button class="addTask">
-            <a href="{{ url_for('select_task', sprint_id=sprint.id) }}" class="add-task-button">Add Task</a>
-        </button>
-      {%endif%}
-      
-      <button class="sprintStatus">
-        <form action="/sprint/{{sprint.id}}" method="POST">
-            <select id="sprint_status" name="sprint_status" onchange="this.form.submit()">
-                <option value="Not Started" {% if sprint.sprint_status == "Not Started"%}selected{%endif%}>Not Started</option>
-                <option value="In Progress" {% if sprint.sprint_status == "In Progress"%}selected{%endif%}>In Progress</option>
-                <option value="Completed" {% if sprint.sprint_status == "Completed"%}selected{%endif%}>Completed</option>
-            </select>
-        </form>
-      </button>
-      <button class="editSprint">
-        <a href="{{ url_for('edit_sprint', sprint_id=sprint.id) }}" class="edit-sprint-button">Edit Sprint</a>
-      </button>
-    </div>
-  </h1>
 
+{% block title%} <i class="fa-solid fa-database" style="margin-right: 20px;"></i> {{sprint.sprint_name}} {% endblock%}
+
+{% block new_entity%}
+
+        {% if sprint.sprint_status == "not-started" %}
+            <div style="width: 10%;">
+                <button id='selectTaskButton' class="addTask">Add Task
+                </button>
+            </div>
+        {% endif %}
+
+        <div>
+            <form action="/sprint/{{sprint.id}}" method="POST">
+                <select id="sprint_status" name="sprint_status" onchange="this.form.submit()" class="sprint-status-dropdown">
+                    <option value="not-started" {% if sprint.sprint_status == "not-started"%}selected{%endif%}>Not Started</option>
+                    <option value="in-progress" {% if sprint.sprint_status == "in-progress"%}selected{%endif%}>In Progress</option>
+                    <option value="completed" {% if sprint.sprint_status == "completed"%}selected{%endif%}>Completed</option>
+                </select>
+            </form>
+        </div>
+
+        <div style="width: 18%;">
+            <button class="sprint-status-dropdown">
+                <a href="{{ url_for('burndown_chart', sprint_id=sprint.id) }}" class="add-task-button" style="text-decoration: none;color: #333333;">Burndown Chart</a>
+            </button>
+        </div>
+
+        <div>
+            <button class="edit-sprint-button">
+                <a href="{{ url_for('edit_sprint', sprint_id=sprint.id) }}" class="add-task-button" style="text-decoration: none;color: #ffffff;font-size: large;">&#9998</a>
+            </button>
+        </div>
     
-    <table>
-        <thead>
-            <tr>
-                
-                <th>
-                    Not Started
-                </th>
-                <th>
-                    In Progress
-                </th>
-                <th>
-                    Completed
-                </th>
-            </tr>
-        </thead>
+{% endblock %}
 
-        <tbody>
-            {% for task in tasks %}
-                <tr>
-                    <td>
-                        {% if task.status == "Not Started"%}
+<<<<<<< HEAD
+            {% if sprint.sprint_status == "not-started" %}
+                <div style="width: 10%;">
+                    <button class="addTaskBut">
+                        <a href="{{ url_for('select_task', sprint_id=sprint.id) }}" class="add-task-button">Add Task</a>
+                    </button>
+                </div>
+            {% endif %}
+=======
+{% block main %}
+>>>>>>> 5fa8ede0c5204ce228d10cfc21520b2cc295b37c
+
+    <div id="selectTaskModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close-button" id="closeSelectTaskButton">&times;</span>
+            <iframe src="{{ url_for('select_task', sprint_id=sprint.id) }}" id="select_task_iframe" name="select_task_iframe" scrolling="no" class="viewTaskIframe" style="padding-top: 0%;"></iframe>
+        </div>
+    </div>
+
+<<<<<<< HEAD
+            {% if sprint.sprint_status == "not-started" %}
+            <div>
+                <a href="{{ url_for('edit_sprint', sprint_id=sprint.id) }}" class="edit-sprint-button">Edit Sprint</a>
+            </div>
+            {% endif %}
+        </div>   
+            
+    </h1>
+=======
+    <div id="viewSprintTaskModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close-button" id="closeViewSprintTaskButton">&times;</span>
+            <iframe src="" id="view_sprint_task_iframe" name="view_sprint_task_iframe" scrolling="no" class="viewTaskIframe" style="padding-top: 0%;"></iframe>
+        </div>
+     </div>
+>>>>>>> 5fa8ede0c5204ce228d10cfc21520b2cc295b37c
+
+    <div class="sprint-backlog-container">
+        <div class="not-started" id="not-started">
+            <h2>Not Started</h2>
+            {% for task in tasks if task.status == "not-started" %}
+                <a href="{{ url_for('view_sprint_task', sprint_id=sprint.id, task_id=task.id) }}" class = "viewSprintTaskButton" target="view_sprint_task_iframe">
+                    <div class="card" id="card-{{ task.id }}">
+                        <div class="taskName" style="text-decoration: none; color: #ffffff;">
                             {{task.name}}
-                        {% endif %}                     
-                    </td>
-                    <td>
-                        {% if task.status == "In Progress"%}
-                            {{task.name}}
-                        {% endif %}  
-                    </td>
-                    <td>
-                        {% if task.status == "Completed"%}
-                            {{task.name}}
-                        {% endif %}  
-                    </td>
-                </tr>
+                            <div class="
+                            {%if task.priority == 4%} urgent-priority 
+                            {%elif task.priority == 3%} important-priority
+                            {%elif task.priority == 2%} medium-priority
+                            {%elif task.priority == 1%} low-priority
+                            {%endif%}"
+                            ></div>
+                        </div>
+                        
+                        {% for label in task.labels %}
+                            <div class="
+                            {%if label.name == "Front End"%} label-front-end 
+                            {%elif label.name == "Back End"%} label-back-end
+                            {%elif label.name == "Testing"%} label-testing
+                            {%elif label.name == "Framework"%} label-framework
+                            {%elif label.name == "API"%} label-api
+                            {%elif label.name == "Database"%} label-database
+                            {%elif label.name == "UI"%}label-ui
+                            {%elif label.name == "UX"%}label-ux
+                            {%endif%}"
+                            >{{ label.name }}</div>
+                        {% endfor %}
+                        <br><br>
+                        <div class="circle">{{task.story_points}}</div>
+                    </div>
+                </a>
             {% endfor %}
-        </tbody>
-
-  </table>
-
+        </div>
+        <div class="in-progress" id="in-progress">
+            <h2>In progress</h2>
+            {% for task in tasks if task.status == "in-progress" %}
+                <a href="{{ url_for('view_sprint_task', sprint_id=sprint.id, task_id=task.id) }}" class = "viewSprintTaskButton" target="view_sprint_task_iframe">
+                    <div class="card" id="card-{{ task.id }}">
+                        <div class="taskName" style="text-decoration: none; color: #ffffff;">
+                            {{task.name}}
+                            <div class="
+                            {%if task.priority == 4%} urgent-priority 
+                            {%elif task.priority == 3%} important-priority
+                            {%elif task.priority == 2%} medium-priority
+                            {%elif task.priority == 1%} low-priority
+                            {%endif%}"
+                            ></div>
+                        </div>
+                        
+                        {% for label in task.labels %}
+                            <div class="
+                            {%if label.name == "Front End"%} label-front-end 
+                            {%elif label.name == "Back End"%} label-back-end
+                            {%elif label.name == "Testing"%} label-testing
+                            {%elif label.name == "Framework"%} label-framework
+                            {%elif label.name == "API"%} label-api
+                            {%elif label.name == "Database"%} label-database
+                            {%elif label.name == "UI"%}label-ui
+                            {%elif label.name == "UX"%}label-ux
+                            {%endif%}"
+                            >{{ label.name }}</div>
+                        {% endfor %}
+                        <br><br>
+                        <div class="circle">{{task.story_points}}</div>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+        <div class="completed" id="completed">
+            <h2>Completed</h2>
+            {% for task in tasks if task.status == "completed" %}
+                <a href="{{ url_for('view_sprint_task', sprint_id=sprint.id, task_id=task.id) }}" class = "viewSprintTaskButton" target="view_sprint_task_iframe">
+                    <div class="card" id="card-{{ task.id }}">
+                        <div class="taskName" style="text-decoration: none; color: #ffffff;">
+                            {{task.name}}
+                            <div class="
+                            {%if task.priority == 4%} urgent-priority 
+                            {%elif task.priority == 3%} important-priority
+                            {%elif task.priority == 2%} medium-priority
+                            {%elif task.priority == 1%} low-priority
+                            {%endif%}"
+                            ></div>
+                        </div>
+                        
+                        {% for label in task.labels %}
+                            <div class="
+                            {%if label.name == "Front End"%} label-front-end 
+                            {%elif label.name == "Back End"%} label-back-end
+                            {%elif label.name == "Testing"%} label-testing
+                            {%elif label.name == "Framework"%} label-framework
+                            {%elif label.name == "API"%} label-api
+                            {%elif label.name == "Database"%} label-database
+                            {%elif label.name == "UI"%}label-ui
+                            {%elif label.name == "UX"%}label-ux
+                            {%endif%}"
+                            >{{ label.name }}</div>
+                        {% endfor %}
+                        <br><br>
+                        <div class="circle">{{task.story_points}}</div>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+        
+    </div>
 
   <script>
     $(document).ready(function() {
@@ -104,5 +206,143 @@
         }
       });
     });
+
+    // Function to open a specific modal
+    function openModal(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.style.display = 'block';
+    }
+
+    // Function to close a specific modal
+    function closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.style.display = 'none';
+    }
+
+    // Event listeners for open add task buttons
+    document.getElementById('selectTaskButton').addEventListener('click', function() {
+        openModal('selectTaskModal');
+    });
+
+    // Event listeners for close add task buttons
+    document.getElementById('closeSelectTaskButton').addEventListener('click', function() {
+        closeModal('selectTaskModal');
+    });
+
+    document.querySelectorAll('.viewSprintTaskButton').forEach(function (button) {
+         button.addEventListener('click', function () {
+               // Open the modal with the task details
+               openModal('viewSprintTaskModal');
+         });
+      });
+
+      // Event listeners for close add task buttons
+      document.getElementById('closeViewSprintTaskButton').addEventListener('click', function() {
+         closeModal('viewSprintTaskModal');
+      });
+
+      function checkAndCloseModal(iFrameID, modalID) {
+         const iframe = document.getElementById(iFrameID);
+         if (iframe) {
+            // Get the URL of the iframe's content window
+            const iframeContentUrl = new URL(iframe.contentWindow.location.href);
+
+            // Get the URL of the main page
+            const mainPageUrl = new URL(window.location.href);
+
+            if (iframeContentUrl.pathname == mainPageUrl.pathname) {
+                  // Both URLs end with "/product-backlog", so close the modal
+                  closeModal(iFrameID);
+                  window.location.href = iframe.contentWindow.location.href
+            }
+         }
+      }
+
+      // Add an event listener for the load event on the iframe element
+      const selectTaskIFrame = document.getElementById('select_task_iframe');
+      if (selectTaskIFrame) {
+        selectTaskIFrame.addEventListener('load', function() {
+            // Call the function to check and close the modal each time the iframe's content changes
+            checkAndCloseModal('select_task_iframe', 'selectTaskModal');
+         });
+      }
+
+
+    // Add an event listener for the load event on the iframe element
+    const iframe = document.getElementById('select_task_iframe');
+    if (iframe) {
+        iframe.addEventListener('load', function() {
+        // Call the function to check and close the modal each time the iframe's content changes
+        checkAndCloseModal();
+        });
+    }
+
+    function closeChildModal() {
+      const modal = document.getElementById('selectTaskModal');
+        if (modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const taskCards = document.querySelectorAll(".card");
+
+        taskCards.forEach((card) => {
+            card.draggable = true;
+
+            card.addEventListener('dragstart', handleDragStart);
+        });
+
+        const dropZones = document.querySelectorAll(".sprint-backlog-container > div");
+
+        dropZones.forEach((zone) => {
+            zone.addEventListener('dragover', handleDragOver);
+            zone.addEventListener('drop', handleDrop);
+        });
+    });
+
+    function handleDragStart(event) {
+        event.dataTransfer.setData('text/plain', event.target.id);
+    }
+
+    function handleDragOver(event) {
+        event.preventDefault();
+    }
+
+    function handleDrop(event) {
+        event.preventDefault();
+        const cardId = event.dataTransfer.getData('text/plain');
+        const dropZoneId = event.target.id;
+
+        // Update the task status based on the drop zone (e.g., "not-started", "in-progress", "completed")
+
+        if (dropZoneId === "not-started" || dropZoneId === "in-progress" || dropZoneId === "completed") {
+        // Update the task status based on the drop zone
+        updateTaskStatus(cardId.slice(5), dropZoneId);
+
+        // Move the card to the new drop zone
+        event.target.appendChild(document.getElementById(cardId));
+        }
+    }
+
+    function updateTaskStatus(taskId, newStatus) {
+        fetch(`/update_task_status/${taskId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                taskId: taskId,
+                newStatus: newStatus
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data.message); // Log the server's response message
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
   </script>
-</body>
+{% endblock %}

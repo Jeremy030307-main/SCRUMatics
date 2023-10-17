@@ -2,13 +2,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;700&display=swap');
 
 
-body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-    padding: 20px;
-    background-color: #d7d7d7;
-}
-
 h1 {
     font-size: 45px;
     margin-bottom: 30px;
@@ -21,21 +14,21 @@ h2 {
     margin-bottom: 10px;
 }
 
-table {
+.sprintTable {
     border-collapse: collapse;
     width: 80%;
     margin-top: 40px;
     margin-left: 130px;
 }
 
-th,
-td {
+.sprintTable th,
+.sprintTable td {
     font-size: 20px;
     padding: 10px;
     text-align: center;
 }
 
-th {
+.sprintTable th {
     background-color: #d7d7d7;
     border-top: 2px solid #333;
     /* Darker color for the top border */
@@ -44,10 +37,10 @@ th {
 }
 
 /* Add left border for Sprint Status and Date columns */
-th:nth-child(2),
-td:nth-child(2),
-th:nth-child(3),
-td:nth-child(3) {
+.sprintTable th:nth-child(2),
+.sprintTable td:nth-child(2),
+.sprintTable th:nth-child(3),
+.sprintTable td:nth-child(3) {
     border-left: 2px solid #333;
 }
 
@@ -68,7 +61,10 @@ td:nth-child(3) {
     /* Add rounded corners */
     font-size: 25px;
     cursor: pointer;
+    text-decoration: none;
+
 }
+
 
 /* Hidden pop-up dialog */
 .pop-up-dialog {
@@ -124,11 +120,6 @@ td:nth-child(3) {
 }
 
 
-/* Style for buttons */
-.button-container {
-    float: right;
-    margin-top: 20px;
-}
 
 .button {
     margin-right: 10px;
@@ -205,33 +196,73 @@ td:nth-child(3) {
     width: 660px;
 }
 
-.addTask{
+.addTaskBut{
     background-color: #ddd;
     color: #333333;
-    padding: 10px 20px;
+    padding: 10%;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     cursor: pointer;
-    border-radius: 16px;
+    border-radius: 1em;
     box-shadow: .3em .3em .3em #999;
     height: 70%;
+    width: 100%;
+    bottom: 40px;
+    right: 50px;
+    margin: 0;
+}
+.addTaskBut a{
+    text-decoration: none;
+    color: #333333;
 }
 
+
+
+.addTask {
+    background-color: #ddd;
+    color: #333333;
+    padding: 1% 1%;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    border-radius: 1em;
+    box-shadow: .3em .3em .3em #999;
+    height: 1px;
+    position: fixed;
+    bottom: 40px;
+    right: 50px;
+    margin: 0;
+}
+
+.addTask a {
+    text-decoration: none;
+    color: #333333;
+}
 .card{
     display: inline-block; 
     background-color: #4f4f4f;
-    width: 400px; 
-    margin: 2px;
+    width: 80%; 
+    margin-left: 13%;
+    margin-right: auto;
     padding: 5px;
     border-radius: .3em;
     position: relative;
     text-align: left;
+    position: relative;
+    margin-bottom: 10px;
 }
 
 .taskName{
+    font-size: 2em;
+    margin-left: 3%;
+    margin-bottom: 3%;
+}
+
+.taskName a{
+    text-decoration: none;
     color: white;
-    font-size: 40px;
 }
 
 .circle {
@@ -244,6 +275,10 @@ td:nth-child(3) {
     padding: 5px;
     text-align: center;
     font-weight: bold;
+    margin-left: 3%;
+    position: absolute;
+    bottom: 3%;
+    right: 3%;
 }
 
 .label-front-end {
@@ -254,6 +289,7 @@ td:nth-child(3) {
     margin: 2px;
     padding: 5px;
     border-radius: .3em;
+    margin-left: 3%;
   }
 
   .label-back-end {
@@ -264,6 +300,7 @@ td:nth-child(3) {
     margin: 2px;
     padding: 5px;
     border-radius: .3em;
+    margin-left: 3%;
   }
 
   .label-testing {
@@ -274,6 +311,7 @@ td:nth-child(3) {
     margin: 2px;
     padding: 5px;
     border-radius: .3em;
+    margin-left: 3%;
   }
 
   .label-framework {
@@ -284,6 +322,7 @@ td:nth-child(3) {
     margin: 2px;
     padding: 5px;
     border-radius: .3em;
+    margin-left: 3%;
   }
 
   .label-api {
@@ -294,6 +333,7 @@ td:nth-child(3) {
     margin: 2px;
     padding: 5px;
     border-radius: .3em;
+    margin-left: 3%;
   }
 
   .label-database {
@@ -304,6 +344,7 @@ td:nth-child(3) {
     margin: 2px;
     padding: 5px;
     border-radius: .3em;
+    margin-left: 3%;
   }
 
   .label-ui {
@@ -314,6 +355,7 @@ td:nth-child(3) {
     margin: 2px;
     padding: 5px;
     border-radius: .3em;
+    margin-left: 3%;
   }
 
   .label-ux {
@@ -324,6 +366,7 @@ td:nth-child(3) {
     margin: 2px;
     padding: 5px;
     border-radius: .3em;
+    margin-left: 3%;
   }
 
   /* Priority Styles */
@@ -334,6 +377,7 @@ td:nth-child(3) {
     width: 20px;
     height: 20px;
     display: inline-block;
+    margin-top: 2%;
 }
 
 .important-priority {
@@ -343,6 +387,7 @@ td:nth-child(3) {
     width: 20px;
     height: 20px;
     display: inline-block;
+    margin-top: 2%;
 }
 
 .medium-priority {
@@ -352,6 +397,7 @@ td:nth-child(3) {
     width: 20px;
     height: 20px;
     display: inline-block;
+    margin-top: 2%;
 }
 
 .low-priority {
@@ -361,4 +407,72 @@ td:nth-child(3) {
     width: 20px;
     height: 20px;
     display: inline-block;
+    margin-top: 2%;
+}
+
+.sprint-backlog-container{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    justify-content: center;
+    min-height: 1000px;
+}
+.not-started{
+    grid-column: 1;
+    text-align: center; 
+}
+
+.in-progress{
+    grid-column: 2;
+    text-align: center;
+}
+.completed{
+    grid-column: 3;
+    text-align: center;
+}
+
+/* Sprint status dropdown */
+.sprint-status-dropdown {
+    background-color: #ddd;
+    height: 3.5em;
+    width: 10em;
+    border-radius: 1em;
+    border-width: 2px;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin: 30%;
+    text-align: center;
+    color: #333333;
+    display: inline-block;
+    cursor: pointer;
+    box-shadow: .3em .3em .3em #999;
+    text-decoration: none;
+}
+
+.sprint-status-dropdown select[open]{
+    z-index: 1;
+}
+
+.sprint-header{
+    display: flex;
+    align-items: center;
+    margin-bottom: 1em;
+    gap: 2%;
+}
+
+.edit-sprint-button{
+    margin-right: 5%;
+    background-color: rgb(0, 76, 255);
+    height: 3.5em;
+    width: 4em;
+    border-radius: 1em;
+    border-width: 2px;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 150px;
+    text-align: center;
+    display: inline-block;
+    cursor: pointer;
+    box-shadow: .3em .3em .3em #999;
+    text-decoration: none;
 }

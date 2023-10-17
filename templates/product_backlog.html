@@ -1,134 +1,205 @@
-<!DOCTYPE html>
-<html lang = "en">
-   <head>
-      <!--CSS-->
-      <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-      <!--ICON-->
-      <link href='https://unpkg.com/css.gg@2.0.0/icons/css/add.css' rel='stylesheet'>
-      
-      <!--font awesome-->
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-   </head>
+{% extends 'base.html' %}
 
 
-   <body>
+{% block title%} Product Backlog {% endblock%}
+
+{% block new_entity%}
+   <button  id="addTaskButton" class="buttons">
+            
+      <i class="gg-add"></i>
+   </button>
+
+   <div class="sortOptions">
+      <!--This is the drop down menu to let user choose whihc to sort-->
+      <form action="/product-backlog" method="POST" class="theForm">
+         <div>
+            <!--Drop-down list of Sorting Element-->
+            <label for="sort_style" >Sorting</label><br>
+            <select id="sorting_style" name="sorting style" onchange="this.form.submit()">
+               <option value="default" {% if selected_sort == 'default' %}selected{% endif %}>Default</option>
+               <option value="created_at" {% if selected_sort == 'created_at' %}selected{% endif %}>Date Created</option>
+               <option value="priority" {% if selected_sort == 'priority' %}selected{% endif %}>Priority</option>
+            </select> <br><br>
+         </div>
+         <div>
+            <!--Drop down list of chossing ascending or descending.-->
+            {% if selected_sort != 'default' %}
+               <label for="ordering" >Ordering</label><br>
+               <select id="ordering" name="ordering" onchange="this.form.submit()">
+                  <option value="ascending" {% if selected_order == 'ascending' %}selected{% endif %}>Ascending</option>
+                  <option value="descending" {% if selected_order == 'descending' %}selected{% endif %}>Descending</option>
+               </select> <br><br>
+            {% endif %}
+         </div>
+         <div>
+            <!--Drop down list for choosing the filter-->
+            <label for="filter" >Filter Tags</label><br>
+            <select id="filter_element" name="filter_element" onchange="this.form.submit()">
+               <option value="default" {% if selected_filter == 'default' %}selected{% endif %}>No filter</option>
+               <option value="Front End" {% if selected_filter == 'Front End' %}selected{% endif %}>Front End</option>
+               <option value="Back End" {% if selected_filter == 'Back End' %}selected{% endif %}>Back End</option>
+               <option value="API" {% if selected_filter == 'API' %}selected{% endif %}>API</option>
+               <option value="Database" {% if selected_filter == 'Database' %}selected{% endif %}>Database</option>
+               <option value="Framework" {% if selected_filter == 'Framework' %}selected{% endif %}>Framework</option>
+               <option value="Testing" {% if selected_filter == 'Testing' %}selected{% endif %}>Testing</option>
+               <option value="UI" {% if selected_filter == 'UI' %}selected{% endif %}>UI</option>
+               <option value="UX" {% if selected_filter == 'UX' %}selected{% endif %}>UX</option>
+
+            </select> <br><br>
+         </div>
+      </form>
+   </div>  
+{% endblock%}
    
-      {%- for message in get_flashed_messages() %}
-         {{ message }}
-      {%- endfor %}
-		
-      <!--This the link to add new task to product backlog, can chage to a button in future-->
-      <!--This the link to add new task to product backlog, can chage to a button in future-->
-      <div class = "header">
-         
-         <div class="menu">
-            <button class="menu-button">
-              <i class="fa-solid fa-bars fa-3x"></i> <!-- Hamburger icon from Font Awesome -->
-            </button>
-            <div class="dropdown-menu">
-              <ul>
-                <li><a href="#">Product Backlog</a></li>  
-                <li><a href="{{ url_for('scrum_board') }}">Scrum Board</a></li> <!-- put sprint backlog html link when finish-->
-              </ul>
-            </div>
-          </div>
-      
-         <h3 class="pageTitle">Product Backlog 
-         
-            <button class="buttons">
-               
-               <a href = "{{ url_for('new_task') }}"><i class="gg-add"></i></a>
-            </button>
-         </h3>
+
+{% block main %}
+
+   <div id="addTaskModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+          <span class="close-button" id="closeAddTaskButton">&times;</span>
+          <iframe src="{{ url_for('new_task') }}" id="add_task_iframe" name="add_task_iframe" scrolling="no" class="viewTaskIframe" style="padding-top: 0%;"></iframe>
       </div>
-      
+   </div>
 
-      <div class="sortOptions">
-         <!--This is the drop down menu to let user choose whihc to sort-->
-         <form action="/product-backlog" method="POST" class="theForm">
-            <div>
-               <!--Drop-down list of Sorting Element-->
-               <label for="sort_style" >Sorting</label><br>
-               <select id="sorting_style" name="sorting style" onchange="this.form.submit()">
-                  <option value="default" {% if selected_sort == 'default' %}selected{% endif %}>Default</option>
-                  <option value="created_at" {% if selected_sort == 'created_at' %}selected{% endif %}>Date Created</option>
-                  <option value="priority" {% if selected_sort == 'priority' %}selected{% endif %}>Priority</option>
-               </select> <br><br>
-            </div>
-            <div>
-               <!--Drop down list of chossing ascending or descending.-->
-               {% if selected_sort != 'default' %}
-                  <label for="ordering" >Ordering</label><br>
-                  <select id="ordering" name="ordering" onchange="this.form.submit()">
-                     <option value="ascending" {% if selected_order == 'ascending' %}selected{% endif %}>Ascending</option>
-                     <option value="descending" {% if selected_order == 'descending' %}selected{% endif %}>Descending</option>
-                  </select> <br><br>
-               {% endif %}
-            </div>
-            <div>
-               <!--Drop down list for choosing the filter-->
-               <label for="filter" >Filter Tags</label><br>
-               <select id="filter_element" name="filter_element" onchange="this.form.submit()">
-                  <option value="default" {% if selected_filter == 'default' %}selected{% endif %}>No filter</option>
-                  <option value="Front End" {% if selected_filter == 'Front End' %}selected{% endif %}>Front End</option>
-                  <option value="Back End" {% if selected_filter == 'Back End' %}selected{% endif %}>Back End</option>
-                  <option value="API" {% if selected_filter == 'API' %}selected{% endif %}>API</option>
-                  <option value="Database" {% if selected_filter == 'Database' %}selected{% endif %}>Database</option>
-                  <option value="Framework" {% if selected_filter == 'Framework' %}selected{% endif %}>Framework</option>
-                  <option value="Testing" {% if selected_filter == 'Testing' %}selected{% endif %}>Testing</option>
-                  <option value="UI" {% if selected_filter == 'UI' %}selected{% endif %}>UI</option>
-                  <option value="UX" {% if selected_filter == 'UX' %}selected{% endif %}>UX</option>
+   <div id="viewTaskModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+          <span class="close-button" id="closeViewTaskButton">&times;</span>
+          <iframe srcdoc="" id="view_task_iframe" name="view_task_iframe" scrolling="no" class="viewTaskIframe" style="padding-top: 0%;"></iframe>
+      </div>
+   </div>
 
-               </select> <br><br>
-            </div>
-         </form>
-      </div>  
+   <div class="tableContainer">
+      <table class="taskTable" style="width:80%">
+         <thead>
+            <tr>
+               <th>Name</th>
+               <th>Tag</th>
+               <th>Priority</th>
+               <th>Story Point</th>
+            </tr>
+         </thead>
 
-      <div class="tableContainer">
-         <table class="taskTable" style="width:80%">
-            <thead>
+         <tbody>
+            {% for task in tasks %}
                <tr>
-                  <th>Name</th>
-                  <th>Tag</th>
-                  <th>Priority</th>
-                  <th>Story Point</th>
-               </tr>
-            </thead>
+                  <td>{{ task.name }} 
+                     <button  id="viewTaskButton" style="border: none;">
+                        <a href = "{{ url_for('view_task', task_id = task.id) }}" class="viewTaskButton" target="view_task_iframe">&#128065</a>
+                     </button>
+                  </td>
+                  
+                  <td style="text-align: justify; padding-left: 1%;">
+                     {% for label in task.labels %}
+                        <div class="
+                        {%if label.name == "Front End"%} label-front-end 
+                        {%elif label.name == "Back End"%} label-back-end
+                        {%elif label.name == "Testing"%} label-testing
+                        {%elif label.name == "Framework"%} label-framework
+                        {%elif label.name == "API"%} label-api
+                        {%elif label.name == "Database"%} label-database
+                        {%elif label.name == "UI"%}label-ui
+                        {%elif label.name == "UX"%}label-ux
+                        {%endif%}"
+                        >{{ label.name }}</div>
+                     {% endfor %}
+                  </td>
+                  
+                  <td
+                     style="background-color: {% if task.priority == 1 %}rgb(100, 255, 100){% elif task.priority == 2 %}yellow{% elif task.priority == 3 %}orange{% elif task.priority == 4 %}rgb(247, 81, 81){% endif %};"
+                  >
+                     {{ proirity_map[task.priority] }}
+                  </td>
 
-            <tbody>
-               {% for task in tasks %}
-                  <tr>
-                     <td>{{ task.name }} <a href = "{{ url_for('view_task', task_id = task.id) }}" style="text-decoration: none; margin-left: 1%; color: #333333;">&#128065</a>
-                     </td>
-                     
-                     <td style="text-align: justify; padding-left: 1%;">
-                        {% for label in task.labels %}
-                           <div class="
-                           {%if label.name == "Front End"%} label-front-end 
-                           {%elif label.name == "Back End"%} label-back-end
-                           {%elif label.name == "Testing"%} label-testing
-                           {%elif label.name == "Framework"%} label-framework
-                           {%elif label.name == "API"%} label-api
-                           {%elif label.name == "Database"%} label-database
-                           {%elif label.name == "UI"%}label-ui
-                           {%elif label.name == "UX"%}label-ux
-                           {%endif%}"
-                           >{{ label.name }}</div>
-                        {% endfor %}
-                     </td>
-                     
-                     <td 
-                        class = "{% if task.priority == 4 %}urgent-priority{% elif task.priority == 3 %}important-priority{% elif task.priority == 2 %}medium-priority{% elif task.priority == 1 %}low-priority{% endif %}"
-                     >
-                        {{ proirity_map[task.priority] }}
-                     </td>
+                     <td>{{ task.story_points }}</td>
+                  </tr>
+            {% endfor %}
+         </tbody>
+      </table>
+   </div>
 
-                        <td>{{ task.story_points }}</td>
-                     </tr>
-               {% endfor %}
-            </tbody>
-         </table>
-      </div>
-   </body>
-</html>
+   <script>
+      // Function to open a specific modal
+      function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.style.display = 'block';
+        }
+
+        // Function to close a specific modal
+      function closeModal(modalId) {
+         const modal = document.getElementById(modalId);
+         modal.style.display = 'none';
+      }
+
+      // Event listeners for open add task buttons
+      document.getElementById('addTaskButton').addEventListener('click', function() {
+         openModal('addTaskModal');
+      });
+
+      // Event listeners for close add task buttons
+      document.getElementById('closeAddTaskButton').addEventListener('click', function() {
+         closeModal('addTaskModal');
+      });
+
+// Event listener for each view task button
+      document.querySelectorAll('.viewTaskButton').forEach(function (button) {
+         button.addEventListener('click', function () {
+               // Open the modal with the task details
+               openModal('viewTaskModal');
+         });
+      });
+
+      // Event listeners for close add task buttons
+      document.getElementById('closeViewTaskButton').addEventListener('click', function() {
+         closeModal('viewTaskModal');
+      });
+
+      // Event listener to close the modal if the user clicks outside of it
+      window.addEventListener('click', function(event) {
+         if (event.target === document.getElementById('myModal1')) {
+               closeModal('myModal1');
+         } else if (event.target === document.getElementById('myModal2')) {
+               closeModal('myModal2');
+         }
+      });
+
+      // Function to check if both the main page and iframe's content page end with "/product-backlog"
+      function checkAndCloseModal(iFrameID, modalID) {
+         const iframe = document.getElementById(iFrameID);
+         if (iframe) {
+            // Get the URL of the iframe's content window
+            const iframeContentUrl = new URL(iframe.contentWindow.location.href);
+
+            // Get the URL of the main page
+            const mainPageUrl = new URL(window.location.href);
+
+            if (iframeContentUrl.pathname == mainPageUrl.pathname) {
+                  // Both URLs end with "/product-backlog", so close the modal
+                  closeModal(iFrameID);
+                  window.location.href = iframe.contentWindow.location.href
+            }
+         }
+      }
+
+      // Add an event listener for the load event on the iframe element
+      const viewTaskIFrame = document.getElementById('view_task_iframe');
+      if (viewTaskIFrame) {
+         viewTaskIFrame.addEventListener('load', function() {
+            // Call the function to check and close the modal each time the iframe's content changes
+            checkAndCloseModal('view_task_iframe', 'viewTaskModal');
+         });
+      }
+
+      // Add an event listener for the load event on the iframe element
+      const addTaskIFrame = document.getElementById('add_task_iframe');
+      if (addTaskIFrame) {
+         addTaskIFrame.addEventListener('load', function() {
+            // Call the function to check and close the modal each time the iframe's content changes
+            checkAndCloseModal('add_task_iframe','addTaskModal');
+         });
+      }
+
+   </script>
+
+{% endblock %}

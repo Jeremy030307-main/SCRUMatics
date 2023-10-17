@@ -1,48 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <script src="https://kit.fontawesome.com/4b4c250273.js" crossorigin="anonymous"></script>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-    <!--CSS-->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/sprint.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <!--font awesome-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!--ICON-->
-    <link href='https://unpkg.com/css.gg@2.0.0/icons/css/add.css' rel='stylesheet'>
-    
-</head>
-<body>
+{% extends 'base.html' %}
 
-    <div class = "header">
-        <div class="menu">
-            <button class="menu-button">
-              <i class="fa-solid fa-bars fa-3x"></i> <!-- Hamburger icon from Font Awesome -->
-            </button>
-            <div class="dropdown-menu">
-              <ul>
-                <li><a href="{{ url_for('product_backlog') }}">Product Backlog</a></li>  
-                <li><a href="#">Scrum Board</a></li> <!-- put sprint backlog html link when finish-->
-              </ul>
-            </div>
-          </div>
-      
-         <h3 class="pageTitle"><i class="fa-solid fa-database" style="margin-top: 20px; font-size: 60px; margin-right: 30px;"></i> <!-- Adjust margin as needed -->
-            Sprints
-        </h3>
+{% block title%} Sprints {% endblock%}
 
-        <div class="new-label-container">
-            <button class="new-button" onclick="showDialog()">New</button>
-        </div>
+{% block new_entity%}
+    <div class="new-label-container">
+        <button class="new-button" onclick="showDialog()">New</button>
     </div>
-
-
+{% endblock%}
+   
+{% block main %}
     <form action="/newSprint" method="POST">
         <!-- Pop-up dialog content -->
         <div id="new-dialog" class="pop-up-dialog">
@@ -72,7 +38,7 @@
                 <select name="sprint-status" onchange="changeColor(this)" class="addTaskSelectLeft">
                     <option value="">Select an option</option>
                     <option value="Not Started" selected>Not Started</option>
-                    <option value="Incomplete" disabled>In Progress</option>
+                    <option value="In Progress" disabled>In Progress</option>
                     <option value="Completed" disabled>Completed</option>
                 </select><br><br>
             </div>
@@ -86,7 +52,7 @@
     </form>
 
     
-    <table>
+    <table class="sprintTable">
         <thead>
             <tr>
                 <!-- Sprint Name with icon -->
@@ -96,7 +62,7 @@
                 </th>
                 <!-- Sprint Status with icon -->
                 <th>
-                    <i class="fa-solid fa-spinner"></i>
+                    <i class="fa-solid fa-spinner" style="margin-right: 2%;"></i>
                     Sprint Status
                 </th>
                 <!-- Sprint Date with icon -->
@@ -111,8 +77,7 @@
             {% for sprint in sprints %}
                 <tr>
                     <td><i class="material-icons" style="margin-right: 5%;">directions_run</i>{{ sprint.sprint_name }}
-                        <button class="b">
-                        <a href="{{ url_for('sprint', sprint_id=sprint.id) }}" class="button-link">View Details</a></button>                      
+                        <a href="{{ url_for('sprint', sprint_id=sprint.id) }}" class="button-link">View Details</a>                     
                     </td>
                     <td>
                         <!-- to update class for containing sprint status like task label in product backlog -->
@@ -126,21 +91,19 @@
 
 
     <script>
-        
-        
         function showDialog() {
             document.getElementById("new-dialog").style.display = "block";
         }
-
+    
         function closeDialog() {
             document.getElementById("new-dialog").style.display = "none";
         }
-
+    
         function createSprint() {
             // Logic to create a new sprint here
             closeDialog(); // Close the dialog after creating
         }
-
+    
         $(function() {
             // Initialize the date-range picker
             $('#sprint-date').daterangepicker({
@@ -149,17 +112,31 @@
                     cancelLabel: 'Clear'
                 }
             });
-
+    
             // Handle date range selection
             $('#sprint-date').on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('YYYY/MM/DD') + ' - ' + picker.endDate.format('YYYY/MM/DD'));
+                var startDate = picker.startDate;
+                var endDate = picker.endDate;
+                var startDateInput = $('#sprint-date').data('daterangepicker').startDate;
+                var endDateInput = $('#sprint-date').data('daterangepicker').endDate;
+    
+                if (startDate > endDate) {
+                    // Display an error message if the start date is greater than the end date
+                    alert('End Date should be greater than or equal to Start Date');
+                    // Clear the date range selection
+                    $('#sprint-date').data('daterangepicker').setStartDate(startDateInput);
+                    $('#sprint-date').data('daterangepicker').setEndDate(endDateInput);
+                } else {
+                    // Set the selected date range in the input field
+                    $('#sprint-date').val(startDate.format('YYYY/MM/DD') + ' - ' + endDate.format('YYYY/MM/DD'));
+                }
             });
-
+    
             // Handle clearing the date range
             $('#sprint-date').on('cancel.daterangepicker', function(ev, picker) {
                 $(this).val('');
             });
         });
     </script>
-</body>
-</html>
+    
+{% endblock %}

@@ -1,22 +1,31 @@
 from datetime import datetime
-from flask import Flask, render_template, request, session, flash, redirect, url_for, abort
+from flask import Flask, render_template, request, session, flash, redirect, url_for, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, collate, Date, Time, Float,TypeDecorator, Interval, event, and_, nulls_last
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, collate, Date, Time, Float,TypeDecorator, Interval, event, and_, nulls_last, Boolean
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
-from wtforms.validators import ValidationError
 from datetime import timedelta
 import plotly.express as px
 import pandas as pd
 import json
 import plotly
+from sqlalchemy.types import TypeDecorator, Interval
+from flask_admin import Admin, AdminIndexView, BaseView, expose
+from flask_admin.contrib.sqla import ModelView
+from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
+
 
 app = Flask(__name__, static_folder='static')
 app.config['FAVICON'] = 'static/favicon.ico'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tasks.sqlite3'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
 app.config['SECRET_KEY'] = "random string"
+app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
+db = SQLAlchemy(app)
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view='login'
 
 # Intermediate table for many-to-many relationship
 task_labels = db.Table(
@@ -24,8 +33,23 @@ task_labels = db.Table(
     db.Column('task_id', db.Integer, db.ForeignKey('tasks.id')) ,
     db.Column('label_id', db.String(20), db.ForeignKey('label.name')))
 
-from datetime import timedelta
-from sqlalchemy.types import TypeDecorator, Interval
+roles_users = db.Table( 'roles_users',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('role_id', db.Integer, db.ForeignKey('role.id')))
+
+class User(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key = True)
+    username = db.Column(db.String(100), unique = True, nullable = False)
+    password = db.Column(db.String(50), nullable = False)
+    roles = db.relationship('Role', secondary=roles_users, backref=db.backref('user', lazy='dynamic'))
+    tasks = db.relationship('Tasks', backref='user', lazy=True)
+    total_contribution = db.Column(Interval)
+    
+
+class Role(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    name = db.Column(db.String(40))
+    description = db.Column(db.String(225))
 
 class Label(db.Model):
     name = db.Column(db.String(20), primary_key=True)
@@ -36,7 +60,7 @@ class Tasks(db.Model):
     priority = db.Column(db.Integer, nullable=False)
     status = db.Column(db.String(100), nullable=False)
     category = db.Column(db.String(100), nullable=False)
-    assignee = db.Column(db.String(100), nullable=False)
+    assignee = db.Column(db.Integer, db.ForeignKey('user.id'))
     story_points = db.Column(db.Integer, nullable=False)
     description = db.Column(db.Text)
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
@@ -48,7 +72,6 @@ class Tasks(db.Model):
 
     sprint_id = db.Column(db.Integer, db.ForeignKey('sprints.id'))
     entries = db.relationship('EntryDate', backref='tasks', lazy=True)
-    total_duration = db.Column(Interval)
     completion_date = db.Column(db.DateTime(timezone=True))
 
     def edit(self, name, priority, status, category, assignee, story_points, description, labels):
@@ -90,30 +113,81 @@ class EntryTime(db.Model):
     end_time = db.Column(db.Time, nullable=True)
     duration = db.Column(Interval)
 
-def filter_and_sort_tasks(filter_condition=None, sort_column=None, ordering = "ascending"):
-    query = Tasks.query
 
-    if filter_condition is not None:
-        query = query.filter(and_(filter_condition, Tasks.sprint_id.is_(None)))
+
+class MyModelView(ModelView):
+    list_template='admin/model/list.html'
+    create_template = 'admin/model/create.html'
+    edit_template ='admin/model/edit.html'
+    column_list = ('username', 'total_contribution')
+
+    
+
+    def is_accessible(self):
+        return True
+
+    def inaccessible_callback(self, name, **kwargs):
+        return redirect(url_for('login'))
+    
+class MyAdminIndexView(AdminIndexView):
+    @expose("/")
+    def index(self):
+        return super(MyAdminIndexView,self).index()
+    
+    def is_accessible(self):
+        return True
+    
+admin = Admin(app, template_mode='bootstrap4', index_view=MyAdminIndexView(name="Home"))
+admin.add_view(MyModelView(User, db.session))
+
+
+
+
+
+# Define an event listener that triggers when 'your_column' changes
+@event.listens_for(Tasks.status, 'set')
+def task_complete_listner(target, value, oldvalue, initiator):
+    specific_value = 'completed'
+    if value == specific_value:
+        # Update 'timestamp_column' with the current timestamp
+        target.completion_date = datetime.utcnow()
     else:
-        query = query.filter(Tasks.sprint_id.is_(None))
+        target.completion_date = None
 
-    if sort_column is not None:
-        if ordering == "ascending":
-            query = query.order_by(collate(sort_column, 'NOCASE').asc())
-        else:
-            query = query.order_by(collate(sort_column, 'NOCASE').desc())
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+########################################## ------- Route ------- ##########################################################
 
-    tasks = query.all()
-
-    return tasks
-
+# --------------------------------------------- login/logout ------------------------------------------------------------
 @app.route('/')
+def main():
+    return render_template('login.html')
+
+@app.route('/login', methods=["POST", "GET"])
+def login():
+    if request.method=="POST":
+        user = User.query.filter_by(username=request.form['username']).first()
+        if user:
+            if request.form['password'] == user.password:
+                login_user(user)
+                return redirect(url_for('scrum_board'))
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('main'))
+
+# ------------------------------------------------------- main page --------------------------------------------------------
+@app.route('/scrum-board')
+@login_required
 def scrum_board():
     sprints = Sprints.query.all()
     return render_template('scrum_board.html', sprints = sprints)
 
+# ------------------------------------------------------- product backlog ----------------------------------------------
 @app.route('/product-backlog', methods = ['GET', 'POST'])
+@login_required
 def product_backlog():
 
     sort_map = {
@@ -168,9 +242,14 @@ def product_backlog():
     return render_template('product_backlog.html', tasks = tasks, proirity_map = proirity_map, 
                                 selected_sort = sorting_style, selected_order = ordering, selected_filter = filter_style, sprint=sprint)
 
+# ----------------------------------------------------- task related route ----------------------------------------------------
 @app.route('/addtask', methods = ['GET', 'POST'])
+@login_required
 def new_task():
-   if request.method == 'POST':
+
+    team_member = User.query.all()
+
+    if request.method == 'POST':
 
         this_task_labels = []
         for label in request.form.getlist("label_type[]"):
@@ -196,15 +275,17 @@ def new_task():
 
         db.session.add(task)
         db.session.commit()
-
         return redirect(url_for('product_backlog'))
-   return render_template('new_task.html')
+
+    return render_template('new_task.html', team = team_member)
 
 @app.route('/addtask/<int:task_id>/edit', methods = ['GET', 'POST'])
+@login_required
 def edit_task(task_id):
 
     this_task = Tasks.query.get(task_id)
     labels_name = [label.name for label in this_task.labels]
+    team_member = User.query.all()
 
     if request.method == 'POST':
         
@@ -229,15 +310,22 @@ def edit_task(task_id):
             labels = this_task_labels
         )
 
-        db.session.commit()
+        sprint_id = this_task.sprint_id
 
-        return redirect(url_for('product_backlog'))
-    return render_template('edit_task.html', task = this_task, labels = labels_name)
+        db.session.commit()
+        if sprint_id is None:
+            return redirect(url_for('product_backlog'))
+        else:
+            return redirect(url_for('sprint', sprint_id = sprint_id))
+
+    return render_template('edit_task.html',team = team_member, task = this_task, labels = labels_name)
 
 @app.route('/addtask/<int:task_id>', methods = ['GET', 'POST'])
+@login_required
 def view_task(task_id):
     this_task = Tasks.query.get(task_id)
     this_task_labels = [label.name for label in this_task.labels]
+    team_member = User.query.all()
 
     if request.method == "POST":
 
@@ -246,17 +334,26 @@ def view_task(task_id):
                 db.session.delete(entry_time)
             db.session.delete(entry_date)
 
+        sprint_id = this_task.sprint_id
+
         db.session.delete(this_task)
         db.session.commit()
 
-        return redirect(url_for('product_backlog'))
-    return render_template("view_task.html", task = this_task, labels = this_task_labels)  
+        if sprint_id is None:
+            return redirect(url_for('product_backlog'))
+        else:
+            return redirect(url_for('sprint', sprint_id = sprint_id))
 
+        return redirect(url_for('product_backlog'))
+        
+    return render_template("view_task.html",team = team_member, task = this_task, labels = this_task_labels)  
+
+# --------------------------------------------------- sprint related route -------------------------------------------------
 @app.route('/sprint/<int:sprint_id>', methods=['GET', 'POST'])
+@login_required
 def sprint(sprint_id):
     current_sprint = Sprints.query.get(sprint_id)
     task_list = Tasks.query.filter(Tasks.sprint_id == sprint_id).all()
-    this_sprint = Sprints.query.get(sprint_id)
 
     if request.method == "POST":
         current_sprint.sprint_status = request.form["sprint_status"]
@@ -265,6 +362,7 @@ def sprint(sprint_id):
     return render_template("sprint_backlog.html", sprint=current_sprint, tasks = task_list)
 
 @app.route('/sprint/<int:sprint_id>/select-task', methods=['GET', 'POST'])
+@login_required
 def select_task(sprint_id):
 
     tasks = Tasks.query.filter(Tasks.sprint_id.is_(None))
@@ -285,12 +383,26 @@ def select_task(sprint_id):
     return render_template('select_task.html', sprint_id = sprint_id, tasks=tasks, proirity_map = proirity_map)
 
 @app.route('/newSprint', methods=['GET', 'POST'])
+@login_required
 def new_sprint():
     if request.method == 'POST':
+        current_date = datetime.now().date()
         sprint_name = request.form['sprint-name']
         start_date = datetime.strptime(request.form['sprint-start-date'], '%Y-%m-%d').date()
         end_date = datetime.strptime(request.form['sprint-end-date'], '%Y-%m-%d').date()
         status = request.form['sprint-status']
+
+        error_message = None
+
+        # Date validation: Check if the start date is not earlier than the current date
+        if start_date < current_date:
+            error_message = "Start date cannot be earlier than the current date"
+        # Date validation: Check if the end date is after the start date
+        elif end_date <= start_date:
+            error_message = "Start date must be before the end date"
+
+        if error_message:
+            return render_template('scrum_board.html', error_message=error_message)
 
         sprint = Sprints(sprint_name, start_date, end_date, status)
         db.session.add(sprint)
@@ -299,6 +411,7 @@ def new_sprint():
         return redirect(url_for('scrum_board'))
 
 @app.route('/sprint/<int:sprint_id>/edit', methods=['GET', 'POST'])
+@login_required
 def edit_sprint(sprint_id):
   sprint = Sprints.query.get(sprint_id)
 
@@ -328,72 +441,77 @@ def edit_sprint(sprint_id):
 
   return render_template('edit_sprint.html', sprint=sprint)
 
-
-@app.route('/hahaha/<int:task_id>')
-def view_sprint_task(task_id):
+@app.route('/sprint/<int:sprint_id>/task/<int:task_id>')
+@login_required
+def view_sprint_task(sprint_id, task_id):
     
     this_task = Tasks.query.get(task_id)
     this_task_labels = [label.name for label in this_task.labels]
     
-    return render_template('view_sprint_task.html', task = this_task, labels = this_task_labels)
+    return render_template('view_sprint_task.html', sprint_id=sprint_id, task = this_task, labels = this_task_labels)
 
-@app.route('/hahaha/<int:task_id>/log-time-spent', methods = ['GET', 'POST'])
-def log_time_spent(task_id):
+# -------------------------------------------  log time spent ---------------------------------------------------
+@app.route('/sprint/<int:sprint_id>/task/<int:task_id>/log-time', methods = ['GET', 'POST'])
+@login_required
+def log_time_spent(sprint_id, task_id):
 
     this_task = Tasks.query.get(task_id)
     this_task_labels = [label.name for label in this_task.labels]
 
     if request.method == "POST":
 
-        entry_date = datetime.strptime(request.form["date"], "%Y-%m-%d").date()
-        start_time = datetime.strptime(request.form["start_time"], '%H:%M')
-        end_time = datetime.strptime(request.form["end_time"], '%H:%M')
+        if (this_task.assignee != current_user.username):
+            flash(f"This task is assign to {this_task.assignee}", "error")
 
-        entries = [(entry_date, start_time, end_time)]
-        if end_time < start_time:
+        else:
+            entry_date = datetime.strptime(request.form["date"], "%Y-%m-%d").date()
+            start_time = datetime.strptime(request.form["start_time"], '%H:%M')
+            end_time = datetime.strptime(request.form["end_time"], '%H:%M')
 
-            start_of_day = (start_time + datetime.timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
+            entries = [(entry_date, start_time, end_time)]
+            if end_time < start_time:
 
-            entries = [(entry_date, start_time, start_of_day), (entry_date + datetime.timedelta(days=1), start_of_day, end_time + datetime.timedelta(days=1))]
+                start_of_day = (start_time + timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
 
-        for entry_date, start_time, end_time in entries:
+                entries = [(entry_date, start_time, start_of_day), (entry_date + timedelta(days=1), start_of_day, end_time + timedelta(days=1))]
 
-            existing_entry_date = EntryDate.query.filter(and_(EntryDate.date==entry_date, EntryDate.task_id==task_id)).first()
-            entry_date_id = None
-            if existing_entry_date:
-                entry_date_id = existing_entry_date.id
-            else:
-                existing_entry_date = EntryDate(task_id=task_id, date=entry_date)
-                db.session.add(existing_entry_date)
-                db.session.flush()
-                entry_date_id = existing_entry_date.id
+            for entry_date, start_time, end_time in entries:
 
-            existing_entry_time = existing_entry_date.entry_time
-            overlap_time = False
-            for entry_time in existing_entry_time:
-                overlap_time = is_overlap(entry_time.start_time, entry_time.end_time, start_time.time(), end_time.time())
-
-            if not overlap_time:
-                time_spend = EntryTime(
-                    entry_date_id = entry_date_id,
-                    start_time = start_time.time(),
-                    end_time = end_time.time(),
-                    duration = end_time - start_time
-                    )
-                db.session.add(time_spend)
-
-                if existing_entry_date.duration is None:
-                    existing_entry_date.duration = end_time - start_time
+                existing_entry_date = EntryDate.query.filter(and_(EntryDate.date==entry_date, EntryDate.task_id==task_id)).first()
+                entry_date_id = None
+                if existing_entry_date:
+                    entry_date_id = existing_entry_date.id
                 else:
-                    existing_entry_date.duration += end_time - start_time
+                    existing_entry_date = EntryDate(task_id=task_id, date=entry_date)
+                    db.session.add(existing_entry_date)
+                    db.session.flush()
+                    entry_date_id = existing_entry_date.id
 
-                task = Tasks.query.get(existing_entry_date.task_id)
-                if task.total_duration is None:
-                    task.total_duration = end_time - start_time
+                existing_entry_time = existing_entry_date.entry_time
+                overlap_time = False
+                for entry_time in existing_entry_time:
+                    overlap_time = is_overlap(entry_time.start_time, entry_time.end_time, start_time.time(), end_time.time())
+
+                if not overlap_time:
+                    time_spend = EntryTime(
+                        entry_date_id = entry_date_id,
+                        start_time = start_time.time(),
+                        end_time = end_time.time(),
+                        duration = end_time - start_time
+                        )
+                    db.session.add(time_spend)
+
+                    if existing_entry_date.duration is None:
+                        existing_entry_date.duration = end_time - start_time
+                    else:
+                        existing_entry_date.duration += end_time - start_time
+
+                    if current_user.total_contribution is None:
+                        current_user.total_contribution = end_time - start_time
+                    else:
+                        current_user.total_contribution += end_time - start_time
                 else:
-                    task.total_duration += end_time - start_time
-            else:
-                flash("Time Logged Overlap.", 'error')
+                    flash("Time Logged Overlap.", 'error')
             
         db.session.commit()
     
@@ -442,17 +560,11 @@ def log_time_spent(task_id):
 
     graph_json = json.dumps(fig, cls= plotly.utils.PlotlyJSONEncoder)
 
-    return render_template('log_time_spent.html', graphJSON=graph_json, task_id=task_id, created_date=this_task.created_at.strftime("%Y-%m-%d"))
+    return render_template('log_time_spent.html', sprint_id=sprint_id, graphJSON=graph_json, task_id=task_id, created_date=this_task.created_at.strftime("%Y-%m-%d"))
 
-# Define an event listener that triggers when 'your_column' changes
-@event.listens_for(Tasks.status, 'set')
-def task_complete_listner(target, value, oldvalue, initiator):
-    specific_value = 'Completed'
-    if value == specific_value:
-        # Update 'timestamp_column' with the current timestamp
-        target.completion_date = datetime.utcnow()
-
+# -------------------------------------------- burndown chart ------------------------------------------------------
 @app.route('/sprint/<int:sprint_id>/burndown-chart')
+@login_required
 def burndown_chart(sprint_id):
 
     current_sprint = Sprints.query.get(sprint_id)
@@ -468,15 +580,16 @@ def burndown_chart(sprint_id):
     end_date = current_sprint.sprint_end_date
     
     # store the data for ideal velocity in lists
-    story_point_data = [total_story_point, 0]
-    date_data = [start_date, end_date]
-    line_type = ["Ideal Velocity", "Ideal Velocity"]
+    story_point_data = [total_story_point, 0, total_story_point]
+    date_data = [start_date, end_date, start_date]
+    line_type = ["Ideal Velocity", "Ideal Velocity", "Actual Velocity" ]
 
+    accumulate_story_points = total_story_point
     for task in sprint_task:
         if task.completion_date is None:
             break
-        total_story_point -= task.story_points
-        story_point_data.append(total_story_point)
+        accumulate_story_points -= task.story_points
+        story_point_data.append(accumulate_story_points)
         date_data.append(task.completion_date)
         line_type.append("Actual Velocity")
     
@@ -491,6 +604,7 @@ def burndown_chart(sprint_id):
     graph_json = json.dumps(fig, cls= plotly.utils.PlotlyJSONEncoder)
     return render_template('burndown_chart.html', graphJSON=graph_json)
 
+# -------------------------------------------- developer route -----------------------------------------------------------
 @app.route('/clear-database', methods=['GET'])
 def clear_database():
     # Drop all tables in the database
@@ -501,14 +615,63 @@ def clear_database():
 
     return 'Database cleared'
 
+@app.route('/add-admin')
+def add_admin():
+    admin_role = Role(
+        name = 'Admin',
+        description = "Control the flow of agile process. "
+    )
+    db.session.add(admin_role)
+    
+    admin_user = User(
+        username = "Admin", 
+        password = "12345678",
+        roles = [admin_role]
+    )
+    db.session.add(admin_user)
+    db.session.commit()
+    return "Admin Added"
+
+@app.route("/update_task_status/<int:task_id>", methods=["POST"])
+def update_task_status(task_id):
+    new_status = request.json["newStatus"]
+    
+    this_task = Tasks.query.get(task_id)
+    this_task.status = new_status
+    db.session.commit()
+    # Update the task status in your database (e.g., using SQLAlchemy)
+    # Replace this with your actual code to update the task status
+
+    # Return a response to the client (you can customize the response based on success/failure)
+    response_data = {"message": "Task status updated successfully"}
+    return jsonify(response_data)
+
+
+# ---------------------------------------------addtional function-------------------------------------------------------
+def is_overlap(range1_start, range1_end, range2_start, range2_end):
+    return range1_start <= range2_end and range1_end >= range2_start
+
+def filter_and_sort_tasks(filter_condition=None, sort_column=None, ordering = "ascending"):
+    query = Tasks.query
+
+    if filter_condition is not None:
+        query = query.filter(and_(filter_condition, Tasks.sprint_id.is_(None)))
+    else:
+        query = query.filter(Tasks.sprint_id.is_(None))
+
+    if sort_column is not None:
+        if ordering == "ascending":
+            query = query.order_by(collate(sort_column, 'NOCASE').asc())
+        else:
+            query = query.order_by(collate(sort_column, 'NOCASE').desc())
+
+    tasks = query.all()
+
+    return tasks
+
 if __name__ == '__main__':
     with app.app_context():
         # Create the database tables if they don't exist
         db.create_all()
 
     app.run(debug=True)
-
-# addtional function 
-def is_overlap(range1_start, range1_end, range2_start, range2_end):
-    return range1_start <= range2_end and range1_end >= range2_start
-
