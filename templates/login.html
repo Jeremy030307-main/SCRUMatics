@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/sprint.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/product_backlog.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     
     <!--ICON-->
@@ -23,14 +24,27 @@
 
 </head>
 <body>
-    <h3>Login Page</h3>
-    <form action="/login" method="POST">
-        <label for="username">Username</label><br>
-        <input type="text" id="username" name="username" placeholder="Enter task name" required><br><br>
+    <div class = "center">
+        <h1>SCRUMatics</h1>
+        <form action="/login" method="POST">
+            <div class="txt_field">
+                <label for="username">Username</label><br>
+                <input type="text" id="username" name="username" placeholder="Enter user name" required>
+                
+            </div>
 
-        <label for="password">password</label>
-        <input type="password" id="password" name="password" required><br><br>
+            <div class="txt_field">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter password" required><br>
 
-        <input type="submit">
-    </form>
+            </div>
+            
+            <div class="login_btn"> 
+                <input type="submit" value = "Login">
+            </div>
+            
+        </form>
+
+    </div>
+    
 </body>

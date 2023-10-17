@@ -91,21 +91,19 @@
 
 
     <script>
-        
-        
         function showDialog() {
             document.getElementById("new-dialog").style.display = "block";
         }
-
+    
         function closeDialog() {
             document.getElementById("new-dialog").style.display = "none";
         }
-
+    
         function createSprint() {
             // Logic to create a new sprint here
             closeDialog(); // Close the dialog after creating
         }
-
+    
         $(function() {
             // Initialize the date-range picker
             $('#sprint-date').daterangepicker({
@@ -114,16 +112,31 @@
                     cancelLabel: 'Clear'
                 }
             });
-
+    
             // Handle date range selection
             $('#sprint-date').on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('YYYY/MM/DD') + ' - ' + picker.endDate.format('YYYY/MM/DD'));
+                var startDate = picker.startDate;
+                var endDate = picker.endDate;
+                var startDateInput = $('#sprint-date').data('daterangepicker').startDate;
+                var endDateInput = $('#sprint-date').data('daterangepicker').endDate;
+    
+                if (startDate > endDate) {
+                    // Display an error message if the start date is greater than the end date
+                    alert('End Date should be greater than or equal to Start Date');
+                    // Clear the date range selection
+                    $('#sprint-date').data('daterangepicker').setStartDate(startDateInput);
+                    $('#sprint-date').data('daterangepicker').setEndDate(endDateInput);
+                } else {
+                    // Set the selected date range in the input field
+                    $('#sprint-date').val(startDate.format('YYYY/MM/DD') + ' - ' + endDate.format('YYYY/MM/DD'));
+                }
             });
-
+    
             // Handle clearing the date range
             $('#sprint-date').on('cancel.daterangepicker', function(ev, picker) {
                 $(this).val('');
             });
         });
     </script>
+    
 {% endblock %}
