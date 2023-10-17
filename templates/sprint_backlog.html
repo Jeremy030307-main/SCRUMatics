@@ -148,38 +148,64 @@
         </div>
         <div class="completed" id="completed">
             <h2>Completed</h2>
-            {% for task in tasks if task.status == "completed" %}
-                <a href="{{ url_for('view_sprint_task', sprint_id=sprint.id, task_id=task.id) }}" class = "viewSprintTaskButton" target="view_sprint_task_iframe">
-                    <div class="card" id="card-{{ task.id }}">
-                        <div class="taskName" style="text-decoration: none; color: #ffffff;">
-                            {{task.name}}
-                            <div class="
-                            {%if task.priority == 4%} urgent-priority 
-                            {%elif task.priority == 3%} important-priority
-                            {%elif task.priority == 2%} medium-priority
-                            {%elif task.priority == 1%} low-priority
-                            {%endif%}"
-                            ></div>
-                        </div>
-                        
-                        {% for label in task.labels %}
-                            <div class="
-                            {%if label.name == "Front End"%} label-front-end 
-                            {%elif label.name == "Back End"%} label-back-end
-                            {%elif label.name == "Testing"%} label-testing
-                            {%elif label.name == "Framework"%} label-framework
-                            {%elif label.name == "API"%} label-api
-                            {%elif label.name == "Database"%} label-database
-                            {%elif label.name == "UI"%}label-ui
-                            {%elif label.name == "UX"%}label-ux
-                            {%endif%}"
-                            >{{ label.name }}</div>
-                        {% endfor %}
-                        <br><br>
-                        <div class="circle">{{task.story_points}}</div>
+=======
+        </div>
+
+        {% for task in tasks %}
+        <div class="{{ task.status }}">
+            <div class="card">
+                <div class="taskName">
+                    <a href="{{ url_for('view_sprint_task', sprint_id=sprint.id, task_id=task.id) }}">{{task.name}}</a> 
+                    <div class="
+                    {%if task.priority == 4%} urgent-priority 
+                    {%elif task.priority == 3%} important-priority
+                    {%elif task.priority == 2%} medium-priority
+                    {%elif task.priority == 1%} low-priority
+                    {%endif%}"
+                    >
+                        {%if task.priority == 4%} U 
+                        {%elif task.priority == 3%} I
+                        {%elif task.priority == 2%} M
+                        {%elif task.priority == 1%} L
+                        {%endif%}
+                        <span class="tooltip">
+                            U = Urgent
+                            <br>
+                            I = Important
+                            <br>
+                            M = Medium
+                            <br>
+                            L = Low
+                        </span>
                     </div>
-                </a>
-            {% endfor %}
+                </div>
+                
+                {% for label in task.labels %}
+                    <div class="
+                    {%if label.name == "Front End"%} label-front-end 
+                    {%elif label.name == "Back End"%} label-back-end
+                    {%elif label.name == "Testing"%} label-testing
+                    {%elif label.name == "Framework"%} label-framework
+                    {%elif label.name == "API"%} label-api
+                    {%elif label.name == "Database"%} label-database
+                    {%elif label.name == "UI"%}label-ui
+                    {%elif label.name == "UX"%}label-ux
+                    {%endif%}"
+                    >{{ label.name }}</div>
+                {% endfor %}
+                <br><br>
+                <div class="circle">{{task.story_points}}</div>
+                
+                
+            </div>
+        </div>
+        {% endfor %}
+
+        <div style="width: 30%;">
+            <button class="addTask">
+                <a href="{{ url_for('burndown_chart', sprint_id=sprint.id) }}" class="add-task-button">Burndown Chart</a>
+            </button>
+>>>>>>> origin/cssBranch1
         </div>
         
     </div>
