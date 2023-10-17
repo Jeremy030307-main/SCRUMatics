@@ -5,16 +5,20 @@
       <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
       <!--ICON-->
       <link href='https://unpkg.com/css.gg@2.0.0/icons/css/add.css' rel='stylesheet'>
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/product_backlog.css') }}">
    </head>
 
 
    <body>
-   
-      {%- for message in get_flashed_messages() %}
-         {{ message }}
-      {%- endfor %}
+      
+      <div id="viewTaskModal" class="modal">
+         <!-- Modal content -->
+         <div class="modal-content">
+             <span class="back-button" id="closeViewTaskButton">&#9204;</span>
+             <iframe srcdoc="" id="view_task_iframe" name="view_task_iframe" scrolling="no" class="viewTaskIframe" style="padding-top: 0%;"></iframe>
+         </div>
+      </div>
 		
-      <!--This the link to add new task to product backlog, can chage to a button in future-->
       <!--This the link to add new task to product backlog, can chage to a button in future-->
       <h3 class="pageTitle">Product Backlog</h3>
 
@@ -37,7 +41,7 @@
                         <td>
                            <input type="checkbox" name="selected_tasks[]" value="{{ task.id }}">
                        </td>
-                        <td>{{ task.name }} <a href = "{{ url_for('view_task', task_id = task.id) }}" style="text-decoration: none; margin-left: 1%; color: #333333;">&#128065</a>
+                        <td>{{ task.name }} <a href = "{{ url_for('view_task', task_id = task.id) }}" style="text-decoration: none; margin-left: 1%; color: #333333;" class="viewTaskButton" target="view_task_iframe">&#128065</a>
                         </td>
                         
                         <td style="text-align: justify; padding-left: 1%;">
@@ -69,10 +73,46 @@
             </table>
             <div class="button-container">
                <input type="submit" value="Add to Sprint" class="button">
-               <input type="button" value="Cancel" onclick="history.back()">
-               
-           </div>
+               <input type="button" value="Cancel" onclick="closeParentModal()">
+            </div>
          </div>
       </form>
+
+      <script>
+         // Function to open a specific modal
+         function openModal(modalId) {
+               const modal = document.getElementById(modalId);
+               modal.style.display = 'block';
+         }
+
+         // Function to close a specific modal
+         function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.style.display = 'none';
+         }
+
+
+         // Event listener for each view task button
+         document.querySelectorAll('.viewTaskButton').forEach(function (button) {
+            button.addEventListener('click', function () {
+                  // Open the modal with the task details
+                  openModal('viewTaskModal');
+            });
+         });
+
+         // Event listeners for close add task buttons
+         document.getElementById('closeViewTaskButton').addEventListener('click', function() {
+            closeModal('viewTaskModal');
+         });
+
+
+         function closeParentModal() {
+            // Check if the parent window is available and has the close modal function
+            if (window.parent && window.parent.closeModal) {
+                  // Call the close modal function in the parent window
+                  window.parent.closeChildModal();
+            }
+         }
+      </script>
    </body>
 </html>

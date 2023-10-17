@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+
+</head>
+
+<body>
+
+  <form action="/sprint/{{sprint.id}}/edit" method="POST" class="addTaskForm">
+
+    <input type="hidden" name="sprint_id" value="{{ sprint.id }}">
+
+    <div class="taskContainer">
+      <div class="left-section" style="border-top-right-radius: .5em; border-bottom-right-radius: .5em;">
+        <label for="sprint_name" class="addTaskLabel">Sprint Name</label><br>
+        <input type="text" id="sprint_name" name="sprint_name" value="{{ sprint.sprint_name }}"> <br><br>
+
+        <label for="sprint_start_date" class="addTaskLabel">Sprint Start Date</label><br>
+        <input type="date" id="sprint_start_date" name="sprint_start_date" value="{{ sprint.sprint_start_date }}"> <br><br>
+
+        <label for="sprint_end_date" class="addTaskLabel">Sprint End Date</label><br>
+        <input type="date" id="sprint_end_date" name="sprint_end_date" value="{{ sprint.sprint_end_date }}"> <br><br>
+
+        <div class="edit-sprint-buttons">
+          <input type="submit" value="Save" class="saveBtn">
+          <input type="submit" name="delete_sprint" value="Delete Sprint" class="deleteBtn">
+        </div>
+      </div>
+      
+    </div>
+
+    
+
+  </form>
+
+</body>
+
+</html>

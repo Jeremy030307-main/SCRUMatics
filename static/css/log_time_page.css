@@ -90,6 +90,16 @@ body {
     background-repeat: no-repeat;
 }
 
+/* Button hover effect */
+.logButton:hover {
+    background-color: #50c5bfa2; /* Change the background color on hover */
+}
+
+/* Button active effect (when clicked) */
+.logButton:active {
+    background-color: #50c5bf; /* Change the background color when clicked */
+}
+
 .logTimeContainer .effortGraphContainer{
     margin-top: 1%;
 }
@@ -113,5 +123,29 @@ body {
     font-weight: bold; /* Adjust the font weight as needed */
     color: #333; /* Adjust the text color as needed */
     /* Add any other CSS properties to style the title */
+}
+
+/* Basic button styling */
+.firstButton {
+    display: inline-block;
+    padding: 10px 20px; /* Adjust padding to your preference */
+    background-color: #007bff; /* Button background color */
+    color: #fff; /* Button text color */
+    text-align: center;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* Button hover effect */
+.firstButton:hover {
+    background-color: #0056b3; /* Change the background color on hover */
+}
+
+/* Button active effect (when clicked) */
+.firstButton:active {
+    background-color: #0043a3; /* Change the background color when clicked */
 }
 

@@ -15,13 +15,17 @@
    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
 
+    <!--font awesome-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 </head>
 
-<body>
+<body style="margin: 0%;padding: 0;">
 
-<form action="/hahaha/{{task.id}}" oninput="calculateTimeDifference()" method="POST">
+<form action="/sprint/{{sprint_id}}/task/{{task.id}}" method="POST">
    
     <div class="taskContainer">
+
         <div class="left-section">
             <!-- Content for the left section goes here -->
             <!--Block to let user enter task name-->
@@ -33,7 +37,6 @@
             </div>
 
             <input type="text" id="task_name" name="task_name" value= "{{ task.name }}" disabled> <br><br>
-    
 
             <!--Drop-down list of Priority-->
             <label for="priority" class="addTaskLabel"> Priority</label><br>
@@ -48,15 +51,15 @@
             <!--Drop-down list of task status-->
             <label for="status" class="addTaskLabel"> Status</label><br>
             <select id="status_type" name="status_type" class="
-                {%if task.status == "Not Started"%} addTaskSelectLeft-not-started 
-                {%elif task.status == "Incomplete"%} addTaskSelectLeft-incomplete
-                {%elif task.status == "Completed"%} addTaskSelectLeft-complete
+                {%if task.status == "not-started"%} addTaskSelectLeft-not-started 
+                {%elif task.status == "in-progress"%} addTaskSelectLeft-incomplete
+                {%elif task.status == "completed"%} addTaskSelectLeft-complete
                 {%endif%}"
                 disabled>
                 <option value="" disabled>Select an option</option>
-                <option value="Not Started" {% if task.status == 'Not Started' %}selected{% endif %}>Not Started</option>
-                <option value="Incomplete" {% if task.status == 'Incomplete' %}selected{% endif %}>In Progress</option>
-                <option value="Completed" {% if task.status == 'Completed' %}selected{% endif %}>Completed</option>
+                <option value="not-started" {% if task.status == 'not-started' %}selected{% endif %}>Not Started</option>
+                <option value="in-progress" {% if task.status == 'in-progress' %}selected{% endif %}>In Progress</option>
+                <option value="completed" {% if task.status == 'completed' %}selected{% endif %}>Completed</option>
             </select><br><br>
     
             <!--Text box to let user enter the text description. -->
@@ -116,7 +119,9 @@
                 <option value=10 {% if task.story_points == 10 %}selected{% endif %}>10</option>
             </select> <br><br>
 
-            <button><a href = "{{ url_for('log_time_spent', task_id=task.id) }}">hahahahaha</a></button>
+            <button class="edit-sprint-button" style="border-radius: 0.5em;border-width: 0.5px;height:3em;width: 9em;background-color: #50c5bf;">
+                <a href="{{ url_for('log_time_spent', task_id=task.id, sprint_id=sprint_id) }}" class="add-task-button" style="text-decoration: none;color: #444444;font-size: large;">Log Time</a>
+            </button>
         </div>
     </div>
     </form>
