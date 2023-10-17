@@ -14,11 +14,13 @@ from flask_admin import Admin, AdminIndexView, BaseView, expose
 from flask_admin.contrib.sqla import ModelView
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 
+
 app = Flask(__name__, static_folder='static')
 app.config['FAVICON'] = 'static/favicon.ico'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tasks.sqlite3'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = "random string"
+app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
 db = SQLAlchemy(app)
 
 login_manager = LoginManager()
@@ -41,7 +43,8 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(50), nullable = False)
     roles = db.relationship('Role', secondary=roles_users, backref=db.backref('user', lazy='dynamic'))
     tasks = db.relationship('Tasks', backref='user', lazy=True)
-    worked_duration = db.Column(Interval)
+    total_contribution = db.Column(Interval)
+    
 
 class Role(db.Model):
     id = db.Column(db.Integer, primary_key = True)
@@ -110,7 +113,16 @@ class EntryTime(db.Model):
     end_time = db.Column(db.Time, nullable=True)
     duration = db.Column(Interval)
 
+
+
 class MyModelView(ModelView):
+    list_template='admin/model/list.html'
+    create_template = 'admin/model/create.html'
+    edit_template ='admin/model/edit.html'
+    column_list = ('username', 'total_contribution')
+
+    
+
     def is_accessible(self):
         return True
 
@@ -118,11 +130,19 @@ class MyModelView(ModelView):
         return redirect(url_for('login'))
     
 class MyAdminIndexView(AdminIndexView):
+    @expose("/")
+    def index(self):
+        return super(MyAdminIndexView,self).index()
+    
     def is_accessible(self):
         return True
-
-admin = Admin(app, index_view=MyAdminIndexView())
+    
+admin = Admin(app, template_mode='bootstrap4', index_view=MyAdminIndexView(name="Home"))
 admin.add_view(MyModelView(User, db.session))
+
+
+
+
 
 # Define an event listener that triggers when 'your_column' changes
 @event.listens_for(Tasks.status, 'set')
@@ -366,10 +386,23 @@ def select_task(sprint_id):
 @login_required
 def new_sprint():
     if request.method == 'POST':
+        current_date = datetime.now().date()
         sprint_name = request.form['sprint-name']
         start_date = datetime.strptime(request.form['sprint-start-date'], '%Y-%m-%d').date()
         end_date = datetime.strptime(request.form['sprint-end-date'], '%Y-%m-%d').date()
         status = request.form['sprint-status']
+
+        error_message = None
+
+        # Date validation: Check if the start date is not earlier than the current date
+        if start_date < current_date:
+            error_message = "Start date cannot be earlier than the current date"
+        # Date validation: Check if the end date is after the start date
+        elif end_date <= start_date:
+            error_message = "Start date must be before the end date"
+
+        if error_message:
+            return render_template('scrum_board.html', error_message=error_message)
 
         sprint = Sprints(sprint_name, start_date, end_date, status)
         db.session.add(sprint)
@@ -473,10 +506,10 @@ def log_time_spent(sprint_id, task_id):
                     else:
                         existing_entry_date.duration += end_time - start_time
 
-                    if current_user.worked_duration is None:
-                        current_user.worked_duration = end_time - start_time
+                    if current_user.total_contribution is None:
+                        current_user.total_contribution = end_time - start_time
                     else:
-                        current_user.worked_duration += end_time - start_time
+                        current_user.total_contribution += end_time - start_time
                 else:
                     flash("Time Logged Overlap.", 'error')
             

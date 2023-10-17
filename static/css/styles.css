@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;700&display=swap');
 
@@ -129,62 +130,68 @@ body {
 
 .label-front-end {
     display: inline-block; /* Use inline-block to display blocks horizontally */
-    background-color: #d62e2e;
+    background-color: #f48942;
     color: white;
     width: 100px; 
     margin: 2px;
     padding: 5px;
     border-radius: .3em;
+    text-align: center;
   }
 
   .label-back-end {
     display: inline-block; /* Use inline-block to display blocks horizontally */
-    background-color: #cd532a;
+    background-color: #ffe9ce;
     width: 100px;
-    color: white;
+    color: #333333;
     margin: 2px;
     padding: 5px;
     border-radius: .3em;
+    text-align: center;
   }
 
   .label-testing {
     display: inline-block; /* Use inline-block to display blocks horizontally */
-    background-color: #d4be55;
-    color: white;
+    background-color: #ffe156;
+    color: #333333;
     width: 80px;
     margin: 2px;
     padding: 5px;
     border-radius: .3em;
+    text-align: center;
   }
 
   .label-framework {
     display: inline-block; /* Use inline-block to display blocks horizontally */
-    background-color: #59d533;
-    color: white;
+    background-color: #97d8c4;
+    color: #333333;
     width: 110px;
     margin: 2px;
     padding: 5px;
     border-radius: .3em;
+    text-align: center;
   }
 
   .label-api {
     display: inline-block; /* Use inline-block to display blocks horizontally */
-    background-color: #32c9cc;
+    background-color: #689ac4;
     color: white;
     width: 50px;
     margin: 2px;
     padding: 5px;
     border-radius: .3em;
+    text-align: center;
   }
 
   .label-database {
     display: inline-block; /* Use inline-block to display blocks horizontally */
-    background-color: #2162cc;
+    background-color: #3777ff;
     color: white;
     width: 100px;
     margin: 2px;
     padding: 5px;
     border-radius: .3em;
+    text-align: center;
   }
 
   .label-ui {
@@ -195,16 +202,18 @@ body {
     margin: 2px;
     padding: 5px;
     border-radius: .3em;
+    text-align: center;
   }
 
   .label-ux {
     display: inline-block; /* Use inline-block to display blocks horizontally */
-    background-color:  #d619a4;
-    color: white;
+    background-color:  #ffb5c2;
+    color: #333333;
     width: 40px;
     margin: 2px;
     padding: 5px;
     border-radius: .3em;
+    text-align: center;
   }
 
 /* ---------------------Add Task--------------------- */

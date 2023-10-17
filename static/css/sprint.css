@@ -196,7 +196,7 @@ h2 {
     width: 660px;
 }
 
-.addTask{
+.addTaskBut{
     background-color: #ddd;
     color: #333333;
     padding: 10%;
@@ -208,12 +208,38 @@ h2 {
     box-shadow: .3em .3em .3em #999;
     height: 70%;
     width: 100%;
+    bottom: 40px;
+    right: 50px;
+    margin: 0;
 }
-.addTask a{
+.addTaskBut a{
     text-decoration: none;
     color: #333333;
 }
 
+
+
+.addTask {
+    background-color: #ddd;
+    color: #333333;
+    padding: 1% 1%;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    border-radius: 1em;
+    box-shadow: .3em .3em .3em #999;
+    height: 1px;
+    position: fixed;
+    bottom: 40px;
+    right: 50px;
+    margin: 0;
+}
+
+.addTask a {
+    text-decoration: none;
+    color: #333333;
+}
 .card{
     display: inline-block; 
     background-color: #4f4f4f;
@@ -257,131 +283,173 @@ h2 {
 
 .label-front-end {
     display: inline-block; /* Use inline-block to display blocks horizontally */
-    background-color: #d62e2e;
+    background-color: #f48942;
     color: white;
-    width: 100px; 
+    width: 25%; 
     margin: 2px;
     padding: 5px;
     border-radius: .3em;
     margin-left: 3%;
+    text-align: center;
   }
 
   .label-back-end {
     display: inline-block; /* Use inline-block to display blocks horizontally */
-    background-color: #cd532a;
-    width: 100px;
-    color: white;
+    background-color: #ffe9ce;
+    width: 25%;
+    color: #333333;
     margin: 2px;
     padding: 5px;
     border-radius: .3em;
     margin-left: 3%;
+    text-align: center;
+
   }
 
   .label-testing {
     display: inline-block; /* Use inline-block to display blocks horizontally */
-    background-color: #d4be55;
-    color: white;
-    width: 80px;
+    background-color: #ffe156;
+    color: #333333;
+    width: 25%;
     margin: 2px;
     padding: 5px;
     border-radius: .3em;
     margin-left: 3%;
+    text-align: center;
   }
 
   .label-framework {
     display: inline-block; /* Use inline-block to display blocks horizontally */
-    background-color: #59d533;
-    color: white;
-    width: 110px;
+    background-color: #97d8c4;
+    color: #333333;
+    width: 30%;
     margin: 2px;
     padding: 5px;
     border-radius: .3em;
     margin-left: 3%;
+    text-align: center;
   }
 
   .label-api {
     display: inline-block; /* Use inline-block to display blocks horizontally */
-    background-color: #32c9cc;
+    background-color: #689ac4;
     color: white;
-    width: 50px;
+    width: 17%;
     margin: 2px;
     padding: 5px;
     border-radius: .3em;
     margin-left: 3%;
+    text-align: center;
   }
 
   .label-database {
     display: inline-block; /* Use inline-block to display blocks horizontally */
-    background-color: #2162cc;
+    background-color: #3777ff;
     color: white;
-    width: 100px;
+    width: 25%;
     margin: 2px;
     padding: 5px;
     border-radius: .3em;
     margin-left: 3%;
+    text-align: center;
   }
 
   .label-ui {
     display: inline-block; /* Use inline-block to display blocks horizontally */
     background-color: #8b50dd;
     color: white;
-    width: 40px;
+    width: 15%;
     margin: 2px;
     padding: 5px;
     border-radius: .3em;
     margin-left: 3%;
+    text-align: center;
   }
 
   .label-ux {
     display: inline-block; /* Use inline-block to display blocks horizontally */
-    background-color:  #d619a4;
-    color: white;
-    width: 40px;
+    background-color:  #ffb5c2;
+    color: #333333;
+    width: 15%;
     margin: 2px;
     padding: 5px;
     border-radius: .3em;
     margin-left: 3%;
+    text-align: center;
   }
 
   /* Priority Styles */
 .urgent-priority {
     background-color: rgb(247, 81, 81);
     border-radius: 50%;
-    padding: 5px;
+    padding: 2%;
     width: 20px;
     height: 20px;
     display: inline-block;
     margin-top: 2%;
+    font-size: .75em;
+    text-align: center;
 }
 
 .important-priority {
     background-color: orange;
     border-radius: 50%;
-    padding: 5px;
+    padding: 2%;
     width: 20px;
     height: 20px;
     display: inline-block;
     margin-top: 2%;
+    font-size: .75em;
+    text-align: center;
 }
 
 .medium-priority {
     background-color: yellow;
     border-radius: 50%;
-    padding: 5px;
+    padding: 2%;
     width: 20px;
     height: 20px;
     display: inline-block;
     margin-top: 2%;
+    font-size: .75em;
+    text-align: center;
 }
 
 .low-priority {
     background-color: rgb(100, 255, 100);
     border-radius: 50%;
-    padding: 5px;
+    padding: 2%;
     width: 20px;
     height: 20px;
     display: inline-block;
     margin-top: 2%;
+    font-size: .75em;
+    text-align: center;
+}
+
+.urgent-priority .tooltip,
+.important-priority .tooltip,
+.medium-priority .tooltip,
+.low-priority .tooltip{
+    visibility: hidden;
+    width: fit-content;
+    background-color: #d7d7d7;
+    color: #333333;
+    text-align: left;
+    font-size: .75em;
+    line-height: 1.5;
+    padding: 5%;
+    border-radius: 3%;
+    border: .1em solid #333333;
+    opacity: 0.9;
+    position: absolute;
+    z-index: 1;
+}
+.urgent-priority:hover .tooltip,
+.important-priority:hover .tooltip,
+.medium-priority:hover .tooltip,
+.low-priority:hover .tooltip{
+    visibility: visible;
 }
 
 .sprint-backlog-container{
