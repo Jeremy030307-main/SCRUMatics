@@ -8,6 +8,11 @@ body {
     background: #fafafa;
 }
 
+h2{
+    margin-top: 20px;
+    color: black; 
+}
+
 p {
     font-family: 'Poppins', sans-serif;
     font-size: 1.1em;
@@ -205,6 +210,7 @@ a.article:hover {
     padding: 10px; /* Add some padding to create spacing between the text and the container */
     display: inline-block; /* Make it an inline-block to keep it on the same line as the trash icon */
     margin-left: 10px; /* Add some left margin for spacing between the icons */
+    border-radius: 10px;
   }
   
   .blue-container a {
