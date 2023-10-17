@@ -416,7 +416,6 @@ td:nth-child(3) {
     opacity: 0.9;
     
     position: absolute;
-    left: 30%;
     z-index: 1;
 }
 .urgent-priority:hover .tooltip,
