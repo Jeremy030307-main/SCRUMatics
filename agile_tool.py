@@ -613,6 +613,26 @@ def update_task_status(task_id):
     response_data = {"message": "Task status updated successfully"}
     return jsonify(response_data)
 
+# ------------------------------------------------user profile---------------------------------------------------------
+@app.route('/user_profile', methods=['GET', 'POST'])
+@login_required
+def uesr_profile():
+    if request.method == 'POST':
+        old_password = request.form.get('old_password')
+        new_password = request.form.get('new_password')
+
+        # Check if the old password matches the one stored in the database
+        if current_user.password == old_password:
+            # Update the password in the database
+            current_user.password = new_password
+            db.session.commit()
+            flash('Password changed successfully', 'success')
+        else:
+            flash('Invalid old password', 'error')
+
+    return render_template("user_profile.html")
+
+
 
 # ---------------------------------------------addtional function-------------------------------------------------------
 def is_overlap(range1_start, range1_end, range2_start, range2_end):
