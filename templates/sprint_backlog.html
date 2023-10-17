@@ -73,11 +73,21 @@
                     {%elif task.priority == 1%} low-priority
                     {%endif%}"
                     >
-                    {%if task.priority == 4%} U 
-                    {%elif task.priority == 3%} I
-                    {%elif task.priority == 2%} M
-                    {%elif task.priority == 1%} L
-                    {%endif%}</div>
+                        {%if task.priority == 4%} U 
+                        {%elif task.priority == 3%} I
+                        {%elif task.priority == 2%} M
+                        {%elif task.priority == 1%} L
+                        {%endif%}
+                        <span class="tooltip">
+                            U = Urgent
+                            <br>
+                            I = Important
+                            <br>
+                            M = Medium
+                            <br>
+                            L = Low
+                        </span>
+                    </div>
                 </div>
                 
                 {% for label in task.labels %}

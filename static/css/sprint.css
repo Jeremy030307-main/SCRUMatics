@@ -399,6 +399,33 @@ td:nth-child(3) {
     text-align: center;
 }
 
+.urgent-priority .tooltip,
+.important-priority .tooltip,
+.medium-priority .tooltip,
+.low-priority .tooltip{
+    visibility: hidden;
+    width: fit-content;
+    background-color: #d7d7d7;
+    color: #333333;
+    text-align: left;
+    font-size: .75em;
+    line-height: 1.5;
+    padding: 5%;
+    border-radius: 3%;
+    border: .1em solid #333333;
+    opacity: 0.9;
+    
+    position: absolute;
+    left: 30%;
+    z-index: 1;
+}
+.urgent-priority:hover .tooltip,
+.important-priority:hover .tooltip,
+.medium-priority:hover .tooltip,
+.low-priority:hover .tooltip{
+    visibility: visible;
+}
+
 .sprint-backlog-container{
     display: grid;
     grid-template-columns: repeat(3, 1fr);
