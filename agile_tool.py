@@ -188,8 +188,13 @@ class TeamEffortView(BaseView):
     @app.route('/handle-contribution-form', methods = ["POST", "GET"])
     def handle_contribution_form():
         if request.method == "POST":
-            session["start_date"] = request.form["startDate"]
-            session["end_date"] = request.form["endDate"]
+
+            if datetime.strptime(request.form["endDate"], "%Y-%m-%d").date() < datetime.strptime(request.form["startDate"], "%Y-%m-%d").date():
+                flash("End date is smaller than start date", "error")
+            else:
+                session["start_date"] = request.form["startDate"]
+                session["end_date"] = request.form["endDate"]
+
             return redirect(url_for('team-contribution.index'))
 
 admin = Admin(app, base_template='admin/navbar_less_base.html', template_mode='bootstrap3', index_view=CustomAdminIndexView())
