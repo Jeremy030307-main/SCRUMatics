@@ -146,18 +146,8 @@
                         {% endif %}
                         {% endfor %}
                         </td>
-                    {% else %}
-                        <tr>
-                            <td colspan="999">
-                                {% block empty_list_message %}
-                                <div class="text-center">
-                                    {{ admin_view.get_empty_list_message() }}
-                                </div>
-                                {% endblock %}
-
-                            </td>
-                        </tr>
-                    {% endif %}    
+                    {% endif %}  
+                
                     <td class="col-total_contribution">
                         
                     </td>
@@ -186,6 +176,18 @@
                     </td>
                 {% endblock %}  
             {% endblock %} 
+            {% else %}
+            <tr>
+                <td colspan="999">
+                    {% block empty_list_message %}
+                    <div class="text-center">
+                        {{ admin_view.get_empty_list_message() }}
+                    </div>
+                    {% endblock %}
+
+                </td>
+            </tr>
+      
         {% endfor %}            
         </tr>
                     
