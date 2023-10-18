@@ -427,18 +427,17 @@ def new_sprint():
         end_date = datetime.strptime(request.form['sprint-end-date'], '%Y-%m-%d').date()
         status = request.form['sprint-status']
 
-        error_message = None
 
         # Date validation: Check if the start date is not earlier than the current date
         if start_date < current_date:
-            error_message = "Start date cannot be earlier than the current date"
+            flash('Start date cannot be earlier than the current date','error')
+            return redirect(url_for('scrum_board'))
         # Date validation: Check if the end date is after the start date
         elif end_date <= start_date:
-            error_message = "Start date must be before the end date"
+            flash('Start date must be before the end date','error')
+            return redirect(url_for('scrum_board'))
 
-        if error_message:
-            return render_template('scrum_board.html', error_message=error_message)
-
+        
         sprint = Sprints(sprint_name, start_date, end_date, status)
         db.session.add(sprint)
         db.session.commit()
