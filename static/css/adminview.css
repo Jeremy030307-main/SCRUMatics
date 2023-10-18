@@ -247,3 +247,34 @@ a.article:hover {
 .your-list li:nth-child(even) {
     background-color: #fff; /* Alternate background color */
 }
+
+.date-picker-container {
+    display: flex;
+    gap: 10%; /* Adjust the gap to control the spacing between date pickers */
+    margin-top: 3%;
+    margin-bottom: 2%
+}
+
+.date-picker {
+    align-items: normal;
+}
+
+.date-picker label {
+    display: block; /* Display labels as block elements to place them above the input */
+    margin-bottom: 5px; /* Add some spacing between label and input */
+    font-size: large;
+}
+
+.submit-button-container {
+    display: flex;
+    align-items: center; /* Align the submit button to the bottom of the container */
+}
+
+.submit-button {
+    background-color: blue;
+    color: #fff;
+    height: 30px;
+    border-radius: 0.23em;
+    size: 3cm;
+}
+

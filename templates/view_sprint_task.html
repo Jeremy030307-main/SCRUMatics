@@ -95,7 +95,7 @@
             <label for="assignee" style="font-size: large;" class="addTaskLabel">Assignee</label><br>
             <select id="assignee_name" name="assignee_name" class="addTaskSelectRight" disabled>
                 {% for member in team %}
-                    <option value={{member.username}} {% if task.assignee == member.username %}selected{% endif %}>{{member.username}}</option>
+                    <option value={{member.id}} {% if task.assignee == member.id %}selected{% endif %}>{{member.username}}</option>
                 {% endfor %}
             </select> <br><br>
 
