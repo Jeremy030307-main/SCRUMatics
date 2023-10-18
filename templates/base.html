@@ -38,7 +38,7 @@
                   <li><a href="{{ url_for('scrum_board') }}">Scrum Board</a></li> <!-- put sprint backlog html link when finish-->
                   {% for role in current_user.roles %}
                      {% if role.name == "Admin" %}
-                        <li><a href="/admin">Admin Page</a></li> 
+                        <li><a href="/admin/user/">Admin Page</a></li> 
                      {% endif %}
                   {% endfor %}
                   <li><a href="/logout">Logout</a></li>

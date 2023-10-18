@@ -13,7 +13,6 @@ from sqlalchemy.types import TypeDecorator, Interval
 from flask_admin import Admin, AdminIndexView, BaseView, expose
 from flask_admin.contrib.sqla import ModelView
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
-from flask_bcrypt import Bcrypt
 
 
 app = Flask(__name__, static_folder='static')
@@ -23,7 +22,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = "random string"
 app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
 db = SQLAlchemy(app)
-bcrypt = Bcrypt()
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -122,6 +120,7 @@ class MyModelView(ModelView):
     create_template = 'admin/model/create.html'
     edit_template ='admin/model/edit.html'
     column_list = ('username', 'total_contribution')
+
     
 
     def is_accessible(self):
@@ -133,12 +132,12 @@ class MyModelView(ModelView):
 class MyAdminIndexView(AdminIndexView):
     @expose("/")
     def index(self):
-        return super(MyAdminIndexView,self).index()
+        return redirect(url_for('scrum_board'))
     
     def is_accessible(self):
         return True
     
-admin = Admin(app, template_mode='bootstrap4', index_view=MyAdminIndexView(name="Home"))
+admin = Admin(app, template_mode='bootstrap4', index_view=MyAdminIndexView(name="Scrum Board"))
 admin.add_view(MyModelView(User, db.session))
 
 
@@ -173,14 +172,6 @@ def login():
             if request.form['password'] == user.password:
                 login_user(user)
                 return redirect(url_for('scrum_board'))
-            
-            else:
-                flash('Wrong password', 'error')
-        
-    return render_template('login.html')
-
-        
-
 
 @app.route('/logout')
 def logout():
@@ -363,7 +354,7 @@ def view_task(task_id):
 def sprint(sprint_id):
     current_sprint = Sprints.query.get(sprint_id)
     task_list = Tasks.query.filter(Tasks.sprint_id == sprint_id).all()
-
+    this_sprint = Sprints.query.get(sprint_id)
     if request.method == "POST":
         current_sprint.sprint_status = request.form["sprint_status"]
         db.session.commit()
@@ -401,15 +392,17 @@ def new_sprint():
         end_date = datetime.strptime(request.form['sprint-end-date'], '%Y-%m-%d').date()
         status = request.form['sprint-status']
 
+        error_message = None
 
         # Date validation: Check if the start date is not earlier than the current date
         if start_date < current_date:
-            flash('Start date cannot be earlier than the current date', 'error')
-            return redirect(url_for('scrum_board'))
+            error_message = "Start date cannot be earlier than the current date"
         # Date validation: Check if the end date is after the start date
         elif end_date <= start_date:
-            flash('Start date must be before the end date', 'error')
-            return redirect(url_for('scrum_board'))
+            error_message = "Start date must be before the end date"
+
+        if error_message:
+            return render_template('scrum_board.html', error_message=error_message)
 
         sprint = Sprints(sprint_name, start_date, end_date, status)
         db.session.add(sprint)
@@ -639,7 +632,6 @@ def add_admin():
     db.session.commit()
     return "Admin Added"
 
-
 @app.route("/update_task_status/<int:task_id>", methods=["POST"])
 def update_task_status(task_id):
     new_status = request.json["newStatus"]
@@ -653,6 +645,26 @@ def update_task_status(task_id):
     # Return a response to the client (you can customize the response based on success/failure)
     response_data = {"message": "Task status updated successfully"}
     return jsonify(response_data)
+
+# ------------------------------------------------user profile---------------------------------------------------------
+@app.route('/user_profile', methods=['GET', 'POST'])
+@login_required
+def uesr_profile():
+    if request.method == 'POST':
+        old_password = request.form.get('old_password')
+        new_password = request.form.get('new_password')
+
+        # Check if the old password matches the one stored in the database
+        if current_user.password == old_password:
+            # Update the password in the database
+            current_user.password = new_password
+            db.session.commit()
+            flash('Password changed successfully', 'success')
+        else:
+            flash('Invalid old password', 'error')
+
+    return render_template("user_profile.html")
+
 
 
 # ---------------------------------------------addtional function-------------------------------------------------------
