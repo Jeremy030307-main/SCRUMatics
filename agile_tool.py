@@ -126,8 +126,14 @@ class CustomAdminIndexView(AdminIndexView):
     @expose('/')
     def index(self):
         record_count = len(User.query.all())
-        print(record_count)
-        return self.render('admin/index.html', number_of_members=record_count)
+        entries = EntryDate.query.all()
+        total_time = timedelta()
+        for entry in entries:
+            total_time += entry.duration
+
+        hours = total_time.total_seconds() // 3600
+        minutes = (total_time.total_seconds() // 60) % 60
+        return self.render('admin/index.html', number_of_members=record_count, total_efforts=f"{hours} hours {minutes} minutes")
 
 class TeamEffortView(BaseView):
     @expose('/')
