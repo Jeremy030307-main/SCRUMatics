@@ -46,5 +46,31 @@
         </form>
 
     </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="flash-messages-container">
+            {% for category, message in messages %}
+                <div class="flash-message {{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                var flashMessagesContainer = document.querySelector(".flash-messages-container");
+        
+                if (flashMessagesContainer) {
+                    flashMessagesContainer.style.display = "block"; // Show the container
+        
+                    setTimeout(function () {
+                        flashMessagesContainer.style.display = "none"; // Hide the container after 5 seconds
+                    }, 5000);
+                }
+            });
+        </script>
+        
+    {% endif %}
+    {% endwith %}  
     
 </body>
