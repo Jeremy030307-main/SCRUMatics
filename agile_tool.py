@@ -13,7 +13,7 @@ from sqlalchemy.types import TypeDecorator, Interval
 from flask_admin import Admin, AdminIndexView, BaseView, expose
 from flask_admin.contrib.sqla import ModelView
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
-
+from flask_bcrypt import Bcrypt
 
 
 app = Flask(__name__, static_folder='static')
@@ -23,6 +23,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = "random string"
 app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
 db = SQLAlchemy(app)
+bcrypt = Bcrypt()
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -172,6 +173,14 @@ def login():
             if request.form['password'] == user.password:
                 login_user(user)
                 return redirect(url_for('scrum_board'))
+            
+            else:
+                flash('Wrong password', 'error')
+        
+    return render_template('login.html')
+
+        
+
 
 @app.route('/logout')
 def logout():
@@ -631,6 +640,7 @@ def add_admin():
     db.session.add(admin_user)
     db.session.commit()
     return "Admin Added"
+
 
 @app.route("/update_task_status/<int:task_id>", methods=["POST"])
 def update_task_status(task_id):
