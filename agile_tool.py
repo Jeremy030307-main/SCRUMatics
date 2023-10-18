@@ -171,7 +171,12 @@ def login():
         if user:
             if request.form['password'] == user.password:
                 login_user(user)
+                flash('Login successful!', 'success')
                 return redirect(url_for('scrum_board'))
+            else:
+                flash('Invalid password. Please try again.', 'error')
+    return render_template('login.html')
+
 
 @app.route('/logout')
 def logout():
