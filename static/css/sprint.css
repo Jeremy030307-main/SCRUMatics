@@ -486,11 +486,13 @@ he {
 .flash-messages-container {
     text-align: center;
     position: fixed;
-    top: 50px; /* Adjust this value as needed for vertical positioning */
-    left: 50%; /* Center the container horizontally */
-    transform: translateX(-50%); /* Center horizontally */
+    top: 50%;
+    left: 0;
+    transform: translate(0, -50%);
+    width: 100%;
     z-index: 9999;
 }
+
 
 
 .flash-message {
