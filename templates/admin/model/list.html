@@ -1,3 +1,19 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 {% extends 'admin/master.html' %}
 
 {% import 'admin/lib.html' as lib with context %}
@@ -81,12 +97,8 @@
     <table class="table table-striped table-bordered table-hover model-list">
 
         <thead>
-            
+            <tr>
                 {% block list_header scoped %}
-<<<<<<< HEAD
-=======
-                   
->>>>>>> c74ee363b0285921d74ef531a0d3aafa6648eafd
                     {% for c, name in list_columns %}
                     {% set column = loop.index0 %}
                     
@@ -124,11 +136,9 @@
                     {% endif %}
                     
                 {% endblock %}
-            
+            </tr>
         </thead>
-        <tbody>
        
-<<<<<<< HEAD
         {% for row in data %}
         <tr>
             {% block list_row scoped %}
@@ -147,55 +157,6 @@
                             {% else %}
                             {{ form[c](pk=get_pk_value(row), display_value=get_value(row, c)) }}
                             {% endif %}
-=======
-            {% for row in data %}
-            <tr>
-                {% block list_row scoped %}
-                
-                    {% block list_row_actions_column scoped %}
-                        {% if admin_view.column_display_actions %}
-                    
-                <td class="col-username"></td>
-                        
-                <td class="col-total_contribution"></td>
-
-                <td class="list-buttons-column">
-                    <div class="blue-container">
-                        <a class="edit-icon" href="/admin/user/edit/?id={{row.id}}&amp;url=/admin/user/" title="Edit Record">
-                            View Details
-                        </a>
-                    </div>
-                </td>
-                        
-                <td class="list-buttons2-column">
-                    <form class="icon" method="POST" action="/admin/user/delete/">
-                        <input id="id" name="id" required type="hidden" value="{{row.id}}">
-                        <input id="url" name="url" type="hidden" value="/admin/user/">
-                        
-                        <!-- Add spacing between the icons -->
-                        <div class="icon-spacing"></div>
-                        
-                        <button onclick="return faHelpers.safeConfirm('Are you sure you want to delete this record?');" title="Delete record">
-                            <span class="fa fa-trash glyphicon glyphicon-trash"></span>
-                            
-                        </button>
-                    </form>
-                </td>
-                        
-                
-                    
-            </tr>
-            <tr>
-                
-                {% for c, name in list_columns %}
-                    <td class="col-{{c}}">
-                    {% if admin_view.is_editable(c) %}
-                        {% set form = list_forms[get_pk_value(row)] %}
-                        {% if form.csrf_token %}
-                        {{ form[c](pk=get_pk_value(row), display_value=get_value(row, c), csrf=form.csrf_token._value()) }}
-                        {% elif csrf_token %}
-                        {{ form[c](pk=get_pk_value(row), display_value=get_value(row, c), csrf=csrf_token()) }}
->>>>>>> c74ee363b0285921d74ef531a0d3aafa6648eafd
                         {% else %}
                             {{ get_value(row, c) }}
                         {% endif %}
@@ -206,7 +167,6 @@
                     <td class="col-total_contribution">
                         
                     </td>
-<<<<<<< HEAD
 
                     <td class="list-buttons-column">
                         <div class="blue-container">
@@ -245,20 +205,6 @@
             </tr>
       
         {% endfor %}            
-=======
-                    <td></td>
-                {% endfor %}
-            </tr>
-        </tbody>
-                    
-    </table>
-                        
-                    {%- endif -%}
-                {% endblock %}
-
-                
-            {% endblock %}
->>>>>>> c74ee363b0285921d74ef531a0d3aafa6648eafd
         </tr>
                     
     </table>
