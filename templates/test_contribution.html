@@ -21,41 +21,6 @@
 
 <body style="margin: 0%;padding: 0; background-color: #646464;">
 
-    <form action="/team-contribution" method="POST" class="logTimeForm"> 
     
-        <div>
-            <label for="date" class="formLabel">Start Date</label><br>
-            <input type="date" id="startDate" name="startDate" class="formDate" required><br><br>
-        </div>
-
-        <div>
-            <label for="date" class="formLabel">End Date</label><br>
-            <input type="date" id="endDate" name="endDate" class="formDate" required><br><br>
-        </div>
-                
-        <div class="logButtonDiv">
-            <!--Add in the save button to let the user to save the task into product backlog-->
-            <input type="submit" value="Filter" class="logButton" required><br><br>
-        </div>
-    </form>
-
-
-    <div class="logTimeContainer">
-        <div class = "header">
-            <a href="javascript:history.back()" class="arrow-button">
-                <i class="fa-solid fa-arrow-left" style="color: #ffffff; font-size: 0.8em;"></i> <!--Arrow icon from Font Awesome-->
-            </a>
-            <label>Team Contribution</label><br>
-        </div>
-
-        <div id='chart' class="effortGraphContainer"></div>
-        
-    </div>
-    
-    <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
-    <script type='text/javascript'>
-    var graphs = {{graphJSON | safe}};
-    Plotly.plot('chart',graphs,{});
-    </script>
 
 </body>

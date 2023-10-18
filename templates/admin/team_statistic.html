@@ -2,38 +2,39 @@
 
 {% block body %}
 
-    {% %}
     <div class="logTimeContainer">
         <div class = "header">
             <a href="javascript:history.back()" class="arrow-button">
                 <i class="fa-solid fa-arrow-left" style="color: #ffffff; font-size: 0.8em;"></i> <!--Arrow icon from Font Awesome-->
             </a>
-            <label>Burndown Chart</label><br>
+            <label>Team Contribution</label><br>
         </div>
+
+        <form action="/handle-contribution-form" method="POST" class="logTimeForm"> 
+
+            <div>
+                <label for="date" class="formLabel">Start Date</label><br>
+                <input type="date" id="startDate" name="startDate" class="formDate" value="{{start_date}}" required><br><br>
+            </div>
+
+            <div>
+                <label for="date" class="formLabel">End Date</label><br>
+                <input type="date" id="endDate" name="endDate" class="formDate"  value="{{end_date}}" required><br><br>
+            </div>
+                    
+            <div class="logButtonDiv">
+                <!--Add in the save button to let the user to save the task into product backlog-->
+                <input type="submit" value="Filter" class="logButton" required><br><br>
+            </div>
+        </form>
 
         <div id='chart' class="effortGraphContainer"></div>
         
     </div>
-    
+
     <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
-    <script>
-        var users = {{users}} 
-        var dates = data['data']['Category'];
-        var values = data['data']['Value'];
-
-        var trace = {
-            x: dates,
-            y: values,
-            type: 'bar'
-        };
-
-        var layout = {
-            title: 'Date vs. Value'
-        };
-
-        var data = [trace];
-
-        Plotly.newPlot('chart', data, layout);
+    <script type='text/javascript'>
+    var graphs = {{graphJSON | safe}};
+    Plotly.plot('chart',graphs,{});
     </script>
-
 {% endblock %}

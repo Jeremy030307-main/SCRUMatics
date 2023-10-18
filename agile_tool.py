@@ -113,31 +113,65 @@ class EntryTime(db.Model):
     end_time = db.Column(db.Time, nullable=True)
     duration = db.Column(Interval)
 
-
-
 class MyModelView(ModelView):
-    list_template='admin/model/list.html'
-    create_template = 'admin/model/create.html'
-    edit_template ='admin/model/edit.html'
-    column_list = ('username', 'total_contribution')
-
-    
 
     def is_accessible(self):
-        return True
+        return Role.query.get(1) in current_user.roles
 
     def inaccessible_callback(self, name, **kwargs):
         return redirect(url_for('login'))
 
-# class TeamEffortView(BaseView):
-#     @expose('/')
+class TeamEffortView(BaseView):
+    @expose('/')
 
-#     def index(self):
-#         return self.render('admin/team_statistic.html')
+    def index(self):
+        start_date = session.get('start_date', None)
+        end_date = session.get('end_date', None)
+
+        if start_date is None or end_date is None:
+            pass
+        else:
+            start_date = datetime.strptime(start_date, "%Y-%m-%d").date()
+            end_date = datetime.strptime(end_date, "%Y-%m-%d").date()
+            period = (end_date - start_date).days
+
+            users = User.query.all()
+            entries_date = EntryDate.query.all()
+            user_entry_dict = {}
+
+            for user in users:
+                user_entry_dict[user] = EntryDate.query.filter(EntryDate.user_id==user.id).all()
+
+            user_data = [user.username for user in users]
+            user_effort_data = []
+            for user in users:
+                user_entries = user_entry_dict[user]
+                total=timedelta()
+                for entry in user_entries:
+                    if start_date <= entry.date <= end_date:
+                        total += entry.duration
+                user_effort_data.append(round((total.total_seconds()/3600)/period,2))
+
+            data = pd.DataFrame({
+                'User' : user_data, 
+                'Duration' : user_effort_data})
+
+            fig = px.bar(data, x='User', y='Duration', title="Average Time Spend Per Day (" + start_date.strftime("%Y-%m-%d") + " - " + end_date.strftime("%Y-%m-%d") + ")")
+            graph_json = json.dumps(fig, cls= plotly.utils.PlotlyJSONEncoder)
+
+            return self.render('admin/team_statistic.html', graphJSON = graph_json, start_date=start_date.strftime("%Y-%m-%d"), end_date=end_date.strftime("%Y-%m-%d"))
+        return self.render('admin/team_statistic.html')
+
+    @app.route('/handle-contribution-form', methods = ["POST", "GET"])
+    def handle_contribution_form():
+        if request.method == "POST":
+            session["start_date"] = request.form["startDate"]
+            session["end_date"] = request.form["endDate"]
+            return redirect(url_for('team-contribution.index'))
 
 admin = Admin(app, base_template='admin/navbar_less_base.html')
 admin.add_view(MyModelView(User, db.session))
-# admin.add_view(TeamEffortView(name='Team Statistic', endpoint='team-statistic'))
+admin.add_view(TeamEffortView(name='Team Contribution', endpoint='team-contribution'))
 
 # Define an event listener that triggers when 'your_column' changes
 @event.listens_for(Tasks.status, 'set')
@@ -157,6 +191,7 @@ def load_user(user_id):
 # --------------------------------------------- login/logout ------------------------------------------------------------
 @app.route('/')
 def main():
+    logout_user()
     return render_template('login.html')
 
 @app.route('/login', methods=["POST", "GET"])
@@ -457,7 +492,7 @@ def log_time_spent(sprint_id, task_id):
     if request.method == "POST":
 
         if (this_task.assignee != current_user.id):
-            flash(f"This task is assign to {this_task.assignee.username}", "error")
+            flash(f"This task is assign to {User.query.get(this_task.assignee).username}", "error")
 
         else:
             entry_date = datetime.strptime(request.form["date"], "%Y-%m-%d").date()
@@ -596,42 +631,6 @@ def burndown_chart(sprint_id):
     graph_json = json.dumps(fig, cls= plotly.utils.PlotlyJSONEncoder)
     return render_template('burndown_chart.html', graphJSON=graph_json)
 
-@app.route('/team-contribution', methods=["GET", "POST"])
-def team_contribution():
-
-    if request.method == "POST":
-        start_date = datetime.strptime(request.form["startDate"], "%Y-%m-%d").date()
-        end_date = datetime.strptime(request.form["endDate"], "%Y-%m-%d").date()
-        period = (end_date - start_date).days
-
-        users = User.query.all()
-        entries_date = EntryDate.query.all()
-        user_entry_dict = {}
-
-        for user in users:
-            user_entry_dict[user] = EntryDate.query.filter(EntryDate.user_id==user.id).all()
-
-        user_data = [user.username for user in users]
-        user_effort_data = []
-        for user in users:
-            user_entries = user_entry_dict[user]
-            total=timedelta()
-            for entry in user_entries:
-                if start_date <= entry.date <= end_date:
-                    total += entry.duration
-            user_effort_data.append(round((total.total_seconds()/3600)/period,2))
-
-        data = pd.DataFrame({
-            'User' : user_data, 
-            'Duration' : user_effort_data})
-
-        fig = px.bar(data, x='User', y='Duration', title='Av')
-        graph_json = json.dumps(fig, cls= plotly.utils.PlotlyJSONEncoder)
-
-        return render_template('test_contribution.html', graphJSON = graph_json)
-    return render_template('test_contribution.html')
-
-
 # -------------------------------------------- developer route -----------------------------------------------------------
 @app.route('/clear-database', methods=['GET'])
 def clear_database():
@@ -692,8 +691,6 @@ def uesr_profile():
             flash('Invalid old password', 'error')
 
     return render_template("user_profile.html")
-
-
 
 # ---------------------------------------------addtional function-------------------------------------------------------
 def is_overlap(range1_start, range1_end, range2_start, range2_end):
