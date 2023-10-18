@@ -414,8 +414,9 @@ def view_sprint_task(sprint_id, task_id):
     
     this_task = Tasks.query.get(task_id)
     this_task_labels = [label.name for label in this_task.labels]
+    team_member = User.query.all()
     
-    return render_template('view_sprint_task.html', sprint_id=sprint_id, task = this_task, labels = this_task_labels)
+    return render_template('view_sprint_task.html', sprint_id=sprint_id, task = this_task, labels = this_task_labels, team = team_member)
 
 # -------------------------------------------  log time spent ---------------------------------------------------
 @app.route('/sprint/<int:sprint_id>/task/<int:task_id>/log-time', methods = ['GET', 'POST'])
