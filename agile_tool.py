@@ -15,6 +15,7 @@ from flask_admin.contrib.sqla import ModelView
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 
 
+
 app = Flask(__name__, static_folder='static')
 app.config['FAVICON'] = 'static/favicon.ico'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tasks.sqlite3'
@@ -120,7 +121,6 @@ class MyModelView(ModelView):
     create_template = 'admin/model/create.html'
     edit_template ='admin/model/edit.html'
     column_list = ('username', 'total_contribution')
-
     
 
     def is_accessible(self):

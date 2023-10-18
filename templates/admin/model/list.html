@@ -80,7 +80,7 @@
     <div class="table-responsive">
     <table class="table table-striped table-bordered table-hover model-list">
         <thead>
-            <tr>
+            
                 {% block list_header scoped %}
                    
                     {% for c, name in list_columns %}
@@ -117,60 +117,49 @@
                     <th class="">&nbsp;</th>
                     {% endif %}
                 {% endblock %}
-            </tr>
-        </thead>
-       
-        {% for row in data %}
-        <tr>
-            {% block list_row scoped %}
             
-                {% block list_row_actions_column scoped %}
-                    {% if admin_view.column_display_actions %}
+        </thead>
+        <tbody>
+       
+            {% for row in data %}
+            <tr>
+                {% block list_row scoped %}
                 
-                    <td class="col-username">
+                    {% block list_row_actions_column scoped %}
+                        {% if admin_view.column_display_actions %}
                     
-        
+                <td class="col-username"></td>
                         
-                        </td>
-                    
-                        <td class="col-total_contribution">
-                        
-                        
-                        
-                    </td>
+                <td class="col-total_contribution"></td>
 
-                    <td class="list-buttons-column">
-                        <div class="blue-container">
-                            <a class="edit-icon" href="/admin/user/edit/?id=1&amp;url=/admin/user/" title="Edit Record">
-                                View Details
-                            </a>
-                        </div>
-                    </td>
-                    
-                    <td class="list-buttons2-column">
-                        <form class="icon" method="POST" action="/admin/user/delete/">
-                            <input id="id" name="id" required type="hidden" value="1">
-                            <input id="url" name="url" type="hidden" value="/admin/user/">
+                <td class="list-buttons-column">
+                    <div class="blue-container">
+                        <a class="edit-icon" href="/admin/user/edit/?id={{row.id}}&amp;url=/admin/user/" title="Edit Record">
+                            View Details
+                        </a>
+                    </div>
+                </td>
+                        
+                <td class="list-buttons2-column">
+                    <form class="icon" method="POST" action="/admin/user/delete/">
+                        <input id="id" name="id" required type="hidden" value="1">
+                        <input id="url" name="url" type="hidden" value="/admin/user/">
+                        
+                        <!-- Add spacing between the icons -->
+                        <div class="icon-spacing"></div>
+                        
+                        <button onclick="return faHelpers.safeConfirm('Are you sure you want to delete this record?');" title="Delete record">
+                            <span class="fa fa-trash glyphicon glyphicon-trash"></span>
                             
-                            <!-- Add spacing between the icons -->
-                            <div class="icon-spacing"></div>
-                            
-                            <button onclick="return faHelpers.safeConfirm('Are you sure you want to delete this record?');" title="Delete record">
-                                <span class="fa fa-trash glyphicon glyphicon-trash"></span>
-                                
-                            </button>
-                        </form>
-                    </td>
-                    
-                    
+                        </button>
+                    </form>
+                </td>
+                        
                 
-        </tr>
                     
-    </table>
-                        
-                    {%- endif -%}
-                {% endblock %}
-
+            </tr>
+            <tr>
+                
                 {% for c, name in list_columns %}
                     <td class="col-{{c}}">
                     {% if admin_view.is_editable(c) %}
@@ -186,7 +175,17 @@
                     {{ get_value(row, c) }}
                     {% endif %}
                     </td>
+                    <td></td>
                 {% endfor %}
+            </tr>
+        </tbody>
+                    
+    </table>
+                        
+                    {%- endif -%}
+                {% endblock %}
+
+                
             {% endblock %}
         </tr>
         {% else %}
