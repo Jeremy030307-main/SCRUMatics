@@ -27,12 +27,13 @@
                 <a href="{{ url_for('burndown_chart', sprint_id=sprint.id) }}" class="add-task-button" style="text-decoration: none;color: #333333;">Burndown Chart</a>
             </button>
         </div>
-
+    {% if sprint.sprint_status == "Not Started" %} 
         <div>
             <button class="edit-sprint-button">
                 <a href="{{ url_for('edit_sprint', sprint_id=sprint.id) }}" class="add-task-button" style="text-decoration: none;color: #ffffff;font-size: large;">&#9998</a>
             </button>
         </div>
+    {% endif %}
 
 {% endblock %}
 
