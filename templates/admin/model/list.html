@@ -79,14 +79,16 @@
     <ul class="your-list">
     <div class="table-responsive">
     <table class="table table-striped table-bordered table-hover model-list">
+
         <thead>
             <tr>
                 {% block list_header scoped %}
-                   
                     {% for c, name in list_columns %}
                     {% set column = loop.index0 %}
+                    
                     <th class="column-header col-{{c}}">
                         {% if admin_view.is_sortable(c) %}
+                         
                             {% if sort_column == column %}
                                 <a href="{{ sort_url(column, True) }}" title="{{ _gettext('Sort by %(name)s', name=name) }}">
                                     {{ name }}
@@ -116,6 +118,7 @@
                     {% if admin_view.column_display_actions %}
                     <th class="">&nbsp;</th>
                     {% endif %}
+                    
                 {% endblock %}
             </tr>
         </thead>
@@ -126,16 +129,26 @@
             
                 {% block list_row_actions_column scoped %}
                     {% if admin_view.column_display_actions %}
-                
-                    <td class="col-username">
-                    
-        
-                        
+                    <!-- <td class="col-username"> -->
+                        {% for c, name in list_columns %}
+                        <td class="col-{{c}}">
+                        {% if admin_view.is_editable(c) %}
+                            {% set form = list_forms[get_pk_value(row)] %}
+                            {% if form.csrf_token %}
+                            {{ form[c](pk=get_pk_value(row), display_value=get_value(row, c), csrf=form.csrf_token._value()) }}
+                            {% elif csrf_token %}
+                            {{ form[c](pk=get_pk_value(row), display_value=get_value(row, c), csrf=csrf_token()) }}
+                            {% else %}
+                            {{ form[c](pk=get_pk_value(row), display_value=get_value(row, c)) }}
+                            {% endif %}
+                        {% else %}
+                            {{ get_value(row, c) }}
+                        {% endif %}
+                        {% endfor %}
                         </td>
-                    
-                        <td class="col-total_contribution">
-                        
-                        
+                    {% endif %}  
+                
+                    <td class="col-total_contribution">
                         
                     </td>
 
@@ -161,46 +174,25 @@
                             </button>
                         </form>
                     </td>
-                    
-                    
-                
-        </tr>
-                    
-    </table>
-                        
-                    {%- endif -%}
-                {% endblock %}
+                {% endblock %}  
+            {% endblock %} 
+            {% else %}
+            <tr>
+                <td colspan="999">
+                    {% block empty_list_message %}
+                    <div class="text-center">
+                        {{ admin_view.get_empty_list_message() }}
+                    </div>
+                    {% endblock %}
 
-                {% for c, name in list_columns %}
-                    <td class="col-{{c}}">
-                    {% if admin_view.is_editable(c) %}
-                        {% set form = list_forms[get_pk_value(row)] %}
-                        {% if form.csrf_token %}
-                        {{ form[c](pk=get_pk_value(row), display_value=get_value(row, c), csrf=form.csrf_token._value()) }}
-                        {% elif csrf_token %}
-                        {{ form[c](pk=get_pk_value(row), display_value=get_value(row, c), csrf=csrf_token()) }}
-                        {% else %}
-                        {{ form[c](pk=get_pk_value(row), display_value=get_value(row, c)) }}
-                        {% endif %}
-                    {% else %}
-                    {{ get_value(row, c) }}
-                    {% endif %}
-                    </td>
-                {% endfor %}
-            {% endblock %}
+                </td>
+            </tr>
+      
+        {% endfor %}            
         </tr>
-        {% else %}
-        <tr>
-            <td colspan="999">
-                {% block empty_list_message %}
-                <div class="text-center">
-                    {{ admin_view.get_empty_list_message() }}
-                </div>
-                {% endblock %}
-            </td>
-        </tr>
-        {% endfor %}
+                    
     </table>
+    <!-- </table>  -->
     </div>
     </ul>
     {% block list_pager %}
