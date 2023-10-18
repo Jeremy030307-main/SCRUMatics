@@ -168,7 +168,7 @@
 
                     <td class="list-buttons-column">
                         <div class="blue-container">
-                            <a class="edit-icon" href="/admin/user/edit/?id=1&amp;url=/admin/user/" title="Edit Record">
+                            <a class="edit-icon" href="/admin/user/edit/?id={{ row.id }}&amp;url=/admin/user/">
                                 View Details
                             </a>
                         </div>
@@ -176,7 +176,7 @@
                     
                     <td class="list-buttons2-column">
                         <form class="icon" method="POST" action="/admin/user/delete/">
-                            <input id="id" name="id" required type="hidden" value="1">
+                            <input id="id" name="id" required type="hidden" value="{{row.id}}">
                             <input id="url" name="url" type="hidden" value="/admin/user/">
                             
                             <!-- Add spacing between the icons -->
