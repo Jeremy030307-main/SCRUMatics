@@ -77,7 +77,7 @@
                 <select id="assignee_name" name="assignee_name" class="addTaskSelectRight">
                     <option value="" disabled selected>Select an option</option>
                     {% for member in team %}
-                        <option value={{member.username}} {% if task.assignee == member.username %}selected{% endif %}>{{member.username}}</option>
+                        <option value={{member.id}} {% if task.assignee == member.id %}selected{% endif %}>{{member.username}}</option>
                     {% endfor %}
                 </select> <br><br>
 

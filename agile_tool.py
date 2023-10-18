@@ -1,7 +1,7 @@
 from datetime import datetime
 from flask import Flask, render_template, request, session, flash, redirect, url_for, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, collate, Date, Time, Float,TypeDecorator, Interval, event, and_, nulls_last, Boolean
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, collate, Date, Time, Float,TypeDecorator, Interval, event, and_, nulls_last, Boolean, func
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from datetime import timedelta
@@ -13,6 +13,7 @@ from sqlalchemy.types import TypeDecorator, Interval
 from flask_admin import Admin, AdminIndexView, BaseView, expose
 from flask_admin.contrib.sqla import ModelView
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
+import math
 
 
 app = Flask(__name__, static_folder='static')
@@ -121,6 +122,13 @@ class MyModelView(ModelView):
     def inaccessible_callback(self, name, **kwargs):
         return redirect(url_for('login'))
 
+class CustomAdminIndexView(AdminIndexView):
+    @expose('/')
+    def index(self):
+        record_count = len(User.query.all())
+        print(record_count)
+        return self.render('admin/index.html', number_of_members=record_count)
+
 class TeamEffortView(BaseView):
     @expose('/')
 
@@ -143,6 +151,7 @@ class TeamEffortView(BaseView):
                 user_entry_dict[user] = EntryDate.query.filter(EntryDate.user_id==user.id).all()
 
             user_data = [user.username for user in users]
+            hover_text = []
             user_effort_data = []
             for user in users:
                 user_entries = user_entry_dict[user]
@@ -150,13 +159,21 @@ class TeamEffortView(BaseView):
                 for entry in user_entries:
                     if start_date <= entry.date <= end_date:
                         total += entry.duration
-                user_effort_data.append(round((total.total_seconds()/3600)/period,2))
+
+                average_second = total.total_seconds()/period
+                user_effort_data.append(round(average_second/3600,2))
+
+                hours = average_second // 3600
+                minutes = (average_second // 60) % 60
+                hover_text.append(f"{user.username} worked average of {hours} hours {minutes} minutes.")
 
             data = pd.DataFrame({
                 'User' : user_data, 
-                'Duration' : user_effort_data})
+                'Duration(hours)' : user_effort_data,
+                'hover_text': hover_text
+                })
 
-            fig = px.bar(data, x='User', y='Duration', title="Average Time Spend Per Day (" + start_date.strftime("%Y-%m-%d") + " - " + end_date.strftime("%Y-%m-%d") + ")")
+            fig = px.bar(data, x='User', y='Duration(hours)', hover_data='hover_text', title="Average Time Spend Per Day (" + start_date.strftime("%Y-%m-%d") + " - " + end_date.strftime("%Y-%m-%d") + ")")
             graph_json = json.dumps(fig, cls= plotly.utils.PlotlyJSONEncoder)
 
             return self.render('admin/team_statistic.html', graphJSON = graph_json, start_date=start_date.strftime("%Y-%m-%d"), end_date=end_date.strftime("%Y-%m-%d"))
@@ -169,7 +186,7 @@ class TeamEffortView(BaseView):
             session["end_date"] = request.form["endDate"]
             return redirect(url_for('team-contribution.index'))
 
-admin = Admin(app, base_template='admin/navbar_less_base.html')
+admin = Admin(app, base_template='admin/navbar_less_base.html', template_mode='bootstrap3', index_view=CustomAdminIndexView())
 admin.add_view(MyModelView(User, db.session))
 admin.add_view(TeamEffortView(name='Team Contribution', endpoint='team-contribution'))
 
