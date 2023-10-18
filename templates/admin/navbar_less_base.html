@@ -1,4 +1,5 @@
-{% extends 'admin/master.html' %}
+{% import 'admin/layout.html' as layout with context -%}
+{% extends 'admin/base.html' %}
 
 {% block head_css %}
     {{super()}}
@@ -23,27 +24,34 @@
 
 {% endblock %}
 
-{% block body %}
-
+{% block page_body %}
     <div class = "header">
-            
+
         <div class="menu">
         <button class="menu-button">
             <i class="fa-solid fa-bars fa-3x"></i> <!-- Hamburger icon from Font Awesome -->
         </button>
         <div class="dropdown-menu">
             <ul>
-                <li><a href="{{ url_for('product_backlog') }}">Product Backlog</a></li>  
-                <li><a href="{{ url_for('scrum_board') }}">Scrum Board</a></li> <!-- put sprint backlog html link when finish-->
-                {% for role in current_user.roles %}
-                    {% if role.name == "Admin" %}
-                    <li><a href="/admin">Admin Page</a></li> 
-                    {% endif %}
-                {% endfor %}
-                <li><a href="/logout">Logout</a></li>
-            </ul>
+                {{ layout.menu() }}
+                <li><a href="{{ url_for('scrum_board') }}">Quit Admin Page</a></li>
         </div>
         </div>
     </div>
-  
+  <div class="container{%if config.get('FLASK_ADMIN_FLUID_LAYOUT', False) %}-fluid{% endif %}">
+
+    <!-- Nav section removed -->
+
+    {% block messages %}
+    {{ layout.messages() }}
+    {% endblock %}
+
+    {# store the jinja2 context for form_rules rendering logic #}
+    {% set render_ctx = h.resolve_ctx() %}
+
+    {% block body %}{% endblock %}
+  </div>
+
+
+
 {% endblock %}
