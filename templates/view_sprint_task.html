@@ -94,13 +94,9 @@
             <!--Drop-down list of Assignee-->
             <label for="assignee" style="font-size: large;" class="addTaskLabel">Assignee</label><br>
             <select id="assignee_name" name="assignee_name" class="addTaskSelectRight" disabled>
-                <option value="" disabled selected>Select an option</option>
-                <option value="Sheena" {% if task.assignee == 'Sheena' %}selected{% endif %}>Sheena</option>
-                <option value="Jean" {% if task.assignee == 'Jean' %}selected{% endif %}>Jean</option>
-                <option value="Jie Ru" {% if task.assignee == 'Jie Ru' %}selected{% endif %}>Jie Ru</option>
-                <option value="Bryan" {% if task.assignee == 'Bryan' %}selected{% endif %}>Bryan</option>
-                <option value="Benjamin" {% if task.assignee == 'Benjamin' %}selected{% endif %}>Benjamin</option>
-                <option value="Jeremy" {% if task.assignee == 'Jeremy' %}selected{% endif %}>Jeremy</option>
+                {% for member in team %}
+                    <option value={{member.username}} {% if task.assignee == member.username %}selected{% endif %}>{{member.username}}</option>
+                {% endfor %}
             </select> <br><br>
 
             <!--Drop-down list of Story Point-->

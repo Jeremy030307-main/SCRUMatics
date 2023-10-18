@@ -1,0 +1,57 @@
+{% import 'admin/layout.html' as layout with context -%}
+{% extends 'admin/base.html' %}
+
+{% block head_css %}
+    {{super()}}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--CSS-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/sprint.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/product_backlog.css') }}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!--ICON-->
+    <link href='https://unpkg.com/css.gg@2.0.0/icons/css/add.css' rel='stylesheet'>
+
+    <!--font awesome-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <script src="https://kit.fontawesome.com/4b4c250273.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+{% endblock %}
+
+{% block page_body %}
+    <div class = "header">
+
+        <div class="menu">
+        <button class="menu-button">
+            <i class="fa-solid fa-bars fa-3x"></i> <!-- Hamburger icon from Font Awesome -->
+        </button>
+        <div class="dropdown-menu">
+            <ul>
+                {{ layout.menu() }}
+                <li><a href="{{ url_for('scrum_board') }}">Quit Admin Page</a></li>
+        </div>
+        </div>
+    </div>
+  <div class="container{%if config.get('FLASK_ADMIN_FLUID_LAYOUT', False) %}-fluid{% endif %}">
+
+    <!-- Nav section removed -->
+
+    {% block messages %}
+    {{ layout.messages() }}
+    {% endblock %}
+
+    {# store the jinja2 context for form_rules rendering logic #}
+    {% set render_ctx = h.resolve_ctx() %}
+
+    {% block body %}{% endblock %}
+  </div>
+
+
+
+{% endblock %}
