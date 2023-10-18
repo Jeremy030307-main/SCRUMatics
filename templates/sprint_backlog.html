@@ -58,7 +58,7 @@
         <div class="not-started" id="not-started">
             <h2>Not Started</h2>
             {% for task in tasks if task.status == "not-started" %}
-                <a href="{{ url_for('view_sprint_task', sprint_id=sprint.id, task_id=task.id) }}" id="card-{{ task.id }}" class = "viewSprintTaskButton" target="view_sprint_task_iframe">
+                <a href="{{ url_for('view_sprint_task', sprint_id=sprint.id, task_id=task.id) }}" id="card-{{ task.id }}" class = "viewSprintTaskButton" target="view_sprint_task_iframe" draggable="true">
                     <div class="card" >
                         <div class="taskName" style="text-decoration: none; color: #ffffff;">
                             {{task.name}}
@@ -93,7 +93,7 @@
         <div class="in-progress" id="in-progress">
             <h2>In progress</h2>
             {% for task in tasks if task.status == "in-progress" %}
-                <a href="{{ url_for('view_sprint_task', sprint_id=sprint.id, task_id=task.id) }}" id="card-{{ task.id }}" class = "viewSprintTaskButton" target="view_sprint_task_iframe">
+                <a href="{{ url_for('view_sprint_task', sprint_id=sprint.id, task_id=task.id) }}" id="card-{{ task.id }}" class = "viewSprintTaskButton" target="view_sprint_task_iframe" draggable="true">
                     <div class="card">
                         <div class="taskName" style="text-decoration: none; color: #ffffff;">
                             {{task.name}}
@@ -128,7 +128,7 @@
         <div class="completed" id="completed">
             <h2>Completed</h2>
             {% for task in tasks if task.status == "completed" %}
-                <a href="{{ url_for('view_sprint_task', sprint_id=sprint.id, task_id=task.id) }}" id="card-{{ task.id }}" class = "viewSprintTaskButton" target="view_sprint_task_iframe">
+                <a href="{{ url_for('view_sprint_task', sprint_id=sprint.id, task_id=task.id) }}" id="card-{{ task.id }}" class = "viewSprintTaskButton" target="view_sprint_task_iframe"  draggable="true">
                     <div class="card">
                         <div class="taskName" style="text-decoration: none; color: #ffffff;">
                             {{task.name}}
@@ -198,16 +198,6 @@
         modal.style.display = 'none';
     }
 
-    // Event listeners for open add task buttons
-    document.getElementById('selectTaskButton').addEventListener('click', function() {
-        openModal('selectTaskModal');
-    });
-
-    // Event listeners for close add task buttons
-    document.getElementById('closeSelectTaskButton').addEventListener('click', function() {
-        closeModal('selectTaskModal');
-    });
-
     document.querySelectorAll('.viewSprintTaskButton').forEach(function (button) {
          button.addEventListener('click', function () {
                // Open the modal with the task details
@@ -270,6 +260,7 @@
             card.draggable = true;
 
             card.addEventListener('dragstart', handleDragStart);
+            console.log("handle drag start")
         });
 
         const dropZones = document.querySelectorAll(".sprint-backlog-container > div");
@@ -277,6 +268,7 @@
         dropZones.forEach((zone) => {
             zone.addEventListener('dragover', handleDragOver);
             zone.addEventListener('drop', handleDrop);
+            console.log("handle drop")
         });
     });
 
@@ -323,5 +315,16 @@
             console.error('Error:', error);
         });
     }
+  
+    // Event listeners for open add task buttons
+    document.getElementById('selectTaskButton').addEventListener('click', function() {
+        openModal('selectTaskModal');
+    });
+
+    // Event listeners for close add task buttons
+    document.getElementById('closeSelectTaskButton').addEventListener('click', function() {
+        closeModal('selectTaskModal');
+    });
+
   </script>
 {% endblock %}
