@@ -476,3 +476,47 @@ h2 {
     box-shadow: .3em .3em .3em #999;
     text-decoration: none;
 }
+
+he {
+    font-size: 30px;
+    margin-bottom: 30px;
+    text-align: left;
+}
+
+.flash-messages-container {
+    text-align: center;
+    position: fixed;
+    top: 50px; /* Adjust this value as needed for vertical positioning */
+    left: 50%; /* Center the container horizontally */
+    transform: translateX(-50%); /* Center horizontally */
+    z-index: 9999;
+}
+
+
+.flash-message {
+    background-color: #4CAF50; /* Green background color for success messages */
+    color: white;
+    padding: 10px;
+    margin: 10px auto;
+    max-width: 500px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    text-align: center;
+    list-style-type: none;
+    transition: display 1s ease-in-out; /* Transition to hide the message smoothly */
+}
+
+.flash-message.error {
+    background-color: #FF0000; /* Red background color for error messages */
+}
+
+.flash-message.hidden {
+    display: none; /* Hide the message initially */
+}
+
+.mes{
+    text-align: center;
+    background-color: azure;
+}
+
+

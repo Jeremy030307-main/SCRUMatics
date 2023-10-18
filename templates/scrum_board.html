@@ -88,7 +88,18 @@
             {% endfor %}
         </tbody>
     </table>
-
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="flash-messages-container">
+            {% for category, message in messages %}
+                <div class="flash-message {{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}
+    
 
     <script>
         function showDialog() {
@@ -137,6 +148,26 @@
                 $(this).val('');
             });
         });
+        document.addEventListener("DOMContentLoaded", function () {
+            var flashMessagesContainer = document.querySelector(".flash-messages-container");
+
+            if (flashMessagesContainer) {
+                flashMessagesContainer.style.display = "block"; // Show the container
+
+                // Check if there are error messages in the container
+                var errorMessages = flashMessagesContainer.querySelectorAll(".flash-message.error");
+                if (errorMessages.length > 0) {
+                    flashMessagesContainer.style.zIndex = "9999"; // Ensure it's in front
+                    showDialog(); // Show the dialog if there are error messages
+                }
+
+                setTimeout(function () {
+                    flashMessagesContainer.style.display = "none"; // Hide the container after 5 seconds
+                }, 5000);
+            }
+        });
+
+        
     </script>
     
 {% endblock %}
