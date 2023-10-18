@@ -23,14 +23,30 @@
 
 </head>
 <body>
-    <h3>Login Page</h3>
-    <form action="/login" method="POST">
+    {% block title %}Login{% endblock %}
+
+    {% for message in messages %}
+    
+    <div class="alert alert-success">
+        <a class="close" href="#" data-dismiss="alert">×</a>
+           {{ message }}
+    </div>
+
+    {% endfor %}
+
+    {% block content %}
+        <h2>Login</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
         <label for="username">Username</label><br>
-        <input type="text" id="username" name="username" placeholder="Enter task name" required><br><br>
+        <input type="text" id="username" name="username" placeholder="Enter user name" required><br><br>
 
         <label for="password">password</label>
         <input type="password" id="password" name="password" required><br><br>
 
-        <input type="submit">
+        <button type="submit">Login</button>
     </form>
+    {% endblock %}
 </body>
+
